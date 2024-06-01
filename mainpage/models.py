@@ -12,6 +12,7 @@ class Profile(models.Model):
     Move to separate "users" app?'''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
+    # TODO: limit image size
     pic = CloudinaryField('image', default='placeholder')
     joined = models.DateTimeField(auto_now_add=True)
     social = models.URLField(blank=True, null=True)
@@ -26,7 +27,7 @@ class Entry(models.Model):
         User, on_delete=models.CASCADE, related_name="entries")
     title = models.CharField(max_length=200, unique=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    audio_file = CloudinaryField('audio')
+    audio_file = CloudinaryField('raw', resource_type='auto', format='mp3')
     description = models.TextField()
     tags = TaggableManager()
     slug = models.SlugField(max_length=200, unique=True)
