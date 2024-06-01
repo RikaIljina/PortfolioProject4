@@ -6,6 +6,8 @@ from taggit.managers import TaggableManager
 STATUS = ((0, "Private"), (1, "Published"))
 
 # Create your models here.
+
+
 class Profile(models.Model):
     '''User profile
     Must be created automatically when user registers
@@ -17,11 +19,11 @@ class Profile(models.Model):
     joined = models.DateTimeField(auto_now_add=True)
     social = models.URLField(blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    
+
     def __str__(self) -> str:
         return f"User profile of {self.user.username}"
-    
-    
+
+
 class Entry(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="entries")
@@ -31,16 +33,16 @@ class Entry(models.Model):
     description = models.TextField()
     tags = TaggableManager()
     slug = models.SlugField(max_length=200, unique=True)
-    likes = models.IntegerField(blank=True, null=True)
+    likes = models.IntegerField(null=True, default=0)
     publish = models.IntegerField(choices=STATUS, default=0)
-    
+
     class Meta:
         ordering = ["-created_on"]
-    
+
     def __str__(self):
         return f"Entry {self.title} created by {self.author}"
-    
-    
+
+
 class Comment(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="commenter")
@@ -48,23 +50,38 @@ class Comment(models.Model):
         Entry, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
         ordering = ["-created_on"]
-    
+
     def __str__(self):
         return f"Comment {self.content} written by {self.author}"
-    
-    
+
+
 class Like(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="liked")
     entry = models.ForeignKey(
         Entry, on_delete=models.CASCADE, related_name="all_likes")
     created_on = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
         ordering = ["-created_on"]
-    
+
+
+    def save(self):
+        '''Checks if the like is valid before saving
+        This makes sure that a user cannot like an entry twice and cannot
+        like their own entry
+        '''
+        if self.user.liked.all().filter(entry=self.entry.id).count() != 0 \
+            or self.entry.author == self.user:
+            print('You already liked it')
+            return
+        else:
+            self.entry.likes += 1
+            self.entry.save()
+            super(Like, self).save()
+
     def __str__(self):
         return f"Entry {self.entry} liked by {self.user}"
