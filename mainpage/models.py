@@ -40,6 +40,7 @@ class Entry(models.Model):
         ordering = ["-created_on"]
 
     def created_date(self):
+        ''' Convert DateTime to pure Date '''
         return self.created_on.date()
     
     def __str__(self):
