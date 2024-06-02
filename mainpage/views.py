@@ -6,8 +6,13 @@ from .models import Entry
 
 
 def index(request):
-    entries = Entry.objects.all()
+    entries = Entry.objects.all().order_by('-likes')
     return render(
         request,
         'mainpage/index.html',
         {'entries': entries})
+
+
+
+
+# For sort button: if 'sort_likes' in request.POST

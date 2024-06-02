@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% block content %}
 
-<body>
-
-    <div>
-        <p>MusicLab</p>
-        {% for entry in entries %}
-        <div>
+<div class="container">
+    <h1>MusicLab</h1>
+    {% for entry in entries %}
+    <div class="card">
+        <div class="card-header">
             <p>{{ entry.author }}</p>
             <p>{{ entry.title }}</p>
+        </div>
+        <div class="card-body">
             <div>{{ entry.description | safe}}</div>
-            <p>{{ entry.audio_file.url }}</p>
             <audio controls>
                 <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                 Your browser does not support the audio tag.
@@ -26,13 +21,16 @@
             {{ tag }}{% if tag == entry.tags.last %}{% else %},{% endif %}
             {% endfor %}
             </p>
-            {% for comment in entry.comments.all %}
-            <div>{{ comment.content }}</div>
-            {% endfor %}
+            <div class="card-footer">
+                <p>Likes: {{ entry.likes }}</p>
+                {% for comment in entry.comments.all %}
+                <p>{{ comment.author }} wrote:</p>
+                <div>{{ comment.content }}</div>
+                {% endfor %}
+            </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
+</div>
 
-</body>
-
-</html>
+{% endblock content %}
