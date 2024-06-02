@@ -6,7 +6,15 @@ from .models import Entry
 
 
 def index(request):
-    entries = Entry.objects.all().filter(publish=1).order_by('-likes')
+    entries = Entry.objects.all().filter(publish=1)
+    
+    if request.method == "POST":
+        print("Posted")
+        if 'by_likes' in request.POST:
+            entries = Entry.objects.all().filter(publish=1).order_by('-likes')
+        elif 'by_date' in request.POST:
+            entries = Entry.objects.all().filter(publish=1).order_by('-created_on')
+    
     return render(
         request,
         'mainpage/index.html',
