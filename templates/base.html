@@ -95,22 +95,12 @@
                                     <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Filter by
                                         tags</span> </a>
                                 <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                    {% for tag, count in tags.items %}
                                     <li class="w-100">
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Tag</span>
-                                            1</a>
+                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ tag }}</span> ({{ count }})</a>
                                     </li>
-                                    <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Tag</span>
-                                            2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Tag</span>
-                                            3</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Tag</span>
-                                            4</a>
-                                    </li>
+                                    {% endfor %}
+                                   
                                 </ul>
                             </li>
 

@@ -1,19 +1,43 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from taggit.models import Tag
 
 from .models import Entry
 
-# Create your views here.
+# Helper functions
 
+
+def get_all_users():
+    User = get_user_model()
+    users = User.objects.all()
+
+    return users
+
+
+def get_page_obj(request, entries):
+    paginator = Paginator(entries, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return page_obj
+
+
+def get_all_tags():
+    tags = Tag.objects.all().order_by('name')
+    return tags
+
+
+# Views
 
 def index(request):
     entries = Entry.objects.all().filter(publish=1)
     sorted_param = ''
-    User = get_user_model()
-    users = User.objects.all()
+    users = get_all_users()
+    tags = get_all_tags()
 
     if request.GET.get('sorted') == 'by_likes':
         entries = Entry.objects.all().filter(publish=1).order_by('-likes')
@@ -22,9 +46,13 @@ def index(request):
         entries = Entry.objects.all().filter(publish=1).order_by('-created_on')
         sorted_param = '?sorted=by_date'
 
-    paginator = Paginator(entries, 2)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    tag_names = dict()
+    for tag in tags:
+        tag_names[tag.name] = entries.filter(
+            tags__name__in=[tag.name]).distinct().count()
+    print(tag_names)
+    print(entries.filter(tags__name__in=['guitar']).count())
+    page_obj = get_page_obj(request, entries)
 
     return render(
         request,
@@ -33,14 +61,15 @@ def index(request):
          'sorted_param': sorted_param,
          'page_obj': page_obj,
          'users': users,
+         'tags': tag_names,
          })
 
 
 def entry_details(request, slug):
     entry = get_object_or_404(Entry.objects.filter(publish=1), slug=slug)
-    User = get_user_model()
-    users = User.objects.all()
-    
+    users = get_all_users()
+    print(entry.tags.all()[0])
+
     return render(
         request,
         'mainpage/entry_details.html',
@@ -50,12 +79,11 @@ def entry_details(request, slug):
 
 
 def filter_user(request, username):
-    User = get_user_model()
-    users = User.objects.all()
+    users = get_all_users()
     user = get_object_or_404(users, username=username)
     entries = user.entries.all().filter(publish=1)
     sorted_param = ''
-    
+
     if request.GET.get('sorted') == 'by_likes':
         entries = entries.order_by('-likes')
         sorted_param = '?sorted=by_likes'
@@ -63,10 +91,8 @@ def filter_user(request, username):
         entries = entries.order_by('-created_on')
         sorted_param = '?sorted=by_date'
 
-    paginator = Paginator(entries, 2)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
+    page_obj = get_page_obj(request, entries)
+
     return render(
         request,
         'mainpage/index.html',
@@ -75,3 +101,7 @@ def filter_user(request, username):
          'page_obj': page_obj,
          'sorted_param': sorted_param,
          })
+
+
+def filter_tags():
+    entries = entries.filter(tags__name__in=['german', 'cover'])
