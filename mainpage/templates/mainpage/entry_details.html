@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1>MusicLab</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <p>Created by {{ entry.author }}</p>
+                <h3>{{ entry.title }}</h3>
+            <p>Created on: {{ entry.created_date }}</p>
+        </div>
+        <div class="card-body">
+            <div>{{ entry.description | safe}}</div>
+            <audio controls>
+                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
+            <p></p>
+            {% for tag in entry.tags.all %}
+            {{ tag }}{% if tag == entry.tags.last %}{% else %},{% endif %}
+            {% endfor %}
+            </p>
+            <div class="card-footer">
+                <p>Likes: {{ entry.likes }}</p>
+                {% for comment in entry.comments.all %}
+                <div class="mt-2">
+                    <p>{{ comment.author }} wrote:</p>
+                    <div>{{ comment.content }}</div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
