@@ -7,8 +7,9 @@
     {% for entry in entries %}
     <div class="card">
         <div class="card-header">
-            <p>{{ entry.author }}</p>
-            <p>{{ entry.title }}</p>
+            <p>Created by {{ entry.author }}</p>
+            <h3>{{ entry.title }}</h3>
+            <p>Created on: {{ entry.created_date }}</p>
         </div>
         <div class="card-body">
             <div>{{ entry.description | safe}}</div>
@@ -24,8 +25,10 @@
             <div class="card-footer">
                 <p>Likes: {{ entry.likes }}</p>
                 {% for comment in entry.comments.all %}
-                <p>{{ comment.author }} wrote:</p>
-                <div>{{ comment.content }}</div>
+                <div class="mt-2">
+                    <p>{{ comment.author }} wrote:</p>
+                    <div>{{ comment.content }}</div>
+                </div>
                 {% endfor %}
             </div>
         </div>

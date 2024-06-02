@@ -39,8 +39,11 @@ class Entry(models.Model):
     class Meta:
         ordering = ["-created_on"]
 
+    def created_date(self):
+        return self.created_on.date()
+    
     def __str__(self):
-        return f"Entry {self.title} created by {self.author}"
+        return f"{self.title} created by {self.author}"
 
 
 class Comment(models.Model):
@@ -55,7 +58,8 @@ class Comment(models.Model):
         ordering = ["-created_on"]
 
     def __str__(self):
-        return f"Comment {self.content} written by {self.author}"
+        return (f"{self.author} commented on {self.entry}: " +
+                f"{self.content[:15]}...")
 
 
 class Like(models.Model):
@@ -76,10 +80,10 @@ class Like(models.Model):
         '''
         if self.user.liked.all().filter(entry=self.entry.id).count() != 0 \
             or self.entry.author == self.user:
-            print('You already liked it')
+            print('You already liked it or this is your own entry')
             return
         else:
-            self.entry.likes += 1
+            self.entry.likes = self.entry.all_likes.count() + 1
             self.entry.save()
             super(Like, self).save()
 

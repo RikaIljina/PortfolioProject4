@@ -6,7 +6,7 @@ from .models import Entry
 
 
 def index(request):
-    entries = Entry.objects.all().order_by('-likes')
+    entries = Entry.objects.all().filter(publish=1).order_by('-likes')
     return render(
         request,
         'mainpage/index.html',
