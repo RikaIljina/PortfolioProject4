@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'taggit',
     'cloudinary',
     'mainpage',
+    'users',
 ]
 
 MIDDLEWARE = [

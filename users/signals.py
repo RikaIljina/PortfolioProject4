@@ -5,7 +5,7 @@ from taggit.models import Tag
 from django.db.models import Count, Q
 from django.dispatch import receiver
 
-from .models import Profile, Like
+from .models import Profile
 
     
 # https://dev.to/earthcomfy/django-user-profile-3hik
@@ -36,8 +36,8 @@ def save_profile(sender, instance, created, **kwargs):
 #         pass
 
 
-@receiver(pre_delete, sender=Like)
-def delete_like(sender, instance, **kwargs):
-    if instance.entry.likes > 0:
-        instance.entry.likes -= 1
-        instance.entry.save()
+# @receiver(pre_delete, sender=Like)
+# def delete_like(sender, instance, **kwargs):
+#     if instance.entry.likes > 0:
+#         instance.entry.likes -= 1
+#         instance.entry.save()

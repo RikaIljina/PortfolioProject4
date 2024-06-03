@@ -8,7 +8,6 @@ from django.db.models.functions import Lower
 from taggit.models import Tag
 
 from .models import Entry
-#from .signals import current_usernames, current_tags
 
 # Helper functions
 
@@ -40,6 +39,9 @@ def sort_by(request, entries):
         sorted_param = '?sorted=by_date'
     else:
         sorted_param = ''
+    print(request.GET)
+    if 'tag' in request.GET:
+        print("Tag found!")
     
     return entries, sorted_param
 
@@ -126,6 +128,29 @@ def filter_tag(request, tag):
                'sorted_param': sorted_param,
                }
 
+    return render(
+        request,
+        'mainpage/index.html',
+        context)
+    
+
+def user_profile(request, username):
+    user = get_object_or_404(User.objects.all(), username=username)
+    entries = user.entries.filter(publish=1)
+    
+    entries, sorted_param = sort_by(request, entries)
+    
+    page_obj = get_page_obj(request, entries)
+    users = get_username_list()
+    tags = get_all_tags()
+    
+    context = {'entries': entries,
+               'users': users,
+               'tags': tags,
+               'page_obj': page_obj,
+               'sorted_param': sorted_param,
+               }
+    
     return render(
         request,
         'mainpage/index.html',
