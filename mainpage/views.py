@@ -1,22 +1,15 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from taggit.models import Tag
 
 from .models import Entry
+from .signals import current_usernames
 
 # Helper functions
-
-
-def get_all_users():
-    User = get_user_model()
-    users = User.objects.all()
-
-    return users
-
 
 def get_page_obj(request, entries):
     paginator = Paginator(entries, 2)
@@ -27,7 +20,9 @@ def get_page_obj(request, entries):
 
 
 def get_all_tags():
-    tags = Tag.objects.all().order_by('name')
+    tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
+        entry__publish=1), distinct=True)).filter(amount__gt=0).order_by('name')
+
     return tags
 
 
@@ -36,51 +31,64 @@ def get_all_tags():
 def index(request):
     entries = Entry.objects.all().filter(publish=1)
     sorted_param = ''
-    users = get_all_users()
+    users = current_usernames
+    
     tags = get_all_tags()
 
     if request.GET.get('sorted') == 'by_likes':
-        entries = Entry.objects.all().filter(publish=1).order_by('-likes')
+        entries = entries.order_by('-likes')
         sorted_param = '?sorted=by_likes'
     elif request.GET.get('sorted') == 'by_date':
-        entries = Entry.objects.all().filter(publish=1).order_by('-created_on')
+        entries = entries.order_by('-created_on')
         sorted_param = '?sorted=by_date'
 
-    tag_names = dict()
-    for tag in tags:
-        tag_names[tag.name] = entries.filter(
-            tags__name__in=[tag.name]).distinct().count()
-    print(tag_names)
-    print(entries.filter(tags__name__in=['guitar']).count())
+    # tag_names = dict()
+    # for tag in tags:
+    #     tag_names[tag.name] = entries.filter(
+    #         tags__name__in=[tag.name]).distinct().count()
+    # print(tag_names)
+    # print(entries.filter(tags__name__in=['guitar']).count())
+        # Entry.objects.filter(
+        # tags__name__in=[tag.name]).distinct().count())
+    # print(tags.__dir__())
+
     page_obj = get_page_obj(request, entries)
+
+    context = {'entries': entries,
+               'sorted_param': sorted_param,
+               'page_obj': page_obj,
+               'users': users,
+               'tags': tags,
+               }
 
     return render(
         request,
         'mainpage/index.html',
-        {'entries': entries,
-         'sorted_param': sorted_param,
-         'page_obj': page_obj,
-         'users': users,
-         'tags': tag_names,
-         })
+        context)
 
 
 def entry_details(request, slug):
     entry = get_object_or_404(Entry.objects.filter(publish=1), slug=slug)
-    users = get_all_users()
+   # users = get_all_users()
+    users = current_usernames
+
     print(entry.tags.all()[0])
+    
+    context = {'entry': entry,
+               'users': users,
+               }
 
     return render(
         request,
         'mainpage/entry_details.html',
-        {'entry': entry,
-         'users': users,
-         })
+        context)
 
 
 def filter_user(request, username):
-    users = get_all_users()
-    user = get_object_or_404(users, username=username)
+    users = current_usernames
+    
+    user = get_object_or_404(User.objects.all(), username=username)
+    
     entries = user.entries.all().filter(publish=1)
     sorted_param = ''
 
@@ -92,15 +100,16 @@ def filter_user(request, username):
         sorted_param = '?sorted=by_date'
 
     page_obj = get_page_obj(request, entries)
+    context = {'entries': entries,
+               'users': users,
+               'page_obj': page_obj,
+               'sorted_param': sorted_param,
+               }
 
     return render(
         request,
         'mainpage/index.html',
-        {'entries': entries,
-         'users': users,
-         'page_obj': page_obj,
-         'sorted_param': sorted_param,
-         })
+        context)
 
 
 def filter_tags():

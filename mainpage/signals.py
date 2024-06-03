@@ -1,17 +1,25 @@
 from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.functions import Lower
 from django.contrib.auth.models import User
+from taggit.models import Tag
+from django.db.models import Count, Q
 from django.dispatch import receiver
 
 from .models import Profile, Like
 
+# Global lists that store querysets to be used by all views
+current_usernames = []
+
+    
 # https://dev.to/earthcomfy/django-user-profile-3hik
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+        current_usernames.append(instance.username)
 
-
+    
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     if created:

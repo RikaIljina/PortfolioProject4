@@ -25,7 +25,7 @@
         </div>
         <div class="card-body">
             <div>{{ entry.description | safe}}</div>
-            <audio controls>
+            <audio controls class="w-100">
                 <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                 Your browser does not support the audio tag.
             </audio>

@@ -21,6 +21,7 @@
         <a class="nav-link" href="#">Sign in</a>
         <a class="nav-link" href="#">Register</a>
         <a class="nav-link" href="#">My Dashboard</a>
+        {% if user.is_authenticated %}
         <div class="dropdown pb-4">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,6 +38,7 @@
                 <li><a class="dropdown-item" href="#">Sign out</a></li>
             </ul>
         </div>
+        {% endif %}
     </nav>
 
 
@@ -84,7 +86,7 @@
 
                                     {% for user in users %}
                                     <li class="w-100">
-                                        <a href="{% url 'filter_user' user.username %}" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ user.username }}</span></a>
+                                        <a href="{% url 'filter_user' user %}" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ user }}</span></a>
                                     </li>
                                     {% endfor %}
 
@@ -95,9 +97,9 @@
                                     <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Filter by
                                         tags</span> </a>
                                 <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                    {% for tag, count in tags.items %}
+                                    {% for tag in tags %}
                                     <li class="w-100">
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ tag }}</span> ({{ count }})</a>
+                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ tag }}</span> ({{ tag.amount }})</a>
                                     </li>
                                     {% endfor %}
                                    
