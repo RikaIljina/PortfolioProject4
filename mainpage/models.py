@@ -2,49 +2,58 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from taggit.managers import TaggableManager
+from django.template.defaultfilters import slugify
 
 STATUS = ((0, "Private"), (1, "Published"))
 
 # Create your models here.
 
 
-class Profile(models.Model):
-    '''User profile
-    Must be created automatically when user registers
-    Move to separate "users" app?'''
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True, null=True)
-    # TODO: limit image size
-    pic = CloudinaryField('image', default='placeholder')
-    joined = models.DateTimeField(auto_now_add=True)
-    social = models.URLField(blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+# class Profile(models.Model):
+#     '''User profile
+#     Must be created automatically when user registers
+#     Move to separate "users" app?'''
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     bio = models.TextField(blank=True, null=True)
+#     # TODO: limit image size
+#     pic = CloudinaryField('image', default='placeholder')
+#     joined = models.DateTimeField(auto_now_add=True)
+#     social = models.URLField(blank=True, null=True)
+#     email = models.EmailField(blank=True, null=True)
 
-    def __str__(self) -> str:
-        return f"User profile of {self.user.username}"
+#     def __str__(self) -> str:
+#         return f"User profile of {self.user.username}"
 
 
 class Entry(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="entries")
-    title = models.CharField(max_length=200, unique=True)
+    title = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
     audio_file = CloudinaryField('raw', resource_type='auto', format='mp3')
     description = models.TextField()
     tags = TaggableManager()
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     likes = models.IntegerField(null=True, default=0)
     publish = models.IntegerField(choices=STATUS, default=0)
 
     class Meta:
         ordering = ["-created_on"]
 
-    def created_date(self):
-        ''' Convert DateTime to pure Date '''
-        return self.created_on.date()
+    # def created_date(self):
+    #     ''' Convert DateTime to pure Date '''
+    #     return self.created_on.date()
     
     def __str__(self):
         return f"{self.title} created by {self.author}"
+    
+    def save(self, *args, **kwargs):
+        # TODO: Check if author already used same title in form in JS file
+        #if not self.slug:
+        new_slug = f'{self.title}-{self.author.username}'
+        print(new_slug)
+        self.slug = slugify(new_slug)
+        return super().save(*args, **kwargs)
 
 
 class Comment(models.Model):
