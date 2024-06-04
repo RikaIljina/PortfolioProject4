@@ -31,10 +31,27 @@
             <p>
                 {{ entry.tags.all|join:", " }}
             </p>
-            <div class="card-footer">
-                <p>Likes: {{ entry.all_likes.all|length }} | Comments: {{ entry.comments.all|length }}</p>
 
-            </div>
+        </div>
+        <div class="card-footer">
+                <p>
+                    {% if user.is_authenticated and entry.author != user %}
+                        {% if page_obj.number != 1 or sorted_param != '' %}
+                        <a class="like" onclick="window.location=window.location.search+'&liked={{ entry.id }}';">
+                        {% else %}
+                        <a class="like" onclick="window.location='?liked={{ entry.id }}';">
+                        {% endif %}
+                            {% if entry.already_liked == 1 %}
+                            <i class="fa-solid fa-heart like-red"></i>
+                            {% else %}
+                            <i class="fa-regular fa-heart"></i>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                    <i class="fa-regular fa-heart text-muted"></i>
+                    {% endif %}
+                    {{ entry.all_likes.all|length }} | <i class="fa-regular fa-comment"></i> {{entry.comments.all|length }}
+                </p>
         </div>
     </div>
     {% empty %}
@@ -44,7 +61,7 @@
     {% endfor %}
 
     {% include 'pagination.html' %}
-    
+
 </div>
 
 {% endblock content %}

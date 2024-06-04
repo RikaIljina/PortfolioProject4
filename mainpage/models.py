@@ -83,7 +83,7 @@ class Like(models.Model):
         ordering = ["-created_on"]
 
 
-    def save(self):
+    def save(self, *args, **kwargs):
         '''Checks if the like is valid before saving
         This makes sure that a user cannot like an entry twice and cannot
         like their own entry
@@ -95,7 +95,7 @@ class Like(models.Model):
         else:
             self.entry.likes = self.entry.all_likes.count() + 1
             self.entry.save()
-            super(Like, self).save()
+            super(Like, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Entry {self.entry} liked by {self.user}"

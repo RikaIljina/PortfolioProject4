@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
 
-from mainpage.models import Entry
+from mainpage.models import Entry, Like
 
 # Helper functions
 
@@ -32,18 +32,40 @@ def get_all_tags():
 
 def sort_by(request, entries):
     if request.GET.get('sorted') == 'by_likes':
-        entries = entries.order_by('-likes')
+        entries = entries.annotate(count_likes=Count('all_likes')).order_by('-count_likes')
         sorted_param = '?sorted=by_likes'
     elif request.GET.get('sorted') == 'by_date':
         entries = entries.order_by('-created_on')
         sorted_param = '?sorted=by_date'
     else:
         sorted_param = ''
+        
     print(request.GET)
-    if 'tag' in request.GET:
-        print("Tag found!")
     
     return entries, sorted_param
 
-def get_published_entries():
-    return Entry.objects.filter(publish=1)
+def get_published_entries(request):
+    if request.user.is_authenticated:
+        entries = Entry.objects.filter(publish=1).annotate(already_liked=Count(
+            'all_likes', filter=Q(all_likes__user = request.user)))
+        print(request.user.liked)
+    else:
+        entries = Entry.objects.filter(publish=1)
+
+    return entries
+
+def save_like(request):
+    entry = get_object_or_404(get_published_entries(request), id=request.GET.get('liked'))
+    like = Like.objects.create(user=request.user, entry=entry)
+    print(like)
+    print(request.GET.dict())
+    if request.GET.dict():
+        q = '?'
+        for key, value in request.GET.items():
+            if key != 'liked':
+                q += f'{key}=' + f'{value}&'
+        q = q[:-1]
+
+    else:
+        q = ''
+    return HttpResponseRedirect(reverse('home') + q)

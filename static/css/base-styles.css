@@ -9,3 +9,19 @@
 .active {
     background-color: rgb(95, 111, 106);
 }
+
+.like-btn:focus,.like-btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ .like {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+ }
+
+ .like-red
+ {
+    color: red;
+ }

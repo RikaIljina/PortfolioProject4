@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
 
-from .models import Entry
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
+from .models import Entry, Like
+from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
 
 # Helper functions
 
@@ -52,8 +52,11 @@ from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_b
 # Views
 
 def index(request):
-    entries = get_published_entries()
+    entries = get_published_entries(request)
     entries, sorted_param = sort_by(request, entries)
+    
+    if request.GET.get('liked') and request.user.is_authenticated:
+        save_like(request)
 
     page_obj = get_page_obj(request, entries)
     
@@ -66,7 +69,7 @@ def index(request):
                'users': users,
                'tags': tags,
                }
-    print(request.path)
+    print(request)
 
     return render(
         request,
@@ -75,7 +78,7 @@ def index(request):
 
 
 def entry_details(request, slug):
-    entry = get_object_or_404(get_published_entries(), slug=slug)
+    entry = get_object_or_404(get_published_entries(request), slug=slug)
     users = get_username_list()
     tags = get_all_tags()
 
@@ -116,7 +119,7 @@ def filter_user(request, username):
 
 
 def filter_tag(request, tag):
-    entries = get_published_entries().filter(tags__name__in=[tag])
+    entries = get_published_entries(request).filter(tags__name__in=[tag])
     entries, sorted_param = sort_by(request, entries)
     
     page_obj = get_page_obj(request, entries)
