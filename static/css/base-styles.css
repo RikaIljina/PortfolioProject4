@@ -5,3 +5,7 @@
 .nav a {
     color: aliceblue;
 }
+
+.active {
+    background-color: rgb(95, 111, 106);
+}

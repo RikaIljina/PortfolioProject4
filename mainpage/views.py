@@ -66,6 +66,7 @@ def index(request):
                'users': users,
                'tags': tags,
                }
+    print(request.path)
 
     return render(
         request,

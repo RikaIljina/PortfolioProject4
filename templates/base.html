@@ -1,5 +1,10 @@
 {% load static %}
 
+{% url 'home' as home_url %}
+{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,10 +28,10 @@
 <body>
 
     <nav class="nav justify-content-center bg-dark">
-        <a class="nav-link active" href="{% url 'home' %}" aria-current="page">Main</a>
-        <a class="nav-link" href="#">Sign in</a>
-        <a class="nav-link" href="#">Register</a>
-        <a class="nav-link" href="#">My Dashboard</a>
+        <a class="nav-link {% if request.path == home_url %} active" aria-current="page{% endif %}" href="{% url 'home' %}" >Main</a>
+        <a class="nav-link {% if request.path == login_url %} active" aria-current="page{% endif %}" href="{% url 'account_login' %}">Sign in</a>
+        <a class="nav-link {% if request.path == signup_url %} active" aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
+        <a class="nav-link {% if request.path == dashboard %} active" aria-current="page{% endif %}" href="#">My Dashboard</a>
         {% if user.is_authenticated %}
         <div class="dropdown py-2 px-4">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
@@ -46,7 +51,7 @@
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a></li>
             </ul>
         </div>
         {% endif %}
