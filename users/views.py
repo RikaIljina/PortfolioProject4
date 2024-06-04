@@ -10,23 +10,30 @@ from taggit.models import Tag
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 
 # Create your views here.
+
+
 def user_profile(request, username):
     user = get_object_or_404(User.objects.all(), username=username)
+    profile = user.profile
     entries = user.entries.filter(publish=1)
-    
+    most_liked = entries.order_by('-likes').first
+    most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
-    
+
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
     tags = get_all_tags()
-    
-    context = {'entries': entries,
+
+    context = {'profile': profile,
+               'entries': entries,
+               'most_liked': most_liked,
+               'most_recent': most_recent,
                'users': users,
                'tags': tags,
                'page_obj': page_obj,
                'sorted_param': sorted_param,
                }
-    
+
     return render(
         request,
         'users/profile.html',

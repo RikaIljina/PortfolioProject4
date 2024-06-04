@@ -1,1 +1,148 @@
-hello
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<!-- https://mdbootstrap.com/docs/standard/extended/profiles/ -->
+<section class="vh-100" style="background-color: #f4f5f7;">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center  h-100 w-100">
+            <div class="col col-lg-6 mb-4 mb-lg-0 w-100">
+                <div class="card mb-3" style="border-radius: .5rem;">
+                    <div class="row g-0">
+                        <div class="col-md-4 gradient-custom text-center text-white"
+                            style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                            {% if "placeholder" in user.profile.pic.url %}
+                            <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar"
+                                class="img-fluid my-5 rounded-circle" style="width: 120px;">
+                            {% else %}
+                            <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid my-5 rounded-circle"
+                                style="width: 120px;" />
+                            {% endif %}
+                            <h3>{{ profile.user.username }}</h3>
+                            <p>Joined {{ profile.joined|date:'Y, M d' }}</p>
+                            <i class="far fa-edit mb-5"></i>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body p-4">
+                                <h6>Contact Me</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row pt-1">
+                                    <div class="col-6 mb-3">
+                                        <h6>Email</h6>
+                                        <a href="mailto:{{ profile.email }}"><i class="fa fa-envelope fa-lg"></i></a>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>Social</h6>
+                                        <div class="d-flex justify-content-start">
+                                            <a href="{{ profile.social }}" target="_blank"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                                            <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                                            <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6>My Entries</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row pt-1">
+                                    <div class="col-6 mb-3">
+                                        <h6>Recent</h6>
+                                        <a href="{% url 'entry_details' most_recent.slug %}">
+                                        <p class="text-muted">{{ most_recent.title }}</p>
+                                    </a>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>Most Liked</h6>
+                                        <a href="{% url 'entry_details' most_liked.slug %}">
+                                        <p class="text-muted">{{ most_liked.title }}</p>
+                                    </a>
+                                    </div>
+                                </div>
+                                <h6>My Bio</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row pt-1">
+                                    <div class="col-12 mb-3">
+                                        <p class="text-muted">{{ profile.bio }}</p>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>My Entries</h1>
+
+        <form method="GET">
+            <p>Sort entries:</p>
+            <button name="sorted" id="by_likes" value="by_likes" class="btn btn-primary" href="#" type="submit">Most
+                popular</button>
+            <button name="sorted" id="by_date" value="by_date" class="btn btn-primary" href="#" type="submit">Newest
+                first</button>
+        </form>
+
+        {% for entry in page_obj %}
+        <div class="card">
+            <div class="card-header">
+                <a href="{% url 'entry_details' entry.slug %}">
+                    <h3>{{ entry.title }}</h3>
+                </a>
+                <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
+            </div>
+            <div class="card-body">
+                <audio controls class="w-100">
+                    <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
+                    Your browser does not support the audio tag.
+                </audio>
+                <p>
+                    {{ entry.tags.all|join:", " }}
+                </p>
+                <div class="card-footer">
+                    <p>Likes: {{ entry.all_likes.all|length }} | Comments: {{ entry.comments.all|length }}</p>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div>
+            <p>This user has not uploaded any songs yet.</p>
+        </div>
+        {% endfor %}
+
+        <div class="pagination">
+            <ul class="pagination">
+                <li class="page-item">
+                {% if page_obj.has_previous %}
+                <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page=1" class="page-link">&laquo; first</a>
+                <a
+                    href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.previous_page_number }}" class="page-link">previous</a>
+                {% endif %}
+            </li>
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                <a
+                    href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.next_page_number }}">next</a>
+                <a
+                    href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.paginator.num_pages }}">last
+                    &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</section>
+
+
+
+
+{% endblock %}

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +13,10 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Font Awesome JS -->
     <script src="https://kit.fontawesome.com/936b3a8c94.js" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/base-styles.css' %}">
+    {% block styles %}
+    {% endblock %}
     <title>MusicLab</title>
 </head>
 
@@ -22,11 +28,16 @@
         <a class="nav-link" href="#">Register</a>
         <a class="nav-link" href="#">My Dashboard</a>
         {% if user.is_authenticated %}
-        <div class="dropdown pb-4">
+        <div class="dropdown py-2 px-4">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                 id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if "placeholder" in user.profile.pic.url %}
+                <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
+                class="rounded-circle">
+                {% else %}
                 <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
                     class="rounded-circle">
+                {% endif %}
                 <span class="d-none d-sm-inline mx-1">{{ user.username }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
