@@ -1,6 +1,7 @@
 {% load static %}
 
 {% url 'home' as home_url %}
+
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
@@ -28,10 +29,7 @@
 <body>
 
     <nav class="nav justify-content-center bg-dark">
-        <a class="nav-link {% if request.path == home_url %} active" aria-current="page{% endif %}" href="{% url 'home' %}" >Main</a>
-        <a class="nav-link {% if request.path == login_url %} active" aria-current="page{% endif %}" href="{% url 'account_login' %}">Sign in</a>
-        <a class="nav-link {% if request.path == signup_url %} active" aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
-        <a class="nav-link {% if request.path == dashboard %} active" aria-current="page{% endif %}" href="#">My Dashboard</a>
+        <a class="nav-link {% if request.path == home_url %} active" aria-current="page{% endif %}" href="{% url 'home' %}" >Home</a>
         {% if user.is_authenticated %}
         <div class="dropdown py-2 px-4">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
@@ -54,6 +52,9 @@
                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a></li>
             </ul>
         </div>
+        {% else %}
+        <a class="nav-link {% if request.path == login_url %} active" aria-current="page{% endif %}" href="{% url 'account_login' %}">Sign in</a>
+        <a class="nav-link {% if request.path == signup_url %} active" aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
         {% endif %}
     </nav>
 
@@ -67,39 +68,17 @@
                 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                     <div
                         class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                        <a href="/"
-                            class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                            <span class="fs-5 d-none d-sm-inline">Menu</span>
-                        </a>
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link align-middle px-0">
-                                    <i class="fa-solid fa-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                                </a>
-                            </li>
                             <li>
-                                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span
-                                        class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                                <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                    <li class="w-100">
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">New
-                                                entry</span> </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">...</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                                <a href="{% url 'home' %}" class="nav-link px-0 align-middle ">
+                                    <i class="fa-solid fa-xmark"></i> <span class="ms-1 d-none d-sm-inline">Delete filters</span></a>
                             </li>
-
                             <li>
                                 <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                    <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Filter by
+                                    <i class="fa-solid fa-user"></i> <span class="ms-1 d-none d-sm-inline">Filter by
                                         user</span></a>
-                                <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-
+                                <ul class="collapse {% if request.path|slice:':9' == '/filter/u' %}show{% endif %} nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                                     {% for user in users %}
                                     <li class="w-100">
                                         <a href="{% url 'filter_user' user %}" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ user }}</span></a>
@@ -110,9 +89,9 @@
                             </li>
                             <li>
                                 <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Filter by
-                                        tags</span> </a>
-                                <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                    <i class="fa-solid fa-tag"></i> <span class="ms-1 d-none d-sm-inline">Filter by
+                                        tag</span> </a>
+                                <ul class="collapse {% if request.path|slice:':9' == '/filter/t' %}show{% endif %} nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                                     {% for tag in tags %}
                                     <li class="w-100">
                                         <a href="{% url 'filter_tag' tag.name %}" class="nav-link px-0"> <span class="d-none d-sm-inline">{{ tag }}</span> ({{ tag.amount }})</a>
@@ -127,6 +106,7 @@
                     </div>
                 </div>
                 <div class="col py-3">
+                    
                     {% block content %}
 
                     {% endblock content %}
