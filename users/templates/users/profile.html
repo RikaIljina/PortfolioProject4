@@ -117,10 +117,9 @@
                 <p>
                     {{ entry.tags.all|join:", " }}
                 </p>
-                <div class="card-footer">
-                    <p>Likes: {{ entry.all_likes.all|length }} | Comments: {{ entry.comments.all|length }}</p>
 
-                </div>
+                {% include 'like_comment_summary.html' %}
+                
             </div>
         </div>
         {% empty %}

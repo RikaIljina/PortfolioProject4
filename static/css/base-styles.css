@@ -15,6 +15,10 @@
     box-shadow: none;
  }
 
+ a {
+    cursor: pointer;
+ }
+ 
  .like {
     cursor: pointer;
     text-decoration: none;

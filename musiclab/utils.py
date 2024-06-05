@@ -44,22 +44,24 @@ def sort_by(request, entries):
     
     return entries, sorted_param
 
-def get_published_entries(request):
-    if request.user.is_authenticated:
-        entries = Entry.objects.filter(publish=1).annotate(already_liked=Count(
+def get_published_entries(request, source, get_likes=True):
+    if request.user.is_authenticated and get_likes:
+        entries = source.filter(publish=1).annotate(already_liked=Count(
             'all_likes', filter=Q(all_likes__user = request.user)))
-        print(request.user.liked)
+        print(f"Annotating: {request.user.liked}")
     else:
-        entries = Entry.objects.filter(publish=1)
+        entries = source.filter(publish=1)
 
     return entries
 
 def save_like(request):
-    entry = get_object_or_404(get_published_entries(request), id=request.GET.get('liked'))
-    like = Like.objects.create(user=request.user, entry=entry)
-    print(like)
-    print(request.GET.dict())
+    entry_id = request.GET.get('liked')
+    entry = get_object_or_404(get_published_entries(request, Entry.objects), id=entry_id)
+    if entry.already_liked == 0:
+        like = Like.objects.create(user=request.user, entry=entry)
+
     if request.GET.dict():
+        print(request.GET.dict())
         q = '?'
         for key, value in request.GET.items():
             if key != 'liked':
@@ -68,4 +70,5 @@ def save_like(request):
 
     else:
         q = ''
-    return HttpResponseRedirect(reverse('home') + q)
+        
+    return HttpResponseRedirect(request.path + q)

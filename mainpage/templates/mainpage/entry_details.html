@@ -20,17 +20,21 @@
             <p>
                 {{ entry.tags.all|join:", " }}
             </p>
-            <div class="card-footer">
-                <p>Likes: {{ entry.likes }}</p>
-                {% for comment in entry.comments.all %}
-                <div class="mt-2">
-                    <p><a href="{% url 'user_profile' comment.author.username %}">{{ comment.author }}</a> wrote:</p>
-                    <div>{{ comment.content }}</div>
-                </div>
-                <hr>
-                {% endfor %}
-            </div>
+
+            {% include 'like_comment_summary.html' %}
+
         </div>
+        <div class="card">
+
+            {% for comment in entry.comments.all %}
+            <div class="mt-2">
+                <p><a href="{% url 'user_profile' comment.author.username %}">{{ comment.author }}</a> wrote:</p>
+                <div>{{ comment.content }}</div>
+            </div>
+            <hr>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
 

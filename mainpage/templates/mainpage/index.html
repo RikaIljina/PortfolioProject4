@@ -4,9 +4,15 @@
 
 <div class="container">
     <h1>MusicLab</h1>
-
+<div>
+    {% if user_filter %}
+    <h3>Results for user "{{ user_filter }}"</h3>
+    {% endif %}
+    {% if tag_filter %}
+    <h3>Results for tag "{{ tag_filter }}"</h3>
+    {% endif %}
+</div>
     <form method="GET">
-        <!-- {% csrf_token %} -->
         <p>Sort entries:</p>
         <button name="sorted" id="by_likes" value="by_likes" class="btn btn-primary" href="#" type="submit">Most
             popular</button>
@@ -33,26 +39,8 @@
             </p>
 
         </div>
-        <div class="card-footer">
-                <p>
-                    {% if user.is_authenticated and entry.author != user %}
-                        {% if page_obj.number != 1 or sorted_param != '' %}
-                        <a class="like" onclick="window.location=window.location.search+'&liked={{ entry.id }}';">
-                        {% else %}
-                        <a class="like" onclick="window.location='?liked={{ entry.id }}';">
-                        {% endif %}
-                            {% if entry.already_liked == 1 %}
-                            <i class="fa-solid fa-heart like-red"></i>
-                            {% else %}
-                            <i class="fa-regular fa-heart"></i>
-                            {% endif %}
-                        </a>
-                    {% else %}
-                    <i class="fa-regular fa-heart text-muted"></i>
-                    {% endif %}
-                    {{ entry.all_likes.all|length }} | <i class="fa-regular fa-comment"></i> {{entry.comments.all|length }}
-                </p>
-        </div>
+        {% include 'like_comment_summary.html' %}
+       
     </div>
     {% empty %}
     <div>
