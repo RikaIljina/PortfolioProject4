@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include 'profile_card.html' %}
+
+{% endblock %}

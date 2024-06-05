@@ -56,6 +56,7 @@ def entry_details(request, slug):
             comment.author = request.user
             comment.entry = entry
             comment.save()
+        print(request.POST)
             
     comment_form = CommentForm()
 

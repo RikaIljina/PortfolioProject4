@@ -23,7 +23,7 @@ def user_profile(request, username):
 
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
-        
+
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
     tags = get_all_tags()
@@ -41,4 +41,39 @@ def user_profile(request, username):
     return render(
         request,
         'users/profile.html',
+        context)
+
+
+def dashboard(request, username):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+    
+    user = request.user
+    profile = user.profile
+   # entries = user.entries.filter(publish=1)
+    entries = get_published_entries(request, user.entries)
+    most_liked = entries.order_by('-likes').first
+    most_recent = entries.order_by('-created_on').first
+    entries, sorted_param = sort_by(request, entries)
+
+    if request.GET.get('liked') and request.user.is_authenticated:
+        return save_like(request)
+# Deactivate sidebar!! 
+    page_obj = get_page_obj(request, entries)
+    users = get_username_list()
+    tags = get_all_tags()
+
+    context = {'profile': profile,
+               'entries': entries,
+               'most_liked': most_liked,
+               'most_recent': most_recent,
+               'users': users,
+               'tags': tags,
+               'page_obj': page_obj,
+               'sorted_param': sorted_param,
+               }
+
+    return render(
+        request,
+        'users/dashboard.html',
         context)
