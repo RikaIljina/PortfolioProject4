@@ -11,7 +11,6 @@ from .models import Entry, Like
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
 
 
-
 # Views
 
 def index(request):

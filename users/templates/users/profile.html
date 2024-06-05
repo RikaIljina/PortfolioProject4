@@ -22,7 +22,7 @@
                                 class="img-fluid my-5 rounded-circle" style="width: 120px;">
                             {% else %}
                             <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid my-5 rounded-circle"
-                                style="width: 120px;" />
+                                style="width: 120px;" >
                             {% endif %}
                             <h3>{{ profile.user.username }}</h3>
                             <p>Joined {{ profile.joined|date:'Y, M d' }}</p>
@@ -119,7 +119,7 @@
                 </p>
 
                 {% include 'like_comment_summary.html' %}
-                
+
             </div>
         </div>
         {% empty %}

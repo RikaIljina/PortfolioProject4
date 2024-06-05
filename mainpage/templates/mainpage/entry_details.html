@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -24,18 +25,80 @@
             {% include 'like_comment_summary.html' %}
 
         </div>
+        <div>
+
+        </div>
         <div class="card">
 
-            {% for comment in entry.comments.all %}
-            <div class="mt-2">
-                <p><a href="{% url 'user_profile' comment.author.username %}">{{ comment.author }}</a> wrote:</p>
-                <div>{{ comment.content }}</div>
+            <!-- https://bbbootstrap.com/snippets/bootstrap-comment-section-reply-input-and-vote-up-and-down-73363704 -->
+
+            <div class="container mt-5 mb-5">
+                <div class="d-flex justify-content-center row">
+                    <div class="d-flex flex-column col-md-8">
+
+                        <div class="comment-bottom bg-white p-2 px-4">
+
+                            {% if user.is_authenticated %}
+                            <div class="d-flex flex-row add-comment-section justify-content-center mt-4 mb-4">
+                                {% if "placeholder" in user.profile.pic.url %}
+                                <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
+                                    src="{% static 'images/default_profile.jpg' %}" width="38">
+                                {% else %}
+                                <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
+                                    src="{{ user.profile.pic.url }}" width="38">
+                                {% endif %}
+                                <form method="POST" action="" id="commentForm"
+                                    class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
+                                    {% csrf_token %}
+                                    <input type="text" name="comment" id="comment-input"
+                                        class="flex-fill form-control me-3" placeholder="Add comment">
+                                    <button class="btn btn-primary" id="submitButton" type="submit">Comment</button>
+
+                                </form>
+                            </div>
+                            {% else %}
+                            <p>Log in to leave a comment</p>
+                            {% endif %}
+
+                            {% for comment in entry.comments.all %}
+                            <div class="commented-section mt-2">
+                                <div class="d-flex flex-row align-items-center commented-user">
+                                    {% if "placeholder" in comment.author.profile.pic.url %}
+                                    <img class="img-fluid img-responsive rounded-circle me-2"
+                                        src="{% static 'images/default_profile.jpg' %}" width="30">
+                                    {% else %}
+                                    <img class="img-fluid img-responsive rounded-circle me-2"
+                                        src="{{ comment.author.profile.pic.url }}" width="30">
+                                    {% endif %}
+                                    <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1">
+                                        <h5>{{ comment.author }}</h5>
+                                    </a>
+                                    <p class="flex-fill"></p>
+                                    <p class="mt-1 ms-2 text-muted text-end">on {{ comment.created_on }}</p>
+                                </div>
+
+                                <div class="comment-text-sm my-2"><span>{{ comment.content }}</span></div>
+
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <hr>
-            {% endfor %}
         </div>
 
+
+        {% for comment in entry.comments.all %}
+        <div class="mt-2">
+            <p><a href="{% url 'user_profile' comment.author.username %}">{{ comment.author }}</a> wrote:</p>
+            <div>{{ comment.content }}</div>
+        </div>
+        <hr>
+        {% endfor %}
     </div>
+
 </div>
+
 
 {% endblock %}
