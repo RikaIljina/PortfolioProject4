@@ -8,6 +8,7 @@ from django.db.models.functions import Lower
 from taggit.models import Tag
 
 from .models import Entry, Like
+from .forms import CommentForm
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
 
 
@@ -41,18 +42,27 @@ def index(request):
 
 def entry_details(request, slug):
     entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
-    print(entry.already_liked)
+    
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
         
     users = get_username_list()
     tags = get_all_tags()
 
-    print(entry.tags.all()[0])
-    
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.entry = entry
+            comment.save()
+            
+    comment_form = CommentForm()
+
     context = {'entry': entry,
                'users': users,
                'tags': tags,
+               'comment_form': comment_form,
                }
 
     return render(
