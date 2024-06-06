@@ -57,8 +57,13 @@ def get_published_entries(request, source, get_likes=True):
 def save_like(request):
     entry_id = request.GET.get('liked')
     entry = get_object_or_404(get_published_entries(request, Entry.objects), id=entry_id)
+    print(entry.already_liked)
+    print(entry_id)
     if entry.already_liked == 0:
         like = Like.objects.create(user=request.user, entry=entry)
+    else:
+        like = request.user.liked.get(entry=entry)
+        like.delete()
 
     if request.GET.dict():
         print(request.GET.dict())
