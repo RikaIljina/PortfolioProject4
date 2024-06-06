@@ -5,35 +5,35 @@
 
 <div class="container">
     <h1>MusicLab</h1>
-    <hr>
+    <hr />
+    <form action="" method="GET">
+        <button class="btn btn-success" name="edit" value="{{ entry.id }}" type="submit">Edit Entry</button>
+    </form>
     <div class="card">
         <div class="card-header">
-            <p>Created by <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}</a></p>
-            <h3>{{ entry.title }}</h3>
+            <h3>
+                {% if entry.publish == 0 %}
+                <i class="fa-solid fa-lock"></i>
+                {% else %}
+                <i class="fa-solid fa-globe"></i>
+                {% endif %}
+                {{ entry.title }}</h3>
             <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
         </div>
         <div class="card-body">
             <div>{{ entry.description | safe}}</div>
             <audio controls>
-                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
+                <source src="{{ entry.audio_file.url }}" type="audio/mpeg" />
                 Your browser does not support the audio tag.
             </audio>
-            <p>
-                {{ entry.tags.all|join:", " }}
-            </p>
+            <p>{{ entry.tags.all|join:", " }}</p>
 
             {% include 'like_comment_summary.html' %}
-
         </div>
-        <div>
-
-        </div>
+        <div></div>
 
         {% include 'comment_section.html' %}
-        
     </div>
-
 </div>
-
 
 {% endblock %}
