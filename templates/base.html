@@ -70,6 +70,17 @@
                         class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
+
+                            {% if request.path|slice:'11' == '/dashboard/' %}
+
+                            
+                            <li>
+                                <a href="{% url 'dashboard' user.username %}" class="nav-link px-0 align-middle ">
+                                    <i class="fa-solid fa-folder-open"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span></a>
+                            </li>
+
+                            {% else %}
+
                             <li>
                                 <a href="{% url 'home' %}" class="nav-link px-0 align-middle ">
                                     <i class="fa-solid fa-xmark"></i> <span class="ms-1 d-none d-sm-inline">Delete filters</span></a>
@@ -100,6 +111,8 @@
                                    
                                 </ul>
                             </li>
+
+                            {% endif %}
 
                         </ul>
 

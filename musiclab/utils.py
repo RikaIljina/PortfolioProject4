@@ -37,6 +37,10 @@ def sort_by(request, entries):
     elif request.GET.get('sorted') == 'by_date':
         entries = entries.order_by('-created_on')
         sorted_param = '?sorted=by_date'
+    elif request.GET.get('sorted') == 'by_published':
+        entries = entries.order_by('publish')
+        sorted_param = '?sorted=by_published'
+    
     else:
         sorted_param = ''
         

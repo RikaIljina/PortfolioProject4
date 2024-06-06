@@ -45,7 +45,7 @@ def entry_details(request, slug):
     
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
-        
+
     users = get_username_list()
     tags = get_all_tags()
 
