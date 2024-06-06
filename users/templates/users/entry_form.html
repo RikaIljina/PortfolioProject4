@@ -4,12 +4,26 @@
 {% block content %}
 
 <h1>{{ entry.title }}</h1>
-<div>
-    <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ entry_form }}
-        <button id="submitButton" name="submit" type="submit">Save</button>
-    </form>
+<div class="d-flex flex-row justify-content-center">
+    <div class="col-8 d-flex flex-column p-4">
+        <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <audio controls class="w-100">
+                <source src="{{ entry.audio_file.url }}" type="audio/mpeg" >
+                Your browser does not support the audio tag.
+            </audio>
+            {% for form in entry_form %}
+            <div class="d-flex flex-row my-3">
+                <div class="col-4">{{ form.label_tag }}</div>
+                <!-- {% if form.field.widget.input_type == 'file' %}
+                <div>{{ form.field }}</div>
+                {% endif %} -->
+                <div class="col-8">{{ form }}</div>
+            </div>                  
+            {% endfor %}
+            <button id="submitButton" name="submit" type="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

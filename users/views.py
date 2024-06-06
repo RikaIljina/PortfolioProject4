@@ -173,6 +173,7 @@ def edit_entry(request, username, slug):
                            'audio_file': entry.audio_file, 'tags':(',').join(tag_list), 'publish': entry.publish})
 
     context = {
+        'entry': entry,
         'entry_form': entry_form,
     }
 

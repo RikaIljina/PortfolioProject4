@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import TextInput, EmailInput, Textarea
+from django.forms import TextInput, EmailInput, Textarea, RadioSelect, FileInput
 from mainpage.models import Entry
 from cloudinary.forms import CloudinaryFileField
 from django.utils.translation import gettext_lazy as _
@@ -17,8 +17,13 @@ class EntryForm(forms.ModelForm):
         model = Entry
         fields = ('title', 'description', 'audio_file', 'tags', 'publish')
         widgets = {
-            "description": Textarea(attrs={"rows":"3", "class":"flex-fill form-control me-3", "placeholder":"Add comment", "type":"text", "name":"comment"}),
+            "title": TextInput(attrs={"class":"flex-fill form-control me-3"}),
+            "description": Textarea(attrs={"rows":"3", "class":"flex-fill form-control me-3", "type":"text", "name":"description"}),
+            "audio_file": FileInput(attrs={"class":"flex-fill form-control me-3"}),
+            "tags": TextInput(attrs={"class":"flex-fill form-control me-3"}),
+            "publish": RadioSelect(),
         }
+        
         labels = {
             'title': _('Title'),
             'description': _('Description'),

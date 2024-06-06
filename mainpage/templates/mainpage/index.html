@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <div class="container">
@@ -23,7 +23,15 @@
     {% for entry in page_obj %}
     <div class="card">
         <div class="card-header">
-            <p>Created by <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}</a></p>
+            <p>
+                {% if "placeholder" in user.profile.pic.url %}
+                <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
+                class="rounded-circle">
+                {% else %}
+                <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30" height="30"
+                    class="rounded-circle">
+                {% endif %}
+                <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}</a></p>
             <a href="{% url 'entry_details' entry.slug %}">
                 <h3>{{ entry.title }}</h3>
             </a>

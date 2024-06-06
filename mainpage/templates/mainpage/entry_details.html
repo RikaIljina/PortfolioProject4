@@ -8,7 +8,14 @@
     <hr>
     <div class="card">
         <div class="card-header">
-            <p>Created by <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}</a></p>
+            <p>{% if "placeholder" in user.profile.pic.url %}
+                <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
+                class="rounded-circle">
+                {% else %}
+                <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30" height="30"
+                    class="rounded-circle">
+                {% endif %}
+                <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}</a></p>
             <h3>{{ entry.title }}</h3>
             <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
         </div>
