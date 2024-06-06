@@ -74,6 +74,9 @@ MIDDLEWARE = [
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 cloudinary.config(secure=True)
 
+TAGGIT_CASE_INSENSITIVE = True
+
+
 ROOT_URLCONF = 'musiclab.urls'
 
 TEMPLATES = [

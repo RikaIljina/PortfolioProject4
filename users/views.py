@@ -6,9 +6,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
+import cloudinary
 
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
 from mainpage.forms import CommentForm
+from .forms import EntryForm
 
 # Create your views here.
 
@@ -48,7 +50,7 @@ def user_profile(request, username):
 def dashboard(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
-    
+
     user = request.user
     profile = user.profile
     entries = user.entries.all()
@@ -56,19 +58,20 @@ def dashboard(request, username):
     most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
 
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
-# Deactivate sidebar!! 
+    # if request.GET.get('newEntry'):
+    #     return HttpResponseRedirect(reverse('new_entry'))
+
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request)
+# Deactivate sidebar!!
     page_obj = get_page_obj(request, entries)
-    users = get_username_list()
-    tags = get_all_tags()
+    # users = get_username_list()
+    # tags = get_all_tags()
 
     context = {'profile': profile,
                'entries': entries,
                'most_liked': most_liked,
                'most_recent': most_recent,
-               'users': users,
-               'tags': tags,
                'page_obj': page_obj,
                'sorted_param': sorted_param,
                }
@@ -77,16 +80,16 @@ def dashboard(request, username):
         request,
         'users/dashboard.html',
         context)
-    
+
 
 def dashboard_entry(request, username, slug):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
-        
+
     entry = get_object_or_404(request.user.entries.all(), slug=slug)
 
-    if request.GET.get('edit'):
-        return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
+    # if request.GET.get('edit'):
+    #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
 
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
@@ -96,7 +99,7 @@ def dashboard_entry(request, username, slug):
             comment.entry = entry
             comment.save()
         print(request.POST)
-            
+
     comment_form = CommentForm()
 
     context = {'entry': entry,
@@ -107,19 +110,73 @@ def dashboard_entry(request, username, slug):
         request,
         'users/dashboard_entry.html',
         context)
-    
-    
+
+
+def new_entry(request, username):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+
+    if request.method == 'POST':
+        entry_form = EntryForm(request.POST, request.FILES)
+        if entry_form.is_valid():
+            entry = entry_form.save(commit=False)
+            entry.author = request.user
+            # cloudinary.uploader.upload(request.FILES['audio_file'])
+            entry.likes = 0
+            entry.save()
+            entry_form.save_m2m()
+        else:
+            print('not valid')
+            print(entry_form.errors.as_data())
+
+        print(request.POST)
+        return HttpResponseRedirect(reverse('dashboard', args=[username]))
+
+    entry_form = EntryForm()
+
+    context = {
+        'entry_form': entry_form,
+    }
+
+    return render(
+        request,
+        'users/entry_form.html',
+        context)
+
+
 def edit_entry(request, username, slug):
+
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
 
     entry = get_object_or_404(request.user.entries.all(), slug=slug)
+
+    if request.method == 'POST':
+        entry_form = EntryForm(request.POST, request.FILES, instance=entry)
+        if entry_form.is_valid():
+            entry = entry_form.save(commit=False)
+            entry.author = request.user
+            # cloudinary.uploader.upload(request.FILES['audio_file'])
+            entry.likes = 0
+            entry.save()
+            entry_form.save_m2m()
+        else:
+            print('not valid')
+            print(entry_form.errors.as_data())
+
+        print(request.POST)
+        return HttpResponseRedirect(reverse('dashboard', args=[username]))
     
-    
-    context = {'entry': entry,
-               }
-    
+    tag_list = [value['name'] for value in entry.tags.all().values()]
+
+    entry_form = EntryForm(initial={'title': entry.title, 'description': entry.description,
+                           'audio_file': entry.audio_file, 'tags':(',').join(tag_list), 'publish': entry.publish})
+
+    context = {
+        'entry_form': entry_form,
+    }
+
     return render(
         request,
-        'users/edit_entry.html',
+        'users/entry_form.html',
         context)

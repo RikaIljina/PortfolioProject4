@@ -14,6 +14,8 @@
     <div class="container">
         <h1>My Entries</h1>
 
+        <a href="{% url 'new_entry' user.username %}" class="btn btn-success" role="button">New Entry</a>
+
         <form method="GET">
             <p>Sort entries:</p>
             <button name="sorted" id="by_likes" value="by_likes" class="btn btn-primary" href="#" type="submit">Most
@@ -26,6 +28,7 @@
 
         <!-- Maybe load entry details for this user on the profile page? -->
 
+        
         {% for entry in page_obj %}
         <div class="card">
             <div class="card-header">

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>{{ entry.title }}</h1>
+<div>
+    <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ entry_form }}
+        <button id="submitButton" name="submit" type="submit">Save</button>
+    </form>
+</div>
+
+{% endblock %}

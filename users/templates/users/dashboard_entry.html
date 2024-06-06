@@ -6,9 +6,10 @@
 <div class="container">
     <h1>MusicLab</h1>
     <hr />
-    <form action="" method="GET">
+    <a href="{% url 'edit_entry' user.username entry.slug %}" class="btn btn-success" role="button">Edit Entry</a>
+    <!-- <form action="" method="GET">
         <button class="btn btn-success" name="edit" value="{{ entry.id }}" type="submit">Edit Entry</button>
-    </form>
+    </form> -->
     <div class="card">
         <div class="card-header">
             <h3>
