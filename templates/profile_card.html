@@ -70,7 +70,7 @@
                             <div class="row pt-1">
                                 <div class="col-12 mb-3">
                                     {% if profile.bio %}
-                                    <p class="text-muted">{{ profile.bio }}</p>
+                                    <p class="text-muted">{{ profile.bio|safe }}</p>
                                     {% else %}
                                     <p class="text-muted"> --- </p>
                                     {% endif %}

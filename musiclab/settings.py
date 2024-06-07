@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_SIGNUP_REDIRECT_URL = 'dashboard_new_user'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -76,6 +77,32 @@ cloudinary.config(secure=True)
 
 TAGGIT_CASE_INSENSITIVE = True
 
+#SUMMERNOTE_THEME = 'lite'
+SUMMERNOTE_CONFIG = {
+    'iframe': True,
+    'summernote': {
+        'airMode': False,
+        # Toolbar customization
+        # https://summernote.org/deep-dive/#custom-toolbar-popover
+        'toolbar': [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear', 'strikethrough', 'superscript', 'subscript']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['forecolor', ['forecolor']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link']],
+            ['view', ['fullscreen', 'help']],
+        ],
+        'lang': 'en-US',
+        'fontNames': ["Arial", "Arial Black", "Comic Sans MS", "Courier New"],
+        'width': '500px',
+        'disable_attachment': True,
+        'disableDragAndDrop': True,
+    }
+}
 
 ROOT_URLCONF = 'musiclab.urls'
 
@@ -148,6 +175,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

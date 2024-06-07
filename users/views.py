@@ -47,6 +47,10 @@ def user_profile(request, username):
         context)
 
 
+def dashboard_new_user(request):
+        return HttpResponseRedirect(reverse('edit_profile', args=[request.user.username]))
+    
+
 def dashboard(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
