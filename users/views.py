@@ -10,7 +10,7 @@ import cloudinary
 
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
 from mainpage.forms import CommentForm
-from .forms import EntryForm
+from .forms import EntryForm, ProfileForm
 
 # Create your views here.
 
@@ -79,6 +79,38 @@ def dashboard(request, username):
     return render(
         request,
         'users/dashboard.html',
+        context)
+    
+
+def edit_profile(request, username):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+    
+    profile = request.user.profile
+    
+    if request.method == 'POST' and profile.user == request.user:
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            #profile = profile_form.save(commit=False)
+            #profile.user = request.user
+            profile_form.save()
+           # profile_form.save_m2m()
+        else:
+            print('not valid')
+            print(profile_form.errors.as_data())
+
+        print(request.POST)
+        return HttpResponseRedirect(reverse('dashboard', args=[username]))
+    
+    profile_form = ProfileForm(initial={'bio': profile.bio, 'pic': profile.pic, 'social': profile.social, 'email': profile.email})
+    
+    context = {'profile': profile,
+               'profile_form': profile_form,
+               }
+
+    return render(
+        request,
+        'users/profile_form.html',
         context)
 
 

@@ -18,7 +18,9 @@
                         {% endif %}
                         <h3>{{ profile.user.username }}</h3>
                         <p>Joined {{ profile.joined|date:'Y, M d' }}</p>
-                        <i class="far fa-edit mb-5"></i>
+                        {% if user.is_authenticated and profile == user.profile %}
+                        <a href="{% url 'edit_profile' user.username %}"><i class="far fa-edit mb-5"></i></a>
+                        {% endif %}
                     </div>
                     <div class="col-md-8">
                         <div class="card-body p-4">

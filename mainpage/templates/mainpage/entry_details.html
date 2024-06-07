@@ -8,7 +8,8 @@
     <hr>
     <div class="card">
         <div class="card-header">
-            <p>{% if "placeholder" in user.profile.pic.url %}
+            <p>
+                {% if "placeholder" in entry.author.profile.pic.url %}
                 <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
                 class="rounded-circle">
                 {% else %}

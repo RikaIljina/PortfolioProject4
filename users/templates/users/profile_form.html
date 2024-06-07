@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<section class="vh-100" style="background-color: #f4f5f7;">
+    <div class="d-flex flex-column justify-content-center">
+        <h1 class="align-self-center">{{ profile.user.username }}</h1>
+
+        <div class="d-flex justify-content-center">
+
+            <div class="col-8 d-flex flex-column p-4">
+                <form method="POST" action="" id="profileForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for form in profile_form %}
+                    <div class="d-flex flex-row my-3">
+                        <div class="col-4">{{ form.label_tag }}</div>
+                        <div class="col-8 d-flex flex-row">
+                            {% if form.field.widget.input_type == 'file' %}
+                            {% if "placeholder" in profile.pic.url %}
+                            <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar"
+                                class="img-fluid me-2 rounded-circle" style="width: 38px;">
+                            {% else %}
+                            <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid me-2 rounded-circle"
+                                style="width: 38px;">
+                            {% endif %}
+                            {% endif %}
+                            {{ form }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex flex-row my-3">
+                        <div class="col-4"></div>
+                        <div class="col-8 d-flex flex-row">
+                            <button id="submitButton" name="submit" type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
