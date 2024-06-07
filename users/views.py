@@ -217,3 +217,13 @@ def edit_entry(request, username, slug):
         request,
         'users/entry_form.html',
         context)
+
+
+def delete_entry(request, username, slug):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+
+    entry = get_object_or_404(request.user.entries.all(), slug=slug)
+    entry.delete()
+    
+    return HttpResponseRedirect(reverse('dashboard', args=[username]))

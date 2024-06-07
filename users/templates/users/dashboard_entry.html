@@ -7,6 +7,36 @@
     <h1>MusicLab</h1>
     <hr />
     <a href="{% url 'edit_entry' user.username entry.slug %}" class="btn btn-success" role="button">Edit Entry</a>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalId">Delete Entry</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        Delete {{ entry.title }}?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">Are you sure you want to delete {{ entry.title }}? This action cannot be undone!</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        No, abort
+                    </button>
+                    <a id="deleteConfirm" href="{% url 'delete_entry' user.username entry.slug %}"
+                        class="btn btn-danger" role="button">Yes, delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- <form action="" method="GET">
         <button class="btn btn-success" name="edit" value="{{ entry.id }}" type="submit">Edit Entry</button>
     </form> -->
@@ -18,7 +48,8 @@
                 {% else %}
                 <i class="fa-solid fa-globe"></i>
                 {% endif %}
-                {{ entry.title }}</h3>
+                {{ entry.title }}
+            </h3>
             <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
         </div>
         <div class="card-body">
@@ -36,5 +67,22 @@
         {% include 'comment_section.html' %}
     </div>
 </div>
+
+{% endblock %}
+
+{% block extras %}
+
+<script>
+    var modalId = document.getElementById('modalId');
+
+    modalId.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        let button = event.relatedTarget;
+        // Extract info from data-bs-* attributes
+        let recipient = button.getAttribute('data-bs-whatever');
+
+        // Use above variables to manipulate the DOM
+    });
+</script>
 
 {% endblock %}
