@@ -234,8 +234,14 @@ def edit_comment(request, current_path, comment_id):
     next = request.POST.get('next')
     
     if request.method == 'POST' and comment.author == request.user:
-        comment_form = CommentForm(request.POST, instance=comment)
-        if comment_form.is_valid():
-            comment_form.save()
+        
+        if 'updateOld' in request.POST:
+            print(request.POST)
+            comment_form = CommentForm(data=request.POST, instance=comment)
+
+            if comment_form.is_valid():
+                comment_form.save()
+            else:
+                print(comment_form.errors.as_data())
 
     return HttpResponseRedirect(next)

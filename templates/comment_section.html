@@ -30,11 +30,11 @@
                             <span class="visually-hidden">{{ field.label_tag }}</span>
                             {{ field }}
                             {% endfor %}
-                            <!-- <input type="text" name="comment" id="comment-form"
-                                class="flex-fill form-control me-3" placeholder="Add comment"> -->
-                                <input type="hidden" name="next" value="{{ request.path }}">
+
+                            <input type="hidden" name="next" value="{{ request.path }}">
                             <div class="d-flex flex-column">
-                                <button class="btn btn-primary" id="submitButton" type="submit">Comment</button>
+                                <button class="btn btn-primary" id="submitButton" name="addNew"
+                                    type="submit">Comment</button>
                             </div>
                         </form>
 
@@ -60,10 +60,28 @@
                             <p class="mt-1 ms-2 text-muted text-end">on {{ comment.created_on }}</p>
                         </div>
 
-                        <div id="comment{{ comment.id }}" class="comment-text-sm my-2"><span>{{ comment.content|linebreaks }}</span></div>
+                        <div id="comment{{ comment.id }}" class="comment-text-sm my-2">
+                            <span>{{ comment.content|linebreaks }}</span>
+                        </div>
+
                         {% if user.is_authenticated and comment.author == user %}
+                        <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 visually-hidden">
+                            <form method="POST" action="" id="editCommentForm{{ comment.id }}"
+                                class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
+                                {% csrf_token %}
+                                
+                                <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your Comment:</label>
+                                <textarea type="text" class="flex-fill form-control" name="content" id="updatedComment{{ comment.id }}"></textarea>
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <div class="d-flex flex-column">
+                                    <button class="btn btn-primary" name="updateOld" type="submit">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
                         <button class="btn btn-edit btn-success" data-comment_id="{{ comment.id }}">Edit</button>
                         <button class="btn btn-delete btn-danger" data-comment_id="{{ comment.id }}">Delete</button>
+                        </div>
                         {% endif %}
 
                     </div>
