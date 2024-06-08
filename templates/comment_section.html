@@ -69,9 +69,11 @@
                             <form method="POST" action="" id="editCommentForm{{ comment.id }}"
                                 class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
                                 {% csrf_token %}
-                                
-                                <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your Comment:</label>
-                                <textarea type="text" class="flex-fill form-control" name="content" id="updatedComment{{ comment.id }}"></textarea>
+
+                                <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your
+                                    Comment:</label>
+                                <textarea type="text" class="flex-fill form-control" name="content"
+                                    id="updatedComment{{ comment.id }}"></textarea>
                                 <input type="hidden" name="next" value="{{ request.path }}">
                                 <div class="d-flex flex-column">
                                     <button class="btn btn-primary" name="updateOld" type="submit">Update</button>
@@ -79,8 +81,11 @@
                             </form>
                         </div>
                         <div>
-                        <button class="btn btn-edit btn-success" data-comment_id="{{ comment.id }}">Edit</button>
-                        <button class="btn btn-delete btn-danger" data-comment_id="{{ comment.id }}">Delete</button>
+                            <button type="button" class="btn btn-edit btn-success"
+                                data-comment_id="{{ comment.id }}">Edit</button>
+                            <button type="button" class="btn btn-delete btn-danger" data-comment_id="{{ comment.id }}" data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button>
+                            <!--  -->
+
                         </div>
                         {% endif %}
 
@@ -88,6 +93,30 @@
                     {% endfor %}
 
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">
+                    Delete comment?
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">Are you sure you want to delete your comment? This action cannot be undone!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    No, abort
+                </button>
+                <a id="deleteConfirm" href="{{ request.path }}" class="btn btn-danger" role="button">Yes, delete</a>
             </div>
         </div>
     </div>

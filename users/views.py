@@ -245,3 +245,14 @@ def edit_comment(request, current_path, comment_id):
                 print(comment_form.errors.as_data())
 
     return HttpResponseRedirect(next)
+
+
+def delete_comment(request, current_path, comment_id):
+    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
+    next = request.GET.get('old')
+    print(next)
+    
+    if comment.author == request.user:
+        comment.delete()
+
+    return HttpResponseRedirect(next)
