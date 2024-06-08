@@ -227,3 +227,15 @@ def delete_entry(request, username, slug):
     entry.delete()
     
     return HttpResponseRedirect(reverse('dashboard', args=[username]))
+
+
+def edit_comment(request, current_path, comment_id):
+    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
+    next = request.POST.get('next')
+    
+    if request.method == 'POST' and comment.author == request.user:
+        comment_form = CommentForm(request.POST, instance=comment)
+        if comment_form.is_valid():
+            comment_form.save()
+
+    return HttpResponseRedirect(next)
