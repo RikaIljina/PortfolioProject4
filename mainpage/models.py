@@ -30,6 +30,7 @@ class Entry(models.Model):
         User, on_delete=models.CASCADE, related_name="entries")
     title = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
     audio_file = CloudinaryField('raw', resource_type='auto', format='mp3')
     description = models.TextField()
     tags = TaggableManager()
@@ -64,6 +65,7 @@ class Comment(models.Model):
         Entry, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_on"]

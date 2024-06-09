@@ -5,8 +5,10 @@ from django.db.models import Count, Q
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
+from django.core.files.storage import FileSystemStorage 
 from taggit.models import Tag
 import cloudinary
+#import cloudinary.uploader
 
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
 from mainpage.forms import CommentForm
@@ -18,7 +20,7 @@ from .forms import EntryForm, ProfileForm
 def user_profile(request, username):
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
-    
+
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
    # entries = user.entries.filter(publish=1)
@@ -91,14 +93,15 @@ def edit_profile(request, username):
         return HttpResponseRedirect(reverse('home'))
     
     profile = request.user.profile
+    id = profile.pic.public_id
     
     if request.method == 'POST' and profile.user == request.user:
         profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
         if profile_form.is_valid():
-            #profile = profile_form.save(commit=False)
-            #profile.user = request.user
+            if request.FILES.get('pic'):
+                print(cloudinary.uploader.destroy(id, invalidate=True))
             profile_form.save()
-           # profile_form.save_m2m()
+
         else:
             print('not valid')
             print(profile_form.errors.as_data())
@@ -186,13 +189,18 @@ def edit_entry(request, username, slug):
         return HttpResponseRedirect(reverse('home'))
 
     entry = get_object_or_404(request.user.entries.all(), slug=slug)
+    id = entry.audio_file.public_id
 
     if request.method == 'POST':
         entry_form = EntryForm(request.POST, request.FILES, instance=entry)
+
         if entry_form.is_valid():
             entry = entry_form.save(commit=False)
+            print(f'old: {id}')
+            if request.FILES.get('audio_file'):
+                print(f'changed file: {request.FILES['audio_file']}, old: {id}')
+                print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
             entry.author = request.user
-            # cloudinary.uploader.upload(request.FILES['audio_file'])
             entry.likes = 0
             entry.save()
             entry_form.save_m2m()
@@ -222,8 +230,14 @@ def edit_entry(request, username, slug):
 def delete_entry(request, username, slug):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
-
+    
     entry = get_object_or_404(request.user.entries.all(), slug=slug)
+    print(entry.audio_file.public_id)
+    print(entry.audio_file.url)
+    print(cloudinary.uploader.destroy(entry.audio_file.public_id, resource_type = "video", invalidate=True))
+#    storage_instance.delete(name=entry.audio_file.name)
+    #entry.audio_file.delete()
+
     entry.delete()
     
     return HttpResponseRedirect(reverse('dashboard', args=[username]))
