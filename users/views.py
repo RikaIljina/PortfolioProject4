@@ -16,6 +16,9 @@ from .forms import EntryForm, ProfileForm
 
 
 def user_profile(request, username):
+    if request.GET.get('liked') and request.user.is_authenticated:
+        return save_like(request)
+    
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
    # entries = user.entries.filter(publish=1)
@@ -23,9 +26,6 @@ def user_profile(request, username):
     most_liked = entries.order_by('-likes').first
     most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
-
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
 
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
@@ -262,7 +262,6 @@ def user_favorites(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
     
-   
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
     
@@ -285,10 +284,11 @@ def user_comments(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
     
-    comments = request.user.commenter.select_related('entry')
-    
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
+    
+    comments = request.user.commenter.select_related('entry')
+
 
     page_obj = get_page_obj(request, comments, 10)
     

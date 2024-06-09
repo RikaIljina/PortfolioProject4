@@ -15,11 +15,11 @@ from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_b
 # Views
 
 def index(request):
-    entries = get_published_entries(request, Entry.objects)
-    entries, sorted_param = sort_by(request, entries)
-    
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
+    
+    entries = get_published_entries(request, Entry.objects)
+    entries, sorted_param = sort_by(request, entries)
 
     page_obj = get_page_obj(request, entries)
     
@@ -41,10 +41,10 @@ def index(request):
 
 
 def entry_details(request, slug):
-    entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
-    
     if request.GET.get('liked') and request.user.is_authenticated:
         return save_like(request)
+    
+    entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
 
     users = get_username_list()
     tags = get_all_tags()

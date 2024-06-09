@@ -6,9 +6,9 @@ cloudinary==1.40.0
 dj3-cloudinary-storage==0.0.6
 Django==5.0.6
 django-allauth==0.63.3
+django-debug-toolbar==4.4.2
 django-summernote==0.8.20.0
 django-taggit==5.0.1
-django-tinymce==4.0.0
 idna==3.7
 requests==2.32.3
 six==1.16.0
