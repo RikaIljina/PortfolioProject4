@@ -27,11 +27,11 @@ def save_profile(sender, instance, created, **kwargs):
 def delete_image(sender, instance, **kwargs):
     print(cloudinary.uploader.destroy(instance.pic.public_id, invalidate=True))
 
-@receiver(pre_delete, sender=Entry)
-def delete_link(sender, instance, **kwargs):
-    print('deleting')
-    print(instance)
-    print(cloudinary.uploader.destroy(instance.audio_file.public_id, resource_type = "video", invalidate=True))
+# @receiver(pre_delete, sender=Entry)
+# def delete_link(sender, instance, **kwargs):
+#     print('deleting')
+#     print(instance)
+#     print(cloudinary.uploader.destroy(instance.audio_file.public_id, resource_type = "video", invalidate=True))
 
 
 

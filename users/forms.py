@@ -3,6 +3,7 @@ from django.forms import TextInput, Textarea, RadioSelect, FileInput, EmailInput
 from django.utils.translation import gettext_lazy as _
 from cloudinary.forms import CloudinaryFileField
 from django_summernote.widgets import SummernoteWidget
+import cloudinary
 
 from mainpage.models import Entry
 from .models import Profile
@@ -34,7 +35,42 @@ class EntryForm(forms.ModelForm):
             'tags': _('Tags (comma-separated)'),
             'publish': _('Publicity'),
         }
-        
+
+    def __init__(self, *args, **kwargs):
+        self.author = kwargs.pop('author', None)
+        self.new_file = kwargs.pop('new_file', None)
+        super(EntryForm, self).__init__(*args, **kwargs)
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        print(title)
+        print(Entry.objects.filter(author=self.author, title=title))
+        instance = self.instance
+        if Entry.objects.filter(author=self.author, title=title).exclude(id=instance.id).exists():
+            raise forms.ValidationError("You have already used this title for another song.")
+        return title
+    
+    def save(self, commit=True):
+        print('entering class')
+        instance = super(EntryForm, self).save(commit=False)
+        print(f'Instance in save: {instance}')
+    
+        if self.new_file:
+            old_id = Entry.objects.get(id=instance.id).audio_file.public_id
+            print(f'changed file: {self.new_file}, old: {old_id}')
+            instance.save()
+            print(cloudinary.uploader.destroy(old_id, resource_type = "video", invalidate=True))
+            # print(cloudinary.uploader.destroy(self.old_id, resource_type = "video", invalidate=True))
+        else:
+            print('just saving in class')
+            instance.save()
+            
+        if commit:
+            print('saving in class with commit true')
+            instance.save()
+
+        return instance
+
         
 class ProfileForm(forms.ModelForm):
     """

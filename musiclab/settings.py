@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'cloudinary_storage',
+    'debug_toolbar',
     'django_summernote',
     'taggit',
     'cloudinary',
@@ -61,6 +62,7 @@ ACCOUNT_SIGNUP_REDIRECT_URL = 'dashboard_new_user'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -156,6 +158,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

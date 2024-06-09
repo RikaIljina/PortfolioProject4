@@ -47,6 +47,7 @@ class Entry(models.Model):
     #     ''' Convert DateTime to pure Date '''
     #     return self.created_on.date()
     
+      
     def __str__(self):
         return f"{self.title} created by {self.author}"
     
@@ -57,6 +58,11 @@ class Entry(models.Model):
        # print(new_slug)
         self.slug = slugify(new_slug)
         return super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        print('Trying to delete')
+        print(cloudinary.uploader.destroy(self.audio_file.public_id, resource_type = "video", invalidate=True))
+        return super().delete(*args, **kwargs)
 
 
 class Comment(models.Model):

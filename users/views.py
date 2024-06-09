@@ -8,6 +8,7 @@ from django.db.models.functions import Lower
 from django.core.files.storage import FileSystemStorage 
 from taggit.models import Tag
 import cloudinary
+from django.core.exceptions import ValidationError
 #import cloudinary.uploader
 
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
@@ -86,7 +87,7 @@ def dashboard(request, username):
         request,
         'users/dashboard.html',
         context)
-    
+
 
 def edit_profile(request, username):
     if not request.user.is_authenticated or username != request.user.username:
@@ -154,9 +155,12 @@ def dashboard_entry(request, username, slug):
 def new_entry(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
+    
+    #all_titles = list(request.user.entries.all().values_list('title', flat=True))
+    #titles = [title.get('title') for title in all_titles]
 
     if request.method == 'POST':
-        entry_form = EntryForm(request.POST, request.FILES)
+        entry_form = EntryForm(request.POST, request.FILES, author=request.user)
         if entry_form.is_valid():
             entry = entry_form.save(commit=False)
             entry.author = request.user
@@ -164,14 +168,17 @@ def new_entry(request, username):
             entry.likes = 0
             entry.save()
             entry_form.save_m2m()
+            return HttpResponseRedirect(reverse('dashboard', args=[username]))
+            
         else:
             print('not valid')
             print(entry_form.errors.as_data())
+            #return reverse('new_entry', args=[entry_form])
 
-        print(request.POST)
-        return HttpResponseRedirect(reverse('dashboard', args=[username]))
+        #print(request.POST)
 
-    entry_form = EntryForm()
+    else:
+        entry_form = EntryForm(author=request.user)
 
     context = {
         'entry_form': entry_form,
@@ -189,31 +196,33 @@ def edit_entry(request, username, slug):
         return HttpResponseRedirect(reverse('home'))
 
     entry = get_object_or_404(request.user.entries.all(), slug=slug)
-    id = entry.audio_file.public_id
+    #id = entry.audio_file.public_id
 
     if request.method == 'POST':
-        entry_form = EntryForm(request.POST, request.FILES, instance=entry)
+        entry_form = EntryForm(request.POST, request.FILES, instance=entry, author=request.user, new_file=request.FILES.get('audio_file'))
 
         if entry_form.is_valid():
+            print('form is valid')
             entry = entry_form.save(commit=False)
-            print(f'old: {id}')
-            if request.FILES.get('audio_file'):
-                print(f'changed file: {request.FILES['audio_file']}, old: {id}')
-                print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
+            print('in view now')
+            #print(f'old: {id}')
+            # if request.FILES.get('audio_file'):
+            #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
+            #     print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
             entry.author = request.user
             entry.likes = 0
             entry.save()
             entry_form.save_m2m()
+            print('finished saving in view')
+            return HttpResponseRedirect(reverse('dashboard', args=[username]))
+            
         else:
             print('not valid')
             print(entry_form.errors.as_data())
 
-        print(request.POST)
-        return HttpResponseRedirect(reverse('dashboard', args=[username]))
-    
-    tag_list = [value['name'] for value in entry.tags.all().values()]
-
-    entry_form = EntryForm(initial={'title': entry.title, 'description': entry.description,
+    else:
+        tag_list = [value['name'] for value in entry.tags.all().values()]
+        entry_form = EntryForm(instance=entry, author=request.user, initial={'title': entry.title, 'description': entry.description,
                            'audio_file': entry.audio_file, 'tags':(',').join(tag_list), 'publish': entry.publish})
 
     context = {

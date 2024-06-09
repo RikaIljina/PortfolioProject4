@@ -4,6 +4,15 @@
 {% block content %}
 
 <h1>{{ entry.title }}</h1>
+{% if entry_form.errors %}
+        <ul>
+        {% for field in entry_form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    {% endif %}
 <div class="d-flex flex-row justify-content-center">
     <div class="col-8 d-flex flex-column p-4">
         <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
@@ -23,6 +32,7 @@
             {% endfor %}
             <button id="submitButton" name="submit" type="submit" class="btn btn-success">Save</button>
         </form>
+        
     </div>
 </div>
 
