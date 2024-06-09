@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from taggit.managers import TaggableManager
 from django.template.defaultfilters import slugify
+import cloudinary
 
 STATUS = ((0, "Private"), (1, "Published"))
 
@@ -53,7 +54,7 @@ class Entry(models.Model):
         # TODO: Check if author already used same title in form in JS file
         #if not self.slug:
         new_slug = f'{self.title}-{self.author.username}'
-        print(new_slug)
+       # print(new_slug)
         self.slug = slugify(new_slug)
         return super().save(*args, **kwargs)
 

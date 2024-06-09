@@ -234,7 +234,7 @@ def delete_entry(request, username, slug):
     entry = get_object_or_404(request.user.entries.all(), slug=slug)
     print(entry.audio_file.public_id)
     print(entry.audio_file.url)
-    print(cloudinary.uploader.destroy(entry.audio_file.public_id, resource_type = "video", invalidate=True))
+    #print(cloudinary.uploader.destroy(entry.audio_file.public_id, resource_type = "video", invalidate=True))
 #    storage_instance.delete(name=entry.audio_file.name)
     #entry.audio_file.delete()
 

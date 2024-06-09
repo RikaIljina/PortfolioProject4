@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from taggit.models import Tag
 from django.db.models import Count, Q
 from django.dispatch import receiver
+import cloudinary
 
+from mainpage.models import Entry
 from .models import Profile
 
     
@@ -20,6 +22,17 @@ def create_profile(sender, instance, created, **kwargs):
 def save_profile(sender, instance, created, **kwargs):
     if created:
         instance.profile.save()
+
+@receiver(pre_delete, sender=Profile)
+def delete_image(sender, instance, **kwargs):
+    print(cloudinary.uploader.destroy(instance.pic.public_id, invalidate=True))
+
+@receiver(pre_delete, sender=Entry)
+def delete_link(sender, instance, **kwargs):
+    print('deleting')
+    print(instance)
+    print(cloudinary.uploader.destroy(instance.audio_file.public_id, resource_type = "video", invalidate=True))
+
 
 
 # @receiver(post_save, sender=User)
