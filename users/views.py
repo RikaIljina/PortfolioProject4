@@ -32,7 +32,7 @@ def user_profile(request, username):
     tags = get_all_tags()
 
     context = {'profile': profile,
-               'entries': entries,
+               #'entries': entries,
                'most_liked': most_liked,
                'most_recent': most_recent,
                'users': users,
@@ -73,7 +73,7 @@ def dashboard(request, username):
     # tags = get_all_tags()
 
     context = {'profile': profile,
-               'entries': entries,
+               #'entries': entries,
                'most_liked': most_liked,
                'most_recent': most_recent,
                'page_obj': page_obj,
@@ -256,3 +256,46 @@ def delete_comment(request, current_path, comment_id):
         comment.delete()
 
     return HttpResponseRedirect(next)
+
+
+def user_favorites(request, username):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+    
+   
+    if request.GET.get('liked') and request.user.is_authenticated:
+        return save_like(request)
+    
+    likes = request.user.liked.select_related('entry')
+    is_favorite = 1
+
+    page_obj = get_page_obj(request, likes)
+    
+    context = {#'likes': likes,
+               'page_obj': page_obj,
+                'is_favorite': is_favorite,
+               }
+    
+    return render(request,
+                  'users/favorites.html',
+                  context)
+    
+
+def user_comments(request, username):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+    
+    comments = request.user.commenter.select_related('entry')
+    
+    if request.GET.get('liked') and request.user.is_authenticated:
+        return save_like(request)
+
+    page_obj = get_page_obj(request, comments, 10)
+    
+    context = {#'comments': comments,
+               'page_obj': page_obj,
+               }
+    
+    return render(request,
+                  'users/comments.html',
+                  context)

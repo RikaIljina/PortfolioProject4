@@ -79,7 +79,7 @@ def filter_user(request, username):
     entries, sorted_param = sort_by(request, entries)
     
     if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+        return save_like(request, entries)
     
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
@@ -104,7 +104,7 @@ def filter_tag(request, tag):
     entries, sorted_param = sort_by(request, entries)
     
     if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+        return save_like(request, entries)
         
     page_obj = get_page_obj(request, entries)
     users = get_username_list()

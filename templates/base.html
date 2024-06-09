@@ -86,6 +86,22 @@
                                     <i class="fa-solid fa-folder-open"></i>
                                     <span class="ms-1 d-none d-sm-inline">Dashboard</span></a>
                             </li>
+                            <li>
+                                <a href="{% url 'new_entry' user.username %}" class="nav-link px-0 align-middle">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <span class="ms-1 d-none d-sm-inline">New Entry</span></a>
+                            </li>
+                            <hr>
+                            <li>
+                                <a href="{% url 'user_favorites' user.username %}" class="nav-link px-0 align-middle">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <span class="ms-1 d-none d-sm-inline">My Favorites</span></a>
+                            </li>
+                            <li>
+                                <a href="{% url 'user_comments' user.username %}" class="nav-link px-0 align-middle">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <span class="ms-1 d-none d-sm-inline">My Comments</span></a>
+                            </li>
 
                             {% else %}
 

@@ -35,6 +35,7 @@ class Entry(models.Model):
     tags = TaggableManager()
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     likes = models.IntegerField(null=True, default=0)
+   # liked_users = models.ManyToManyField(User, through=Like, related_name='liked_entries', blank=True)
     publish = models.IntegerField(choices=STATUS, default=0)
 
     class Meta:

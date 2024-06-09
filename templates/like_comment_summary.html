@@ -6,7 +6,7 @@
             {% else %}
             <a class="like" onclick="window.location='?liked={{ entry.id }}';">
             {% endif %}
-                {% if entry.already_liked == 1 %}
+                {% if entry.already_liked == 1 or is_favorite == 1 %}
                 <i class="fa-solid fa-heart like-red"></i>
                 {% else %}
                 <i class="fa-regular fa-heart"></i>

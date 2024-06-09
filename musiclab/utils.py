@@ -11,8 +11,8 @@ from mainpage.models import Entry, Like
 
 # Helper functions
 
-def get_page_obj(request, entries):
-    paginator = Paginator(entries, 2)
+def get_page_obj(request, entries, amount=3):
+    paginator = Paginator(entries, amount)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -58,9 +58,9 @@ def get_published_entries(request, source, get_likes=True):
 
     return entries
 
-def save_like(request):
+def save_like(request, source=Entry.objects):
     entry_id = request.GET.get('liked')
-    entry = get_object_or_404(get_published_entries(request, Entry.objects), id=entry_id)
+    entry = get_object_or_404(get_published_entries(request, source), id=entry_id)
     print(entry.already_liked)
     print(entry_id)
     if entry.already_liked == 0:
