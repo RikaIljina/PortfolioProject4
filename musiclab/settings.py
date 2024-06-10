@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'unidecode',
     'mainpage',
     'users',
+    'entries',
 ]
 
 SITE_ID = 1

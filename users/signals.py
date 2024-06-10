@@ -6,7 +6,7 @@ from django.db.models import Count, Q
 from django.dispatch import receiver
 import cloudinary
 
-from mainpage.models import Entry
+from entries.models import Entry
 from .models import Profile
 
     
