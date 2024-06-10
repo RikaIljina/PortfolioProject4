@@ -16,16 +16,18 @@ from .models import Profile
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+        instance.profile.save()
+        
 
     
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, created, **kwargs):
-    if created:
-        instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_profile(sender, instance, created, **kwargs):
+#     if created:
+#         instance.profile.save()
 
-@receiver(pre_delete, sender=Profile)
-def delete_image(sender, instance, **kwargs):
-    print(cloudinary.uploader.destroy(instance.pic.public_id, invalidate=True))
+# @receiver(pre_delete, sender=Profile)
+# def delete_image(sender, instance, **kwargs):
+#     print(cloudinary.uploader.destroy(instance.pic.public_id, invalidate=True))
 
 # @receiver(pre_delete, sender=Entry)
 # def delete_link(sender, instance, **kwargs):

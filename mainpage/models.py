@@ -34,9 +34,9 @@ class Entry(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
     audio_file = CloudinaryField('raw', resource_type='auto', format='mp3')
     description = models.TextField()
-    tags = TaggableManager()
-    slug = models.SlugField(max_length=200, unique=True, blank=True)
-    likes = models.IntegerField(null=True, default=0)
+    tags = TaggableManager(verbose_name='Tags')
+    slug = models.SlugField(max_length=250, unique=True, blank=True)
+   # likes = models.IntegerField(null=True, default=0)
    # liked_users = models.ManyToManyField(User, through=Like, related_name='liked_entries', blank=True)
     publish = models.IntegerField(choices=STATUS, default=0)
 

@@ -94,13 +94,13 @@ def edit_profile(request, username):
         return HttpResponseRedirect(reverse('home'))
     
     profile = request.user.profile
-    id = profile.pic.public_id
+    #id = profile.pic.public_id
     
     if request.method == 'POST' and profile.user == request.user:
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile, new_file=request.FILES.get('pic'))
         if profile_form.is_valid():
-            if request.FILES.get('pic'):
-                print(cloudinary.uploader.destroy(id, invalidate=True))
+            # if request.FILES.get('pic'):
+            #     print(cloudinary.uploader.destroy(id, invalidate=True))
             profile_form.save()
 
         else:
@@ -110,7 +110,7 @@ def edit_profile(request, username):
         print(request.POST)
         return HttpResponseRedirect(reverse('dashboard', args=[username]))
     
-    profile_form = ProfileForm(initial={'bio': profile.bio, 'pic': profile.pic, 'social': profile.social, 'email': profile.email})
+    profile_form = ProfileForm(instance=profile, initial={'bio': profile.bio, 'pic': profile.pic, 'social': profile.social, 'email': profile.email})
     
     context = {'profile': profile,
                'profile_form': profile_form,
@@ -160,12 +160,12 @@ def new_entry(request, username):
     #titles = [title.get('title') for title in all_titles]
 
     if request.method == 'POST':
-        entry_form = EntryForm(request.POST, request.FILES, author=request.user)
+        entry_form = EntryForm(request.POST, request.FILES, user=request.user)
         if entry_form.is_valid():
             entry = entry_form.save(commit=False)
-            entry.author = request.user
+           # entry.author = request.user
             # cloudinary.uploader.upload(request.FILES['audio_file'])
-            entry.likes = 0
+            #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
             return HttpResponseRedirect(reverse('dashboard', args=[username]))
@@ -178,7 +178,7 @@ def new_entry(request, username):
         #print(request.POST)
 
     else:
-        entry_form = EntryForm(author=request.user)
+        entry_form = EntryForm(user=request.user)
 
     context = {
         'entry_form': entry_form,
@@ -199,7 +199,7 @@ def edit_entry(request, username, slug):
     #id = entry.audio_file.public_id
 
     if request.method == 'POST':
-        entry_form = EntryForm(request.POST, request.FILES, instance=entry, author=request.user, new_file=request.FILES.get('audio_file'))
+        entry_form = EntryForm(request.POST, request.FILES, instance=entry, user=request.user, new_file=request.FILES.get('audio_file'))
 
         if entry_form.is_valid():
             print('form is valid')
@@ -210,7 +210,7 @@ def edit_entry(request, username, slug):
             #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
             #     print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
             entry.author = request.user
-            entry.likes = 0
+            #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
             print('finished saving in view')
@@ -222,7 +222,7 @@ def edit_entry(request, username, slug):
 
     else:
         tag_list = [value['name'] for value in entry.tags.all().values()]
-        entry_form = EntryForm(instance=entry, author=request.user, initial={'title': entry.title, 'description': entry.description,
+        entry_form = EntryForm(instance=entry, user=request.user, initial={'title': entry.title, 'description': entry.description,
                            'audio_file': entry.audio_file, 'tags':(',').join(tag_list), 'publish': entry.publish})
 
     context = {

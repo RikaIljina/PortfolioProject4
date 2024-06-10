@@ -37,26 +37,28 @@ class EntryForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self.author = kwargs.pop('author', None)
+        self.user = kwargs.pop('user', None)
         self.new_file = kwargs.pop('new_file', None)
         super(EntryForm, self).__init__(*args, **kwargs)
 
     def clean_title(self):
         title = self.cleaned_data.get('title')
         print(title)
-        print(Entry.objects.filter(author=self.author, title=title))
+        print(Entry.objects.filter(author=self.user, title=title))
         instance = self.instance
-        if Entry.objects.filter(author=self.author, title=title).exclude(id=instance.id).exists():
+        if Entry.objects.filter(author=self.user, title=title).exclude(id=instance.id).exists():
             raise forms.ValidationError("You have already used this title for another song.")
         return title
     
     def save(self, commit=True):
         print('entering class')
         instance = super(EntryForm, self).save(commit=False)
+        instance.author = self.user
         print(f'Instance in save: {instance}')
     
         if self.new_file:
-            old_id = Entry.objects.get(id=instance.id).audio_file.public_id
+            old_id = self.initial['audio_file'].public_id
+            #old_id = Entry.objects.get(id=instance.id).audio_file.public_id
             print(f'changed file: {self.new_file}, old: {old_id}')
             instance.save()
             print(cloudinary.uploader.destroy(old_id, resource_type = "video", invalidate=True))
@@ -96,3 +98,30 @@ class ProfileForm(forms.ModelForm):
             'social': _('Social link'),
             'email': _('Email address'),
         }
+        
+    def __init__(self, *args, **kwargs):
+        print("initializing profile")
+        self.new_file = kwargs.pop('new_file', None)
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        
+    def save(self, commit=True):
+        print('entering class')
+        instance = super(ProfileForm, self).save(commit=False)
+        print(f'Instance in save: {instance}')
+    
+        if self.new_file:
+            old_id = self.initial['pic'].public_id
+            #old_id = Profile.objects.get(id=instance.id).pic.public_id
+            print(f'changed file: {self.new_file}, old: {old_id}')
+            instance.save()
+            print(cloudinary.uploader.destroy(old_id, invalidate=True))
+            # print(cloudinary.uploader.destroy(self.old_id, resource_type = "video", invalidate=True))
+        else:
+            print('just saving in class')
+            instance.save()
+            
+        if commit:
+            print('saving in class with commit true')
+            instance.save()
+
+        return instance
