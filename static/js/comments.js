@@ -34,7 +34,7 @@ for (let button of deleteButtons) {
         let commentId = e.target.getAttribute("data-comment_id");
         let oldPath = window.location.href.slice(0, -1);
         //let (deleteConfirm.href);
-        deleteConfirm.href = `${oldPath}/delete-comment/${commentId}/?old=${oldPath}`;
+        deleteConfirm.href = `${oldPath}/delete-comment/${commentId}/`;
         //deleteModal.show();
     });
 }

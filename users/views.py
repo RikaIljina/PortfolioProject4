@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.urls import resolve
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
@@ -26,7 +27,7 @@ def user_profile(request, username):
     profile = user.profile
    # entries = user.entries.filter(publish=1)
     entries = get_published_entries(request, user.entries)
-    most_liked = entries.order_by('-likes').first
+    most_liked = entries.annotate(count_likes=Count('all_likes')).order_by('-count_likes').first
     most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
 
@@ -52,7 +53,7 @@ def user_profile(request, username):
 
 def dashboard_new_user(request):
         return HttpResponseRedirect(reverse('edit_profile', args=[request.user.username]))
-    
+
 
 def dashboard(request, username):
     if not request.user.is_authenticated or username != request.user.username:
@@ -61,7 +62,7 @@ def dashboard(request, username):
     user = request.user
     profile = user.profile
     entries = user.entries.all()
-    most_liked = entries.order_by('-likes').first
+    most_liked = entries.annotate(count_likes=Count('all_likes')).order_by('-count_likes').first
     most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
 
@@ -254,7 +255,7 @@ def delete_entry(request, username, slug):
 
 def edit_comment(request, current_path, comment_id):
     comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-    next = request.POST.get('next')
+   # next = request.POST.get('next')
     
     if request.method == 'POST' and comment.author == request.user:
         
@@ -267,18 +268,21 @@ def edit_comment(request, current_path, comment_id):
             else:
                 print(comment_form.errors.as_data())
 
-    return HttpResponseRedirect(next)
+    return redirect(f'{reverse('home')}{current_path}')
 
 
 def delete_comment(request, current_path, comment_id):
     comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-    next = request.GET.get('old')
-    print(next)
+   # next = request.GET.get('old')
+   # print('resolving:')
+   # print(resolve(current_path))
+   # print(resolve(request.path))
+   # print(next)
     
     if comment.author == request.user:
         comment.delete()
 
-    return HttpResponseRedirect(next)
+    return redirect(f'{reverse('home')}{current_path}')
 
 
 def user_favorites(request, username):
