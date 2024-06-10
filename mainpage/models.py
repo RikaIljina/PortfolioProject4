@@ -2,8 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from taggit.managers import TaggableManager
-from django.template.defaultfilters import slugify
+#from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 import cloudinary
+from unidecode import unidecode
 
 STATUS = ((0, "Private"), (1, "Published"))
 
@@ -56,7 +58,7 @@ class Entry(models.Model):
         #if not self.slug:
         new_slug = f'{self.title}-{self.author.username}'
        # print(new_slug)
-        self.slug = slugify(new_slug)
+        self.slug = slugify(unidecode(new_slug))
         return super().save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):

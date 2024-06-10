@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'taggit',
     'cloudinary',
+    'unidecode',
     'mainpage',
     'users',
 ]
