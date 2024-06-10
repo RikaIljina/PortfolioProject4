@@ -31,7 +31,7 @@
                             {{ field }}
                             {% endfor %}
 
-                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
                             <div class="d-flex flex-column">
                                 <button class="btn btn-primary" id="submitButton" name="addNew"
                                     type="submit">Comment</button>
@@ -42,7 +42,6 @@
                     {% else %}
                     <p>Log in to leave a comment</p>
                     {% endif %}
-
                     {% for comment in entry.comments.all %}
                     <div class="commented-section mt-2">
                         <div class="d-flex flex-row align-items-center commented-user">

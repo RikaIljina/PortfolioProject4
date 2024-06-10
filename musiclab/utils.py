@@ -48,36 +48,38 @@ def sort_by(request, entries):
     
     return entries, sorted_param
 
+
 def get_published_entries(request, source, get_likes=True):
     if request.user.is_authenticated and get_likes:
         entries = source.filter(publish=1).annotate(already_liked=Count(
-            'all_likes', filter=Q(all_likes__user = request.user)))
+            'all_likes', filter=Q(all_likes__user = request.user)), likes_received=Count('all_likes'))
         print(f"Annotating: {request.user.liked}")
     else:
         entries = source.filter(publish=1)
-
+        
     return entries
 
-def save_like(request, source=Entry.objects):
-    entry_id = request.GET.get('liked')
-    entry = get_object_or_404(get_published_entries(request, source), id=entry_id)
-    print(entry.already_liked)
-    print(entry_id)
-    if entry.already_liked == 0:
-        like = Like.objects.create(user=request.user, entry=entry)
-    else:
-        like = request.user.liked.get(entry=entry)
-        like.delete()
 
-    if request.GET.dict():
-        print(request.GET.dict())
-        q = '?'
-        for key, value in request.GET.items():
-            if key != 'liked':
-                q += f'{key}=' + f'{value}&'
-        q = q[:-1]
+# def save_like(request, source=Entry.objects):
+#     entry_id = request.GET.get('liked')
+#     entry = get_object_or_404(get_published_entries(request, source), id=entry_id)
+#     print(entry.already_liked)
+#     print(entry_id)
+#     if entry.already_liked == 0:
+#         like = Like.objects.create(user=request.user, entry=entry)
+#     else:
+#         like = request.user.liked.get(entry=entry)
+#         like.delete()
 
-    else:
-        q = ''
+#     if request.GET.dict():
+#         print(request.GET.dict())
+#         q = '?'
+#         for key, value in request.GET.items():
+#             if key != 'liked':
+#                 q += f'{key}=' + f'{value}&'
+#         q = q[:-1]
+
+#     else:
+#         q = ''
         
-    return HttpResponseRedirect(request.path + q)
+#     return HttpResponseRedirect(request.path + q)

@@ -11,8 +11,8 @@ from taggit.models import Tag
 import cloudinary
 from django.core.exceptions import ValidationError
 #import cloudinary.uploader
-
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
+from mainpage.models import Entry, Like
+from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 from mainpage.forms import CommentForm
 from .forms import EntryForm, ProfileForm
 
@@ -20,14 +20,15 @@ from .forms import EntryForm, ProfileForm
 
 
 def user_profile(request, username):
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request)
 
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
    # entries = user.entries.filter(publish=1)
     entries = get_published_entries(request, user.entries)
-    most_liked = entries.annotate(count_likes=Count('all_likes')).order_by('-count_likes').first
+    print(entries[0].likes_received)
+    most_liked = entries.order_by('-likes_received').first
     most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
 
@@ -62,7 +63,7 @@ def dashboard(request, username):
     user = request.user
     profile = user.profile
     entries = user.entries.all()
-    most_liked = entries.annotate(count_likes=Count('all_likes')).order_by('-count_likes').first
+    most_liked = entries.annotate(likes_received=Count('all_likes')).order_by('-likes_received').first
     most_recent = entries.order_by('-created_on').first
     entries, sorted_param = sort_by(request, entries)
 
@@ -281,7 +282,9 @@ def delete_comment(request, current_path, comment_id):
     
     if comment.author == request.user:
         comment.delete()
-
+    print(f'current: {current_path}')
+    print('going to last path')
+    print(f'{reverse('home')}{current_path}')
     return redirect(f'{reverse('home')}{current_path}')
 
 
@@ -289,8 +292,8 @@ def user_favorites(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
     
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request)
     
     likes = request.user.liked.select_related('entry')
     is_favorite = 1
@@ -311,8 +314,8 @@ def user_comments(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
     
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request)
     
     comments = request.user.commenter.select_related('entry')
 
@@ -326,3 +329,29 @@ def user_comments(request, username):
     return render(request,
                   'users/comments.html',
                   context)
+    
+def add_like(request, entry_id, current_path=''):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('home'))
+    
+    entry = get_object_or_404(get_published_entries(request, Entry.objects, False), id=entry_id)
+    
+    if request.method == 'GET':
+        print('...getting...')
+        params = f'?{request.GET.urlencode()}'
+    else:
+        params = ''
+    #print(request.user.liked.filter(entry=entry).exists())
+    #print(entry.already_liked)
+    
+    #if entry.already_liked == 0:
+    if not request.user.liked.filter(entry=entry).exists():
+        like = Like.objects.create(user=request.user, entry=entry)
+    else:
+        like = request.user.liked.get(entry=entry)
+        like.delete()
+
+    print('going to last path')
+    print(f'{reverse('home')}{current_path}')
+    return redirect(f'{reverse('home')}{current_path}{params}')
+

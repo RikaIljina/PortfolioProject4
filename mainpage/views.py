@@ -9,14 +9,14 @@ from taggit.models import Tag
 
 from .models import Entry, Like
 from .forms import CommentForm
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries, save_like
+from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 
 
 # Views
 
 def index(request):
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request)
     
     entries = get_published_entries(request, Entry.objects)
     entries, sorted_param = sort_by(request, entries)
@@ -41,8 +41,8 @@ def index(request):
 
 
 def entry_details(request, slug):
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request)
     
     entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
 
@@ -78,8 +78,8 @@ def filter_user(request, username):
     entries = get_published_entries(request, user.entries)
     entries, sorted_param = sort_by(request, entries)
     
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request, entries)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request, entries)
     
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
@@ -103,8 +103,8 @@ def filter_tag(request, tag):
     entries = get_published_entries(request, Entry.objects).filter(tags__name__in=[tag])
     entries, sorted_param = sort_by(request, entries)
     
-    if request.GET.get('liked') and request.user.is_authenticated:
-        return save_like(request, entries)
+    # if request.GET.get('liked') and request.user.is_authenticated:
+    #     return save_like(request, entries)
         
     page_obj = get_page_obj(request, entries)
     users = get_username_list()

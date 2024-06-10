@@ -1,11 +1,11 @@
+{% load static %}
+
 <div class="card-footer">
     <p>
         {% if user.is_authenticated and entry.author != user %}
-            {% if sorted_param or page_obj.number and page_obj.number != 1 %}
-            <a class="like" onclick="window.location=window.location.search+'&liked={{ entry.id }}';">
-            {% else %}
-            <a class="like" onclick="window.location='?liked={{ entry.id }}';">
-            {% endif %}
+            
+            <a class="btn-like like" data-entry_id="{{ entry.id }}" href="{{ request.path }}">
+
                 {% if entry.already_liked == 1 or is_favorite == 1 %}
                 <i class="fa-solid fa-heart like-red"></i>
                 {% else %}
@@ -18,3 +18,4 @@
         {{ entry.all_likes.all|length }} | <i class="fa-regular fa-comment"></i> {{entry.comments.all|length }}
     </p>
 </div>
+
