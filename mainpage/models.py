@@ -11,22 +11,6 @@ from entries.models import Entry
 
 # Create your models here.
 
-class Comment(models.Model):
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="commenter")
-    entry = models.ForeignKey(
-        Entry, on_delete=models.CASCADE, related_name="comments")
-    content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["-created_on"]
-
-    def __str__(self):
-        return (f"{self.author} commented on {self.entry}: " +
-                f"{self.content[:15]}...")
-
 
 class Like(models.Model):
     user = models.ForeignKey(
@@ -49,7 +33,7 @@ class Like(models.Model):
             print('You already liked it or this is your own entry')
             return
         else:
-            self.entry.likes = self.entry.all_likes.count() + 1
+           # self.entry.likes = self.entry.all_likes.count() + 1
             self.entry.save()
             super(Like, self).save(*args, **kwargs)
 

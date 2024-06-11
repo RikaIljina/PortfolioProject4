@@ -10,7 +10,7 @@ from taggit.models import Tag
 from .models import Like
 from entries.models import Entry
 
-from .forms import CommentForm
+from comments.forms import CommentForm
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 
 

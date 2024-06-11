@@ -28,4 +28,5 @@ urlpatterns = [
     path('', include('mainpage.urls'), name='mainpage-urls'),
     path('', include('users.urls'), name='users-urls'),
     path('', include('entries.urls'), name='entries-urls'),
+    path('', include('comments.urls'), name='comments-urls'),
 ]

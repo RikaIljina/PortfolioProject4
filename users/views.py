@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 from mainpage.models import Like
 from entries.models import Entry
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
-from mainpage.forms import CommentForm
+from comments.forms import CommentForm
 from .forms import ProfileForm
 from entries.forms import EntryForm
 
@@ -28,17 +28,19 @@ def user_profile(request, username):
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
    # entries = user.entries.filter(publish=1)
-    entries = get_published_entries(request, user.all_entries)
-    print(entries[0].likes_received)
-    most_liked = entries.order_by('-likes_received').first
-    most_recent = entries.order_by('-created_on').first
-    entries, sorted_param = sort_by(request, entries)
+    if hasattr(user, 'all_entries'):
+        entries = get_published_entries(request, user.all_entries)
+    # print(entries[0].likes_received)
+        most_liked = entries.order_by('-likes_received').first
+        most_recent = entries.order_by('-created_on').first
+        entries, sorted_param = sort_by(request, entries)
 
-    page_obj = get_page_obj(request, entries)
-    users = get_username_list()
-    tags = get_all_tags()
+        page_obj = get_page_obj(request, entries)
+        
+        users = get_username_list()
+        tags = get_all_tags()
 
-    context = {'profile': profile,
+        context = {'profile': profile,
                #'entries': entries,
                'most_liked': most_liked,
                'most_recent': most_recent,
@@ -47,7 +49,15 @@ def user_profile(request, username):
                'page_obj': page_obj,
                'sorted_param': sorted_param,
                }
-
+    else:
+         context = {'profile': profile,
+              
+               'users': users,
+               'tags': tags,
+              
+               }
+        
+   
     return render(
         request,
         'users/profile.html',
@@ -135,42 +145,6 @@ def edit_profile(request, username):
         context)
 
 
-
-
-def edit_comment(request, current_path, comment_id):
-    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-   # next = request.POST.get('next')
-    
-    if request.method == 'POST' and comment.author == request.user:
-        
-        if 'updateOld' in request.POST:
-            print(request.POST)
-            comment_form = CommentForm(data=request.POST, instance=comment)
-
-            if comment_form.is_valid():
-                comment_form.save()
-            else:
-                print(comment_form.errors.as_data())
-
-    return redirect(f'{reverse('home')}{current_path}')
-
-
-def delete_comment(request, current_path, comment_id):
-    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-   # next = request.GET.get('old')
-   # print('resolving:')
-   # print(resolve(current_path))
-   # print(resolve(request.path))
-   # print(next)
-    
-    if comment.author == request.user:
-        comment.delete()
-    print(f'current: {current_path}')
-    print('going to last path')
-    print(f'{reverse('home')}{current_path}')
-    return redirect(f'{reverse('home')}{current_path}')
-
-
 def user_favorites(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
@@ -189,9 +163,10 @@ def user_favorites(request, username):
                }
     
     return render(request,
-                  'users/favorites.html',
+                  'users/dashboard_user_likes.html',
                   context)
-    
+
+# TODO: Where to put comments and likes? move utils! make like snippets!
 
 def user_comments(request, username):
     if not request.user.is_authenticated or username != request.user.username:
@@ -210,7 +185,7 @@ def user_comments(request, username):
                }
     
     return render(request,
-                  'users/comments.html',
+                  'comments/dashboard_user_comments.html',
                   context)
     
 def add_like(request, entry_id, current_path=''):

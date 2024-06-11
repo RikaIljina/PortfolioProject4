@@ -13,7 +13,7 @@ from django.core.exceptions import ValidationError
 #import cloudinary.uploader
 from mainpage.models import Entry, Like
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
-from mainpage.forms import CommentForm
+from comments.forms import CommentForm
 from .forms import EntryForm
 from .models import Entry
 from users.forms import ProfileForm
@@ -135,6 +135,7 @@ def edit_entry(request, username, slug):
             print('form is valid')
             entry = entry_form.save(commit=False)
             print('in view now')
+            new_slug = Entry.objects.get(id=entry.id).slug
             #print(f'old: {id}')
             # if request.FILES.get('audio_file'):
             #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
@@ -144,7 +145,7 @@ def edit_entry(request, username, slug):
             entry.save()
             entry_form.save_m2m()
             print('finished saving in view')
-            return HttpResponseRedirect(reverse('dashboard_entry', args=[username, slug]))
+            return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
             
         else:
             print('not valid')
