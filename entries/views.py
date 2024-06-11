@@ -12,11 +12,14 @@ import cloudinary
 from django.core.exceptions import ValidationError
 #import cloudinary.uploader
 from likes.models import Like
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
+from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from users.utils import get_username_list
+from .utils import get_published_entries
 from comments.forms import CommentForm
 from .forms import EntryForm
 from .models import Entry
 from users.forms import ProfileForm
+from comments.utils import process_comment_form
 
 
 def entry_details(request, slug):
@@ -28,16 +31,7 @@ def entry_details(request, slug):
     users = get_username_list()
     tags = get_all_tags()
 
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.entry = entry
-            comment.save()
-        print(request.POST)
-            
-    comment_form = CommentForm()
+    comment_form = process_comment_form(request, entry)
 
     context = {'entry': entry,
                'users': users,

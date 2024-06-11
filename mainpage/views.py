@@ -11,7 +11,9 @@ from likes.models import Like
 from entries.models import Entry
 
 from comments.forms import CommentForm
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
+from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from users.utils import get_username_list
+from entries.utils import get_published_entries
 
 
 # Views

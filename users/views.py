@@ -13,10 +13,13 @@ from django.core.exceptions import ValidationError
 #import cloudinary.uploader
 from likes.models import Like
 from entries.models import Entry
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
+from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from .utils import get_username_list
+from entries.utils import get_published_entries
 from comments.forms import CommentForm
 from .forms import ProfileForm
 from entries.forms import EntryForm
+from comments.utils import process_comment_form
 
 # Create your views here.
 
@@ -121,17 +124,8 @@ def dashboard_entry(request, username, slug):
     # if request.GET.get('edit'):
     #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
 
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.entry = entry
-            comment.save()
-        print(request.POST)
-
-    comment_form = CommentForm()
-
+    comment_form = process_comment_form(request, entry)
+    
     context = {'entry': entry,
                'comment_form': comment_form,
                }

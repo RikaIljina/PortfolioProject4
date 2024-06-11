@@ -19,11 +19,6 @@ def get_page_obj(request, entries, amount=3):
 
     return page_obj
 
-def get_username_list():
-    current_usernames = list(User.objects.values_list(
-                'username', flat=True).order_by(Lower('username')))
-    
-    return current_usernames
 
 def get_all_tags():
     tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
@@ -50,15 +45,6 @@ def sort_by(request, entries):
     return entries, sorted_param
 
 
-def get_published_entries(request, source, get_likes=True):
-    if request.user.is_authenticated and get_likes:
-        entries = source.filter(publish=1).annotate(already_liked=Count(
-            'all_likes', filter=Q(all_likes__user = request.user)), likes_received=Count('all_likes'))
-        print(f"Annotating: {request.user.liked}")
-    else:
-        entries = source.filter(publish=1)
-        
-    return entries
 
 
 # def save_like(request, source=Entry.objects):
