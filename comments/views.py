@@ -21,6 +21,8 @@ from users.forms import ProfileForm
 from entries.forms import EntryForm
 # Create your views here.
 
+from django.contrib import messages
+
 
 def edit_comment(request, current_path, comment_id):
     comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
@@ -34,8 +36,12 @@ def edit_comment(request, current_path, comment_id):
 
             if comment_form.is_valid():
                 comment_form.save()
+                messages.success(request, "Your comment has been saved.")
+                
             else:
                 print(comment_form.errors.as_data())
+                messages.warning(request, "Your comment was not saved.")
+                
 
     return redirect(f'{reverse('home')}{current_path}')
 
@@ -50,6 +56,8 @@ def delete_comment(request, current_path, comment_id):
     
     if comment.author == request.user:
         comment.delete()
+        messages.success(request, "Your comment has been deleted.")
+        
     print(f'current: {current_path}')
     print('going to last path')
     print(f'{reverse('home')}{current_path}')

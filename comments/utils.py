@@ -1,4 +1,5 @@
 from .forms import CommentForm
+from django.contrib import messages
 
 def process_comment_form(request, entry):
     if request.method == 'POST':
@@ -8,6 +9,8 @@ def process_comment_form(request, entry):
             comment.author = request.user
             comment.entry = entry
             comment.save()
+            messages.success(request, "Your comment has been saved.")
+            
        # print(request.POST)
 
     comment_form = CommentForm()

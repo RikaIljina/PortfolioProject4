@@ -20,6 +20,7 @@ from comments.forms import CommentForm
 from .forms import ProfileForm
 from entries.forms import EntryForm
 from comments.utils import process_comment_form
+from django.contrib import messages
 
 # Create your views here.
 
@@ -150,10 +151,12 @@ def edit_profile(request, username):
             # if request.FILES.get('pic'):
             #     print(cloudinary.uploader.destroy(id, invalidate=True))
             profile_form.save()
+            messages.success(request, "Your profile has been saved.")
 
         else:
             print('not valid')
             print(profile_form.errors.as_data())
+            messages.warning(request, "There was an error saving your profile.")            
 
         print(request.POST)
         return HttpResponseRedirect(reverse('dashboard', args=[username]))

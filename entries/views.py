@@ -3,6 +3,7 @@ from django.urls import resolve
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
@@ -68,11 +69,14 @@ def new_entry(request, username):
             #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
+            messages.success(request, "Your entry has been saved.")
             return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
             
         else:
             print('not valid')
             print(entry_form.errors.as_data())
+            messages.warning(request, "Your entry could not be saved.")
+            
             #return reverse('new_entry', args=[entry_form])
 
         #print(request.POST)
@@ -114,12 +118,16 @@ def edit_entry(request, username, slug):
             #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
+            messages.success(request, "Your entry has been saved.")
+            
             print('finished saving in view')
             return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
             
         else:
             print('not valid')
             print(entry_form.errors.as_data())
+            messages.warning(request, "Your entry could not be saved.")
+            
 
     else:
         tag_list = [value['name'] for value in entry.tags.all().values()]
@@ -149,5 +157,7 @@ def delete_entry(request, username, slug):
     #entry.audio_file.delete()
 
     entry.delete()
+    messages.success(request, "Your entry has been deleted.")
+    
     
     return HttpResponseRedirect(reverse('dashboard', args=[username]))
