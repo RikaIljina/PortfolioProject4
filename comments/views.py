@@ -11,7 +11,7 @@ from taggit.models import Tag
 import cloudinary
 from django.core.exceptions import ValidationError
 #import cloudinary.uploader
-from mainpage.models import Like
+from likes.models import Like
 from entries.models import Entry
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 from .forms import CommentForm

@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
 
-from mainpage.models import Entry, Like
+from entries.models import Entry
+from likes.models import Like
 
 # Helper functions
 

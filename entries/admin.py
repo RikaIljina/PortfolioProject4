@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 from .models import Entry
-from mainpage.models import Like
+from likes.models import Like
 from django.contrib.auth.models import User
 import cloudinary
 

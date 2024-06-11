@@ -11,7 +11,7 @@ from taggit.models import Tag
 import cloudinary
 from django.core.exceptions import ValidationError
 #import cloudinary.uploader
-from mainpage.models import Entry, Like
+from likes.models import Like
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 from comments.forms import CommentForm
 from .forms import EntryForm
@@ -48,35 +48,6 @@ def entry_details(request, slug):
     return render(
         request,
         'entries/entry_details.html',
-        context)
-
-def dashboard_entry(request, username, slug):
-    if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
-
-    entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
-
-    # if request.GET.get('edit'):
-    #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
-
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.entry = entry
-            comment.save()
-        print(request.POST)
-
-    comment_form = CommentForm()
-
-    context = {'entry': entry,
-               'comment_form': comment_form,
-               }
-
-    return render(
-        request,
-        'entries/dashboard_entry.html',
         context)
 
 

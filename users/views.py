@@ -11,7 +11,7 @@ from taggit.models import Tag
 import cloudinary
 from django.core.exceptions import ValidationError
 #import cloudinary.uploader
-from mainpage.models import Like
+from likes.models import Like
 from entries.models import Entry
 from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
 from comments.forms import CommentForm
@@ -112,6 +112,36 @@ def dashboard(request, username):
         context)
 
 
+def dashboard_entry(request, username, slug):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+
+    entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
+
+    # if request.GET.get('edit'):
+    #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
+
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.entry = entry
+            comment.save()
+        print(request.POST)
+
+    comment_form = CommentForm()
+
+    context = {'entry': entry,
+               'comment_form': comment_form,
+               }
+
+    return render(
+        request,
+        'users/dashboard_entry.html',
+        context)
+
+
 def edit_profile(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
@@ -185,31 +215,6 @@ def user_comments(request, username):
                }
     
     return render(request,
-                  'comments/dashboard_user_comments.html',
+                  'users/dashboard_user_comments.html',
                   context)
     
-def add_like(request, entry_id, current_path=''):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('home'))
-    
-    entry = get_object_or_404(get_published_entries(request, Entry.objects, False), id=entry_id)
-    
-    if request.method == 'GET':
-        print('...getting...')
-        params = f'?{request.GET.urlencode()}'
-    else:
-        params = ''
-    #print(request.user.liked.filter(entry=entry).exists())
-    #print(entry.already_liked)
-    
-    #if entry.already_liked == 0:
-    if not request.user.liked.filter(entry=entry).exists():
-        like = Like.objects.create(user=request.user, entry=entry)
-    else:
-        like = request.user.liked.get(entry=entry)
-        like.delete()
-
-    print('going to last path')
-    print(f'{reverse('home')}{current_path}')
-    return redirect(f'{reverse('home')}{current_path}{params}')
-

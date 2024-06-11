@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
 
-from .models import Like
+from likes.models import Like
 from entries.models import Entry
 
 from comments.forms import CommentForm
