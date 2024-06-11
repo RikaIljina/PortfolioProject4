@@ -22,7 +22,7 @@ def index(request):
     # if request.GET.get('liked') and request.user.is_authenticated:
     #     return save_like(request)
     
-    entries = get_published_entries(request, Entry.objects)
+    entries = get_published_entries(request, Entry.objects, get_comments=False)
     entries, sorted_param = sort_by(request, entries)
 
     page_obj = get_page_obj(request, entries)

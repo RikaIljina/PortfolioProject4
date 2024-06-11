@@ -27,13 +27,18 @@ def entry_details(request, slug):
     #     return save_like(request)
     
     entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
-
+    comments = entry.all_comments.select_related('author', 'author__profile')
+  #  print(comments)
+   # entry_tags = entry.tags.prefetch_related('tagged_items__tag')
+   # print(entry_tags)
+    
     users = get_username_list()
     tags = get_all_tags()
 
     comment_form = process_comment_form(request, entry)
 
     context = {'entry': entry,
+               'comments': comments,
                'users': users,
                'tags': tags,
                'comment_form': comment_form,

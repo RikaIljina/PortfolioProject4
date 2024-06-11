@@ -15,7 +15,7 @@ from likes.models import Like
 from entries.models import Entry
 from mainpage.utils import get_all_tags, get_page_obj, sort_by
 from .utils import get_username_list
-from entries.utils import get_published_entries
+from entries.utils import get_published_entries, get_all_entries
 from comments.forms import CommentForm
 from .forms import ProfileForm
 from entries.forms import EntryForm
@@ -32,10 +32,10 @@ def user_profile(request, username):
     profile = user.profile
    # entries = user.entries.filter(publish=1)
     if hasattr(user, 'all_entries'):
-        entries = get_published_entries(request, user.all_entries)
+        entries = get_published_entries(request, user.all_entries, get_comments=False)
     # print(entries[0].likes_received)
-        most_liked = entries.order_by('-likes_received').first
-        most_recent = entries.order_by('-created_on').first
+        most_liked = entries.order_by('-likes_received').first()
+        most_recent = entries.order_by('-created_on').first()
         entries, sorted_param = sort_by(request, entries)
 
         page_obj = get_page_obj(request, entries)
@@ -77,15 +77,14 @@ def dashboard(request, username):
 
     user = request.user
     profile = user.profile
-    fields = user._meta.get_fields()
-    for field in fields:
-        print(field)
-    print(user.all_entries)
+    # fields = user._meta.get_fields()
+    # for field in fields:
+    #     print(field)
+   # print(user.all_entries)
     if hasattr(user, 'all_entries'):
-        print('HI')
-        entries = user.all_entries.all()
-        most_liked = entries.annotate(likes_received=Count('all_likes')).order_by('-likes_received').first
-        most_recent = entries.order_by('-created_on').first
+        entries = get_all_entries(request, user.all_entries, get_comments=False) #user.all_entries.all()
+        most_liked = Entry.objects.annotate(likes_received=Count('all_likes')).order_by('-likes_received').first()
+        most_recent = Entry.objects.order_by('-created_on').first()
         entries, sorted_param = sort_by(request, entries)
 
     # if request.GET.get('newEntry'):
@@ -119,7 +118,8 @@ def dashboard_entry(request, username, slug):
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
 
-    entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
+    entry = get_object_or_404(get_all_entries(request, request.user.all_entries), slug=slug)
+    comments = entry.all_comments.select_related('author', 'author__profile')
 
     # if request.GET.get('edit'):
     #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
@@ -127,6 +127,7 @@ def dashboard_entry(request, username, slug):
     comment_form = process_comment_form(request, entry)
     
     context = {'entry': entry,
+               'comments': comments,
                'comment_form': comment_form,
                }
 

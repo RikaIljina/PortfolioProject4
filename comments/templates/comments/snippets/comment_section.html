@@ -42,7 +42,7 @@
                     {% else %}
                     <p>Log in to leave a comment</p>
                     {% endif %}
-                    {% for comment in entry.all_comments.all %}
+                    {% for comment in comments %}
                     <div class="commented-section mt-2">
                         <div class="d-flex flex-row align-items-center commented-user">
                             {% if "placeholder" in comment.author.profile.pic.url %}

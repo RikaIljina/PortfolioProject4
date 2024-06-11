@@ -11,12 +11,50 @@ from entries.models import Entry
 from likes.models import Like
 
 
-def get_published_entries(request, source, get_likes=True):
+def get_published_entries(request, source, get_likes=True, get_comments=True):
     if request.user.is_authenticated and get_likes:
-        entries = source.filter(publish=1).annotate(already_liked=Count(
-            'all_likes', filter=Q(all_likes__user = request.user)), likes_received=Count('all_likes'))
+        entries = source.filter(publish=1).annotate(
+            already_liked=Count('all_likes', filter=Q(
+                                all_likes__user=request.user), distinct=True),
+            likes_received=Count('all_likes', distinct=True), 
+            comments_received=Count('all_comments', distinct=True)) \
+            .select_related('author').select_related('author__profile') \
+            .prefetch_related('tags', 'all_comments')
         print(f"Annotating: {request.user.liked}")
+    elif get_comments:
+        entries = source.filter(publish=1).annotate(
+            likes_received=Count('all_likes', distinct=True), 
+            comments_received=Count('all_comments', distinct=True)) \
+            .select_related('author').select_related('author__profile') \
+            .prefetch_related('tags', 'all_comments')
+            # .select_related('all_comments__comment') 
+            #, 'all_comments__author__profile')
     else:
-        entries = source.filter(publish=1)
-        
+        entries = source.filter(publish=1).annotate(
+            likes_received=Count('all_likes', distinct=True), 
+            comments_received=Count('all_comments', distinct=True)) \
+            .select_related('author').select_related('author__profile') \
+            .prefetch_related('tags')
+            # .select_related('all_comments__comment') 
+            #, 'all_comments__author__profile')
+
     return entries
+
+def get_all_entries(request, source, get_comments=True):
+    if request.user.is_authenticated and get_comments:
+        entries = source.annotate(
+            likes_received=Count('all_likes', distinct=True),
+            comments_received=Count('all_comments', distinct=True)) \
+            .select_related('author').select_related('author__profile') \
+            .prefetch_related('tags', 'all_comments')
+        return entries
+            
+    elif request.user.is_authenticated:
+        entries = source.annotate(
+            likes_received=Count('all_likes', distinct=True),
+            comments_received=Count('all_comments', distinct=True)) \
+            .select_related('author').select_related('author__profile') \
+            .prefetch_related('tags')
+        return entries
+        
+        
