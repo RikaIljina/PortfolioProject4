@@ -16,6 +16,7 @@ for (let button of likeButtons) {
   }
 }
 
+
 // let commentParagraph = document.getElementById(`comment${commentId}`);
 // let commentContent = commentParagraph.innerText;
 // let hiddenFormDiv = document.getElementById(`commentform${commentId}`);
