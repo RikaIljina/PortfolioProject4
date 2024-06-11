@@ -25,18 +25,21 @@ def add_like(request, entry_id, current_path=''):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('home'))
     
-    entry = get_object_or_404(get_published_entries(request, Entry.objects, False), id=entry_id)
+    #entry = get_object_or_404(get_published_entries(request, Entry.objects, get_likes=True, get_comments=False), id=entry_id)
+    entry = get_object_or_404(Entry.objects.filter(publish=1).annotate(already_liked=Count('all_likes', filter=Q(
+                                    all_likes__user=request.user), distinct=True)), id=entry_id)
     
-    if request.method == 'GET':
+    
+    if request.GET.dict():
         print('...getting...')
         params = f'?{request.GET.urlencode()}'
     else:
         params = ''
-    #print(request.user.liked.filter(entry=entry).exists())
     #print(entry.already_liked)
     
     #if entry.already_liked == 0:
-    if not request.user.liked.filter(entry=entry).exists():
+   # if not request.user.liked.filter(entry=entry).exists():
+    if not entry.already_liked:
         like = Like.objects.create(user=request.user, entry=entry)
     else:
         like = request.user.liked.get(entry=entry)
