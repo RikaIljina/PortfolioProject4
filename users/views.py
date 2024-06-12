@@ -120,6 +120,8 @@ def dashboard_entry(request, username, slug):
         return HttpResponseRedirect(reverse('home'))
 
     entry = get_object_or_404(get_all_entries(request, request.user.all_entries), slug=slug)
+    old_files = entry.old_files
+    
     comments = entry.all_comments.select_related('author', 'author__profile')
 
     # if request.GET.get('edit'):
@@ -128,6 +130,7 @@ def dashboard_entry(request, username, slug):
     comment_form = process_comment_form(request, entry)
     
     context = {'entry': entry,
+               'old_files': old_files,
                'comments': comments,
                'comment_form': comment_form,
                }

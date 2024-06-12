@@ -37,4 +37,6 @@ class EntryAdmin(SummernoteModelAdmin):
     def delete_queryset(self, request, queryset):
         for obj in queryset:
             print(cloudinary.uploader.destroy(obj.audio_file.public_id, resource_type = "video", invalidate=True))
+            for id, file in obj.old_files.items():
+                print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
         super().delete_model(request, queryset)

@@ -28,6 +28,7 @@ def entry_details(request, slug):
     #     return save_like(request)
     
     entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
+    old_files = entry.old_files
     comments = entry.all_comments.select_related('author', 'author__profile')
   #  print(comments)
    # entry_tags = entry.tags.prefetch_related('tagged_items__tag')
@@ -39,6 +40,7 @@ def entry_details(request, slug):
     comment_form = process_comment_form(request, entry)
 
     context = {'entry': entry,
+               'old_files': old_files,
                'comments': comments,
                'users': users,
                'tags': tags,
@@ -101,8 +103,12 @@ def edit_entry(request, username, slug):
 
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
     #id = entry.audio_file.public_id
+    old_files = entry.old_files
+    print(old_files)
+
 
     if request.method == 'POST':
+
         entry_form = EntryForm(request.POST, request.FILES, instance=entry, user=request.user, new_file=request.FILES.get('audio_file'))
 
         if entry_form.is_valid():
@@ -115,6 +121,7 @@ def edit_entry(request, username, slug):
             #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
             #     print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
             entry.author = request.user
+
             #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
@@ -132,11 +139,12 @@ def edit_entry(request, username, slug):
     else:
         tag_list = [value['name'] for value in entry.tags.all().values()]
         entry_form = EntryForm(instance=entry, user=request.user, initial={'title': entry.title, 'description': entry.description,
-                           'audio_file': entry.audio_file, 'tags':(',').join(tag_list), 'publish': entry.publish})
+                           'audio_file': entry.audio_file, 'keep_file': True, 'tags':(',').join(tag_list), 'publish': entry.publish})
 
     context = {
         'entry': entry,
         'entry_form': entry_form,
+        'old_files': old_files,
     }
 
     return render(
@@ -161,3 +169,18 @@ def delete_entry(request, username, slug):
     
     
     return HttpResponseRedirect(reverse('dashboard', args=[username]))
+
+
+def delete_old_file(request, username, slug, file_id):
+    if not request.user.is_authenticated or username != request.user.username:
+        return HttpResponseRedirect(reverse('home'))
+
+    entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
+    if entry.old_files.get(file_id):
+        del entry.old_files[file_id]
+        entry.save()
+        print(f'{username}, {slug}, {file_id}')
+        print(cloudinary.uploader.destroy(file_id, resource_type = "video", invalidate=True))
+        messages.success(request, "Your file has been deleted.")
+    
+    return redirect('edit_entry', username=username, slug=slug)

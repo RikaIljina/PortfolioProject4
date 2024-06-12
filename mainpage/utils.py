@@ -36,6 +36,9 @@ def sort_by(request, entries):
     elif request.GET.get('sorted') == 'by_published':
         entries = entries.order_by('publish')
         sorted_param = '?sorted=by_published'
+    elif request.GET.get('sorted') == 'by_updated':
+        entries = entries.order_by('-updated_on')
+        sorted_param = '?sorted=by_updated'
     
     else:
         sorted_param = ''

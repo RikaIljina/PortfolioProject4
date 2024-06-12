@@ -17,6 +17,7 @@ class Entry(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     audio_file = CloudinaryField('raw', resource_type='auto', format='mp3')
+    old_files = models.JSONField(default=dict, blank=True)
     description = models.TextField()
     tags = TaggableManager(verbose_name='Tags')
     slug = models.SlugField(max_length=250, unique=True, blank=True)
@@ -30,8 +31,8 @@ class Entry(models.Model):
     # def created_date(self):
     #     ''' Convert DateTime to pure Date '''
     #     return self.created_on.date()
-    
-      
+
+
     def __str__(self):
         return f"{self.title} created by {self.author}"
     
@@ -41,9 +42,11 @@ class Entry(models.Model):
         new_slug = f'{self.title}-{self.author.username}'
        # print(new_slug)
         self.slug = slugify(unidecode(new_slug))
-        return super().save(*args, **kwargs)
+        return super(Entry, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
         print('Trying to delete')
         print(cloudinary.uploader.destroy(self.audio_file.public_id, resource_type = "video", invalidate=True))
+        for id, file in self.old_files.items():
+            print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
         return super().delete(*args, **kwargs)
