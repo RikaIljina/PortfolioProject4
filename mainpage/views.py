@@ -27,11 +27,7 @@ def index(request):
 
     page_obj = get_page_obj(request, entries)
     
-    if request.GET.get('filter') == 'users':
-        users = get_username_list()
-    else:
-        users = ''
-        
+    users = get_username_list()    
     tags = get_all_tags()
     
     context = {'entries': entries,

@@ -111,19 +111,18 @@
                                     <span class="ms-1 d-none d-sm-inline">Delete filters</span></a>
                             </li>
                             <li>
-                                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle" id="filter-user">
+                                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                                     <i class="fa-solid fa-user"></i>
-                                    <span class="ms-1 d-none d-sm-inline">Filter by user</span></a>
-                                <ul class="collapse {% if request.path|slice:':9' == '/filter/u' or users %}show{% endif %} nav flex-column ms-1"
+                                    <span class="ms-1 d-none d-sm-inline">Filter by user</span>
+                                </a>
+                                <ul class="collapse {% if request.path|slice:':9' == '/filter/u' %}show{% endif %} nav flex-column ms-1"
                                     id="submenu2" data-bs-parent="#menu">
-                                    {% if users %}
                                     {% for user in users %}
                                     <li class="w-100">
                                         <a href="{% url 'filter_user' user %}" class="nav-link px-0">
                                             <span class="d-none d-sm-inline">{{ user }}</span></a>
                                     </li>
                                     {% endfor %}
-                                    {% endif %}
                                 </ul>
                             </li>
                             <li>
