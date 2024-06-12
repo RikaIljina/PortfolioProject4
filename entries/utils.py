@@ -19,14 +19,14 @@ def get_published_entries(request, source, get_likes=True, get_comments=True):
             likes_received=Count('all_likes', distinct=True), 
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
-            .prefetch_related('tags', 'all_comments')
+            .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
         print(f"Annotating: {request.user.liked}")
     elif get_comments:
         entries = source.filter(publish=1).annotate(
             likes_received=Count('all_likes', distinct=True), 
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
-            .prefetch_related('tags', 'all_comments')
+            .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
             # .select_related('all_comments__comment') 
             #, 'all_comments__author__profile')
     else:
@@ -34,7 +34,7 @@ def get_published_entries(request, source, get_likes=True, get_comments=True):
             likes_received=Count('all_likes', distinct=True), 
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
-            .prefetch_related('tags')
+            .prefetch_related('tagged_items__tag', 'tags')
             # .select_related('all_comments__comment') 
             #, 'all_comments__author__profile')
 
@@ -46,7 +46,7 @@ def get_all_entries(request, source, get_comments=True):
             likes_received=Count('all_likes', distinct=True),
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
-            .prefetch_related('tags', 'all_comments')
+            .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
         return entries
             
     elif request.user.is_authenticated:
@@ -54,7 +54,7 @@ def get_all_entries(request, source, get_comments=True):
             likes_received=Count('all_likes', distinct=True),
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
-            .prefetch_related('tags')
+            .prefetch_related('tagged_items__tag', 'tags',)
         return entries
         
         

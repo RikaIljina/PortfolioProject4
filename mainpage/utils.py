@@ -28,7 +28,7 @@ def get_all_tags():
 
 def sort_by(request, entries):
     if request.GET.get('sorted') == 'by_likes':
-        entries = entries.annotate(count_likes=Count('all_likes')).order_by('-count_likes')
+        entries = entries.annotate(count_likes=Count('all_likes',  distinct=True)).order_by('-count_likes')
         sorted_param = '?sorted=by_likes'
     elif request.GET.get('sorted') == 'by_date':
         entries = entries.order_by('-created_on')

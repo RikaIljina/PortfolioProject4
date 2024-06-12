@@ -35,8 +35,8 @@ def user_profile(request, username):
     if hasattr(user, 'all_entries'):
         entries = get_published_entries(request, user.all_entries, get_comments=False)
     # print(entries[0].likes_received)
-        most_liked = entries.order_by('-likes_received').first()
-        most_recent = entries.order_by('-created_on').first()
+        most_liked = Entry.objects.filter(publish=1).annotate(likes_received=Count('all_likes')).order_by('-likes_received').first()
+        most_recent = Entry.objects.filter(publish=1).order_by('-created_on').first()
         entries, sorted_param = sort_by(request, entries)
 
         page_obj = get_page_obj(request, entries)
@@ -121,6 +121,10 @@ def dashboard_entry(request, username, slug):
 
     entry = get_object_or_404(get_all_entries(request, request.user.all_entries), slug=slug)
     old_files = entry.old_files
+    print('In details:')
+    print(old_files.items())
+    sorted_files = dict(sorted(old_files.items(), key=lambda item: item[1][1], reverse=True))
+    print(sorted_files)
     
     comments = entry.all_comments.select_related('author', 'author__profile')
 
@@ -130,7 +134,7 @@ def dashboard_entry(request, username, slug):
     comment_form = process_comment_form(request, entry)
     
     context = {'entry': entry,
-               'old_files': old_files,
+               'old_files': sorted_files,
                'comments': comments,
                'comment_form': comment_form,
                }

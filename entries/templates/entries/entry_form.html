@@ -111,8 +111,9 @@
                 </div>
                 <div class="col-8">
                     {% for key, value in old_files.items %}
+                    <p>added {{ value.1 }}</p>
                     <audio controls preload="none">
-                        <source src="{{ value }}" type="audio/mpeg">
+                        <source src="{{ value.0 }}" type="audio/mpeg">
                         Your browser does not support the audio tag.
                     </audio>
                     <button type="button" class="btn btn-danger btn-delete" data-file_id="{{ key }}"

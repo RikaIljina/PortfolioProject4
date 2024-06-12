@@ -47,7 +47,7 @@ def index(request):
 def filter_user(request, username):
     user = get_object_or_404(User.objects.all(), username=username)
     
-    entries = get_published_entries(request, user.all_entries)
+    entries = get_published_entries(request, user.all_entries, get_comments=False)
     entries, sorted_param = sort_by(request, entries)
     
     # if request.GET.get('liked') and request.user.is_authenticated:
@@ -72,8 +72,14 @@ def filter_user(request, username):
 
 
 def filter_tag(request, tag):
-    entries = get_published_entries(request, Entry.objects).filter(tags__name__in=[tag])
+    entries = get_published_entries(request, Entry.objects, get_comments=False).filter(tags__name__in=[tag])
     entries, sorted_param = sort_by(request, entries)
+   # print(entries[0].tags.__dict__)
+   # Tag.objects.all().prefetch_related('entries')
+   # print(Tag.objects.all().filter(name=tag).__dict__)# _meta.get_fields())
+   # tag_obj = get_object_or_404(Tag, pk=Tag.objects.filter(name=tag).first().pk) #.pk=tag.pk)
+   # tagged = Entry.objects.filter(tag=tag_obj)
+   # print(tagged)
     
     # if request.GET.get('liked') and request.user.is_authenticated:
     #     return save_like(request, entries)

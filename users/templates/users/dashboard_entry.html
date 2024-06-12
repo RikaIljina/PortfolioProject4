@@ -62,7 +62,7 @@
                 <p>Previous versions:</p>
                 {% for file in old_files.values %}
                 <audio controls>
-                    <source src="{{ file }}" type="audio/mpeg" />
+                    <source src="{{ file.0 }}" type="audio/mpeg" />
                     Your browser does not support the audio tag.
                 </audio>
                 {% endfor %}

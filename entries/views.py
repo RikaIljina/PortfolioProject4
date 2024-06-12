@@ -29,6 +29,11 @@ def entry_details(request, slug):
     
     entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
     old_files = entry.old_files
+    print('In details:')
+    print(old_files.items())
+    sorted_files = dict(sorted(old_files.items(), key=lambda item: item[1][1], reverse=True))
+    print(sorted_files)
+    
     comments = entry.all_comments.select_related('author', 'author__profile')
   #  print(comments)
    # entry_tags = entry.tags.prefetch_related('tagged_items__tag')
@@ -40,7 +45,7 @@ def entry_details(request, slug):
     comment_form = process_comment_form(request, entry)
 
     context = {'entry': entry,
-               'old_files': old_files,
+               'old_files': sorted_files,
                'comments': comments,
                'users': users,
                'tags': tags,
@@ -103,9 +108,11 @@ def edit_entry(request, username, slug):
 
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
     #id = entry.audio_file.public_id
-    old_files = entry.old_files
-    print(old_files)
-
+    old_files = dict(sorted(entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
+    # print('In details:')
+    # print(old_files.items())
+    # sorted_files = dict(sorted(entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
+    # print(sorted_files)
 
     if request.method == 'POST':
 

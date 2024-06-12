@@ -20,6 +20,7 @@ class Entry(models.Model):
     old_files = models.JSONField(default=dict, blank=True)
     description = models.TextField()
     tags = TaggableManager(verbose_name='Tags')
+    tag_list = models.CharField(max_length=500, blank=True)
     slug = models.SlugField(max_length=250, unique=True, blank=True)
    # likes = models.IntegerField(null=True, default=0)
    # liked_users = models.ManyToManyField(User, through=Like, related_name='liked_entries', blank=True)

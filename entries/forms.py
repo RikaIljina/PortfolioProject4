@@ -3,6 +3,8 @@ from django.forms import TextInput, Textarea, RadioSelect, FileInput, EmailInput
 from django.utils.translation import gettext_lazy as _
 from cloudinary.forms import CloudinaryFileField
 from django_summernote.widgets import SummernoteWidget
+from datetime import datetime
+import json
 import cloudinary
 
 from .models import Entry
@@ -13,6 +15,7 @@ class EntryForm(forms.ModelForm):
     Form class for users to add a new entry 
     """
     keep_file = forms.BooleanField(required=False, label='Keep previous file?')
+    tag_list = forms.CharField(required=False)
 
     class Meta:
         """
@@ -58,11 +61,14 @@ class EntryForm(forms.ModelForm):
         instance.author = self.user
         #print(f'Instance in save: {instance}')
         keep_file = self.data.get('keep_file')
+        instance.tag_list = self.cleaned_data.get('tags')
+        print(instance.tag_list)
         
         if self.new_file and keep_file:
             old_id = self.initial['audio_file'].public_id
-
-            instance.old_files[old_id] = self.initial['audio_file'].url
+            
+            json_date = json.dumps(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            instance.old_files[old_id] = [self.initial['audio_file'].url, json_date ]
  
             print(instance.old_files)
             
@@ -88,5 +94,7 @@ class EntryForm(forms.ModelForm):
         if commit:
             print('saving in class with commit true')
             instance.save()
+            
+        print(instance.tag_list)
 
         return instance
