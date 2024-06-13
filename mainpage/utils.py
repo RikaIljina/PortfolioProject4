@@ -41,7 +41,7 @@ def get_all_tags():
         #file.writelines(str(line) + '\n' for line in tag_list)
         file.write(tags)
     
-    return tag_list
+    return tags
 
 
 def get_tags_from_file():

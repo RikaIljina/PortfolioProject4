@@ -1,5 +1,4 @@
 from django.apps import AppConfig
-#from .utils import get_all_tags
 
 
 class MainpageConfig(AppConfig):
@@ -8,4 +7,5 @@ class MainpageConfig(AppConfig):
 
     def ready(self):
         import mainpage.signals
-        #get_all_tags()
+        from .utils import get_all_tags
+        get_all_tags()

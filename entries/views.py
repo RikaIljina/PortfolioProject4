@@ -13,7 +13,7 @@ import cloudinary
 from django.core.exceptions import ValidationError
 #import cloudinary.uploader
 from likes.models import Like
-from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from mainpage.utils import get_all_tags, get_page_obj, sort_by, get_tags_from_file
 from users.utils import get_username_list, get_users_from_file
 from .utils import get_published_entries
 from comments.forms import CommentForm
@@ -41,7 +41,8 @@ def entry_details(request, slug):
     
     #users = get_username_list()
     users = get_users_from_file()
-    tags = get_all_tags()
+    #tags = get_all_tags()
+    tags = get_tags_from_file()
 
     comment_form = process_comment_form(request, entry)
 
