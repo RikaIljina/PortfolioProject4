@@ -5,6 +5,7 @@ from taggit.models import Tag
 from django.db.models import Count, Q
 from django.dispatch import receiver
 import cloudinary
+from .utils import get_username_list
 
 from entries.models import Entry
 from .models import Profile
@@ -17,6 +18,7 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
         instance.profile.save()
+        get_username_list()
         
 
     

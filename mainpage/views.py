@@ -12,7 +12,7 @@ from entries.models import Entry
 
 from comments.forms import CommentForm
 from mainpage.utils import get_all_tags, get_page_obj, sort_by
-from users.utils import get_username_list
+from users.utils import get_username_list, get_users_from_file
 from entries.utils import get_published_entries
 
 
@@ -21,13 +21,18 @@ from entries.utils import get_published_entries
 def index(request):
     # if request.GET.get('liked') and request.user.is_authenticated:
     #     return save_like(request)
-    
+    # if request.user.is_authenticated:
+    #     profile = request.user.profile
+    # else:
+    #     profile = None
+
     entries = get_published_entries(request, Entry.objects, get_comments=False)
     entries, sorted_param = sort_by(request, entries)
 
     page_obj = get_page_obj(request, entries)
     
-    users = get_username_list()    
+    #users = get_username_list()    
+    users = get_users_from_file()
     tags = get_all_tags()
     
     context = {'entries': entries,
@@ -54,7 +59,8 @@ def filter_user(request, username):
     #     return save_like(request, entries)
     
     page_obj = get_page_obj(request, entries)
-    users = get_username_list()
+    #users = get_username_list()
+    users = get_users_from_file()
     tags = get_all_tags()
     
     context = {'entries': entries,
@@ -85,7 +91,8 @@ def filter_tag(request, tag):
     #     return save_like(request, entries)
         
     page_obj = get_page_obj(request, entries)
-    users = get_username_list()
+    #users = get_username_list()
+    users = get_users_from_file()
     tags = get_all_tags()
     
     context = {'entries': entries,
