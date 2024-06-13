@@ -17,6 +17,7 @@ class EntryForm(forms.ModelForm):
     keep_file = forms.BooleanField(required=False, label='Keep previous file?')
     tag_list = forms.CharField(required=False)
 
+
     class Meta:
         """
         Specify the django model and order of the fields
@@ -51,6 +52,7 @@ class EntryForm(forms.ModelForm):
         print(f'new title {title}')
         print(Entry.objects.filter(author=self.user, title=title))
         instance = self.instance
+
         if Entry.objects.filter(author=self.user, title=title).exclude(id=instance.id).exists():
             raise forms.ValidationError("You have already used this title for another song.")
         return title

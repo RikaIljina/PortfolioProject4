@@ -1,64 +1,80 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.urls import resolve
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
-from django.db.models import Count, Q
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.db.models.functions import Lower
-from django.core.files.storage import FileSystemStorage 
-from taggit.models import Tag
-import cloudinary
-from django.core.exceptions import ValidationError
-#import cloudinary.uploader
-from likes.models import Like
-from entries.models import Entry
-from mainpage.utils import get_all_tags, get_page_obj, sort_by
-from users.utils import get_username_list
-from entries.utils import get_published_entries
-from .forms import CommentForm
-from users.forms import ProfileForm
-from entries.forms import EntryForm
-# Create your views here.
-
+from django.shortcuts import get_object_or_404, reverse, redirect
 from django.contrib import messages
+
+from .forms import CommentForm
 
 
 def edit_comment(request, current_path, comment_id):
-    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-   # next = request.POST.get('next')
+    """ Process the editing of an existing comment by an authenticated user
+
+    This view is triggered via comments.js after the user clicks the "Edit"
+    button. Since the user could be coming from a variety of views, the path
+    they come from is cleaned by the JS file and passed on as 'current_path'
+    so the user can return to it.
     
+    The function retrieves a comment by its ID, ensuring that the comment 
+    belongs to the current authenticated user.
+    
+    Since the editing of the comment is executed in place by un-hiding the
+    textarea for editing, the page can contain multiple POST forms. Therefore,
+    the Update button contains the name attribute 'updateOld' to distinguish it
+    from the original Comment button at the top of the comment section.
+    This view only processes POST data if it was submitted by the 'updateOld'
+    button.
+    
+    The user receives feedback on saving the comment via success/error message
+    and is then redirected to the previous path.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata 
+            about the request.
+        current_path (str): The current path to redirect back to after editing 
+            the comment.
+        comment_id (int): The ID of the comment to be edited.
+
+    Returns:
+        HttpResponseRedirect: A redirect response to the specified path.
+    """
+    
+    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
+
     if request.method == 'POST' and comment.author == request.user:
-        
         if 'updateOld' in request.POST:
             print(request.POST)
             comment_form = CommentForm(data=request.POST, instance=comment)
-
             if comment_form.is_valid():
                 comment_form.save()
                 messages.success(request, "Your comment has been saved.")
-                
             else:
                 print(comment_form.errors.as_data())
-                messages.warning(request, "Your comment was not saved.")
-                
+                messages.error(request, "Your comment was not saved.")
 
     return redirect(f'{reverse('home')}{current_path}')
 
 
 def delete_comment(request, current_path, comment_id):
-    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-   # next = request.GET.get('old')
-   # print('resolving:')
-   # print(resolve(current_path))
-   # print(resolve(request.path))
-   # print(next)
+    """ Handle the deletion of a comment by an authenticated user
+
+    This function retrieves a comment by its ID from the current authenticated 
+    user's comments. If found, the comment is deleted and a success message is 
+    displayed. The user is then redirected to the specified path.
     
-    if comment.author == request.user:
-        comment.delete()
-        messages.success(request, "Your comment has been deleted.")
-        
-    print(f'current: {current_path}')
-    print('going to last path')
-    print(f'{reverse('home')}{current_path}')
+    The file comments.js is responsible for retrieving the comment ID and
+    cleaning the return path.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata 
+            about the request.
+        current_path (str): The current path to redirect back to after deleting 
+            the comment.
+        comment_id (int): The ID of the comment to be deleted.
+
+    Returns:
+        HttpResponseRedirect: A redirect response to the specified path.
+    """
+    
+    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
+    comment.delete()
+    messages.success(request, "Your comment has been deleted.")
+
     return redirect(f'{reverse('home')}{current_path}')

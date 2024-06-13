@@ -146,7 +146,8 @@
                     <p></p>
                 </div>
                 <div class="col-8">
-                    <button id="submitButton" name="submit" type="submit" class="btn btn-success">Save</button>
+                    <button id="submitButton" name="submit" type="submit" class="btn btn-success" id="btn-save-entry"
+                    >Save</button>
                 </div>
             </div>
 
@@ -180,6 +181,28 @@
         </div>
     </div>
 </div>
+
+
+{% if not entry_form.errors %}
+<!-- Modal data-bs-toggle="modal" data-bs-target="#modalSave_" -->
+<div class="modal fade" id="modalSave" tabindex="-1" role="dialog" aria-labelledby="saveModalTitleId" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="saveModalTitleId">
+                    Upload in progress
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">Please do not close this page while your file is being uploaded. You will be redirected shortly.
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}
 

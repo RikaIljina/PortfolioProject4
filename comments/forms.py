@@ -5,20 +5,22 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CommentForm(forms.ModelForm):
+    """ Form class for users to comment on an entry
+
+    The comment form consists of only one input field for the comment text.
     """
-    Form class for users to comment on a post 
-    """
-    
-  #  content = forms.TextInput(widget=forms.TextInput(attrs={'class':'flex-fill form-control me-3'}))
-    
+
     class Meta:
-        """
-        Specify the django model and order of the fields
+        """ Django model and order of the fields
         """
         model = Comment
         fields = ('content',)
         widgets = {
-            "content": Textarea(attrs={"rows":"3", "class":"flex-fill form-control me-3", "placeholder":"Add comment", "type":"text", "name":"comment"}),
+            "content": Textarea(attrs={"rows": "3",
+                                       "class": "flex-fill form-control me-3",
+                                       "placeholder": "Add comment",
+                                       "type": "text",
+                                       "name": "comment"}),
         }
         labels = {
             'content': _('Your comment'),

@@ -26,10 +26,8 @@
                             class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
                             {% csrf_token %}
                             <!-- {{ comment_form }} -->
-                            {% for field in comment_form %}
-                            <span class="visually-hidden">{{ field.label_tag }}</span>
-                            {{ field }}
-                            {% endfor %}
+                            <span class="visually-hidden">{{ comment_form.label }}</span>
+                            {{ comment_form.content }}
 
                             <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
                             <div class="d-flex flex-column">

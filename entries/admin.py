@@ -5,7 +5,6 @@ from likes.models import Like
 from django.contrib.auth.models import User
 import cloudinary
 
-# Register your models here.
 
 @admin.register(Entry)
 class EntryAdmin(SummernoteModelAdmin):

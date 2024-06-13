@@ -66,7 +66,7 @@ def new_entry(request, username):
     
     #all_titles = list(request.user.entries.all().values_list('title', flat=True))
     #titles = [title.get('title') for title in all_titles]
-
+    
     if request.method == 'POST':
         entry_form = EntryForm(request.POST, request.FILES, user=request.user)
         if entry_form.is_valid():
@@ -85,6 +85,7 @@ def new_entry(request, username):
             print('not valid')
             print(entry_form.errors.as_data())
             messages.warning(request, "Your entry could not be saved.")
+            raise ValidationError("Your title is empty.")
             
             #return reverse('new_entry', args=[entry_form])
 

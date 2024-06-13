@@ -4,6 +4,8 @@
 // const editButtons = document.getElementsByClassName("btn-edit");
 // const commentText = document.getElementById("id_content");
 const commentForm = document.getElementById("commentForm");
+const saveBtn = document.getElementById("btn-save-entry");
+
 
 // const deleteModal = new Modal(document.getElementById("deleteModal"));
 const deleteButtons = document.getElementsByClassName('btn-delete');
@@ -20,3 +22,16 @@ for (let button of deleteButtons) {
         //deleteModal.show();
     });
 }
+
+
+$("#modalSave").modal({
+    backdrop: "static",
+    keyboard: true,
+    show: true,
+  });
+  saveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    alert(`${document.getElementById("modalSave").getAttributeNames}`);
+    alert(e.detail);
+  });
+  
