@@ -32,7 +32,9 @@
         </p>
 
     </div>
+    {% with like as entry%}
     {% include 'likes/snippets/like_comment_summary.html' %}
+    {% endwith %}
 
 </div>
 {% endwith %}

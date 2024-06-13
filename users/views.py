@@ -199,8 +199,10 @@ def user_favorites(request, username):
 
     # if request.GET.get('liked') and request.user.is_authenticated:
     #     return save_like(request)
-
-    likes = request.user.liked.select_related('entry')
+    #entries = get_published_entries(request, request.user.liked.all(), get_comments=False)
+    likes = request.user.liked.select_related('entry').annotate(
+        likes_received=Count('entry__all_likes', distinct=True),
+        comments_received=Count('entry__all_comments', distinct=True))
     is_favorite = 1
 
     page_obj = get_page_obj(request, likes)
