@@ -1,0 +1,31 @@
+.nav {
+    color:antiquewhite;
+    
+}
+.nav a {
+    color: aliceblue;
+}
+
+.active {
+    background-color: rgb(95, 111, 106);
+}
+
+.like-btn:focus,.like-btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ a {
+    cursor: pointer;
+ }
+ 
+ .like {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+ }
+
+ .like-red
+ {
+    color: red;
+ }
