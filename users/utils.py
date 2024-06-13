@@ -16,7 +16,7 @@ from likes.models import Like
 
 
 def get_username_list():
-
+# order list after db query!
     current_usernames = list(User.objects.values_list(
                 'username', flat=True).order_by(Lower('username')))
     with open(os.path.join(django_settings.STATIC_ROOT, 'usernames.txt'), 'w') as file:

@@ -132,10 +132,10 @@
                                 </a>
                                 <ul class="collapse {% if request.path|slice:':9' == '/filter/t' %}show{% endif %} nav flex-column ms-1"
                                     id="submenu3" data-bs-parent="#menu">
-                                    {% for tag in tags %}
+                                    {% for tag, amount in tags.items %}
                                     <li class="w-100">
-                                        <a href="{% url 'filter_tag' tag.name %}" class="nav-link px-0">
-                                            <span class="d-none d-sm-inline">{{ tag }}</span> ({{ tag.amount }})</a>
+                                        <a href="{% url 'filter_tag' tag %}" class="nav-link px-0">
+                                            <span class="d-none d-sm-inline">{{ tag }}</span> ({{ amount }})</a>
                                     </li>
                                     {% endfor %}
                                 </ul>

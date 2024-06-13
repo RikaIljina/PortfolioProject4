@@ -6,12 +6,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
+import os
 
 from likes.models import Like
 from entries.models import Entry
 
 from comments.forms import CommentForm
-from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from mainpage.utils import get_all_tags, get_page_obj, sort_by, get_tags_from_file
 from users.utils import get_username_list, get_users_from_file
 from entries.utils import get_published_entries
 
@@ -31,9 +32,18 @@ def index(request):
 
     page_obj = get_page_obj(request, entries)
     
+    # do this on app start
+    if not os.path.isfile('staticfiles/usernames.txt'):
+        users = get_username_list()
+    if not os.path.isfile('staticfiles/tags.txt'):
+        tags = get_all_tags()
+
+    users = get_users_from_file()
+    # tags = get_all_tags()
     #users = get_username_list()    
     users = get_users_from_file()
-    tags = get_all_tags()
+    #tags = get_all_tags()
+    tags = get_tags_from_file()
     
     context = {'entries': entries,
                'sorted_param': sorted_param,
@@ -61,7 +71,8 @@ def filter_user(request, username):
     page_obj = get_page_obj(request, entries)
     #users = get_username_list()
     users = get_users_from_file()
-    tags = get_all_tags()
+    tags = get_tags_from_file()
+
     
     context = {'entries': entries,
                'users': users,
@@ -93,7 +104,9 @@ def filter_tag(request, tag):
     page_obj = get_page_obj(request, entries)
     #users = get_username_list()
     users = get_users_from_file()
-    tags = get_all_tags()
+    # tags = get_all_tags()
+    tags = get_tags_from_file()
+    
     
     context = {'entries': entries,
                'tag_filter': tag,

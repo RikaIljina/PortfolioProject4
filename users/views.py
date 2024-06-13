@@ -13,7 +13,7 @@ from django.core.exceptions import ValidationError
 # import cloudinary.uploader
 from likes.models import Like
 from entries.models import Entry
-from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from mainpage.utils import get_all_tags, get_page_obj, sort_by, get_tags_from_file
 from .utils import get_username_list, get_users_from_file
 from entries.utils import get_published_entries, get_all_entries
 from comments.forms import CommentForm
@@ -48,7 +48,8 @@ def user_profile(request, username):
         
         users = get_users_from_file()
         
-        tags = get_all_tags()
+        #tags = get_all_tags()
+        tags = get_tags_from_file()
 
         context = {'profile': profile,
                    # 'entries': entries,
@@ -81,7 +82,7 @@ def dashboard(request, username):
         return HttpResponseRedirect(reverse('home'))
 
     user = request.user
-   # profile = user.profile
+    profile = user.profile
     # fields = user._meta.get_fields()
     # for field in fields:
     #     print(field)
@@ -105,7 +106,7 @@ def dashboard(request, username):
     # users = get_username_list()
     # tags = get_all_tags()
 
-        context = {#'profile': profile,
+        context = {'profile': profile,
                    # 'entries': entries,
                    'most_liked': most_liked,
                    'most_recent': most_recent,

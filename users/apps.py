@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+#from .utils import get_username_list
 
 
 class UsersConfig(AppConfig):
@@ -7,3 +8,5 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         import users.signals
+        #get_username_list()
+        

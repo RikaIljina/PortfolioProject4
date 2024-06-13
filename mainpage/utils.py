@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
+from django.conf import settings as django_settings
+import os
+import json
 
 from entries.models import Entry
 from likes.models import Like
@@ -23,8 +26,32 @@ def get_page_obj(request, entries, amount=3):
 def get_all_tags():
     tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
         entry__publish=1), distinct=True)).filter(amount__gt=0).order_by('name')
+    #print(tags)
+    #print(tags.values())
+    # BUG: Tag doesn't register tagged entry immediately after tag creation or 
+    # the entry is not counted for other reasons, thus tag isn't counted
+    # TODO: clean up empty tags
+    tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
+        entry__publish=1), distinct=True))#.filter(amount__gt=0)
 
+    tag_list = {str(value['name']): str(value['amount']) for value in tags.values()}
+    tags = json.dumps(tag_list)
+    #print(tags) # tags.values_list('name', flat=True): })
+    with open(os.path.join(django_settings.STATIC_ROOT, 'tags.txt'), 'w') as file:
+        #file.writelines(str(line) + '\n' for line in tag_list)
+        file.write(tags)
+    
+    return tag_list
+
+
+def get_tags_from_file():
+    with open('staticfiles/tags.txt') as f:
+        data = f.read()
+    #print(data)
+    tags = json.loads(data)
+    #print(tags)
     return tags
+
 
 def sort_by(request, entries):
     if request.GET.get('sorted') == 'by_likes':
