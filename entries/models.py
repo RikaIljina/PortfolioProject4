@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from taggit.managers import TaggableManager
+from taggit.models import Tag
 #from django.template.defaultfilters import slugify
 from django.utils.text import slugify
 import cloudinary
@@ -43,10 +44,12 @@ class Entry(models.Model):
         new_slug = f'{self.title}-{self.author.username}'
        # print(new_slug)
         self.slug = slugify(unidecode(new_slug))
+        Tag.objects.filter(entry=None).delete()
         return super(Entry, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
         print('Trying to delete')
+        Tag.objects.filter(entry=None).delete()
         print(cloudinary.uploader.destroy(self.audio_file.public_id, resource_type = "video", invalidate=True))
         for id, file in self.old_files.items():
             print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))

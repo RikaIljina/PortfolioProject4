@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
 from django.db.models.functions import Lower
 from django.contrib.auth.models import User
 from taggit.models import Tag
@@ -12,17 +12,31 @@ from entries.models import Entry
 
 @receiver(post_save, sender=Tag)
 def create_tag(sender, instance, created, **kwargs):
-    if created:
-        print('new tag created, signals')
-        print(Tag.objects.all())
-        get_all_tags()
+    print('new tag created, signals')
+    #Tag.objects.filter(entry=None).delete()
+    
+    get_all_tags()
+
+
+@receiver(post_delete, sender=Tag)
+def del_tag(sender, instance, **kwargs):
+   # Tag.objects.filter(entry=None).delete()
+    
+    get_all_tags()
+
 
 @receiver(post_save, sender=Entry)
-def create_tag(sender, instance, created, **kwargs):
+def check_tags(sender, instance, created, **kwargs):
     print('entry saved created, signals')
-    print(Tag.objects.all())
+    #Tag.objects.filter(entry=None).delete()
+    
     get_all_tags()
-        
+
+@receiver(post_delete, sender=Entry)
+def delete_tags(sender, instance, **kwargs):
+    #Tag.objects.filter(entry=None).delete()
+    
+    get_all_tags()
 
     
 # @receiver(post_save, sender=User)
