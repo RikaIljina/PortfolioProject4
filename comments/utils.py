@@ -1,5 +1,8 @@
-from .forms import CommentForm
 from django.contrib import messages
+from django.shortcuts import get_object_or_404, reverse, redirect
+
+from .forms import CommentForm
+
 
 def process_comment_form(request, entry):
     """ Process the comment form submission and save the comment
@@ -29,6 +32,3 @@ def process_comment_form(request, entry):
         else:
             messages.error(request, "Your comment could not be saved.")
             
-    comment_form = CommentForm()
-    
-    return comment_form

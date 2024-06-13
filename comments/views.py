@@ -49,7 +49,7 @@ def edit_comment(request, current_path, comment_id):
                 print(comment_form.errors.as_data())
                 messages.error(request, "Your comment was not saved.")
 
-    return redirect(f'{reverse('home')}{current_path}')
+        return redirect(f'{reverse('home')}{current_path}')
 
 
 def delete_comment(request, current_path, comment_id):

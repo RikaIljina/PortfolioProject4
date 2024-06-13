@@ -140,8 +140,12 @@ def dashboard_entry(request, username, slug):
 
     # if request.GET.get('edit'):
     #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
-
-    comment_form = process_comment_form(request, entry)
+    if request.method == 'POST':
+        process_comment_form(request, entry)
+        # TODO: make sure to go back the same path, via js
+        return redirect(f'{reverse('dashboard_entry', args=[username, slug])}')
+    
+    comment_form = CommentForm()
 
     context = {'entry': entry,
                'old_files': sorted_files,

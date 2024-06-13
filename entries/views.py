@@ -43,8 +43,13 @@ def entry_details(request, slug):
     users = get_users_from_file()
     #tags = get_all_tags()
     tags = get_tags_from_file()
+    
+    if request.method == 'POST':
+        process_comment_form(request, entry)
+        # TODO: make sure to go back the same path, via js
+        return redirect(f'{reverse('entry_details', args=[slug])}')
 
-    comment_form = process_comment_form(request, entry)
+    comment_form = CommentForm()
 
     context = {'entry': entry,
                'old_files': sorted_files,
@@ -79,7 +84,7 @@ def new_entry(request, username):
             entry.save()
             entry_form.save_m2m()
             messages.success(request, "Your entry has been saved.")
-            return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
+           # return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
             
         else:
             print('not valid')
@@ -88,6 +93,8 @@ def new_entry(request, username):
             raise ValidationError("Your title is empty.")
             
             #return reverse('new_entry', args=[entry_form])
+        return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
+        
 
         #print(request.POST)
 
