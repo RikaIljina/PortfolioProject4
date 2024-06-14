@@ -10,15 +10,11 @@ def process_comment_form(request, entry):
     This function handles the submission of the comment form. It saves the
     logged-in user and the entry as foreign keys and displays a success message
     or an error message to the user.
-    Always returns an empty comment form.
 
     Args:
         request (HttpRequest): The HTTP request object containing metadata 
             about the request.
         entry (Entry): The entry object to which the comment is being added.
-
-    Returns:
-        CommentForm: An instance of the comment form.
     """
 
     if request.method == 'POST':

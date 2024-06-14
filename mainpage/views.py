@@ -32,13 +32,6 @@ def index(request):
 
     page_obj = get_page_obj(request, entries)
     
-    # do this on app start
-    if not os.path.isfile('staticfiles/usernames.txt'):
-        users = get_username_list()
-    if not os.path.isfile('staticfiles/tags.txt'):
-        tags = get_all_tags()
-
-    users = get_users_from_file()
     # tags = get_all_tags()
     #users = get_username_list()    
     users = get_users_from_file()
