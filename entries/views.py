@@ -1,47 +1,29 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.urls import resolve
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
-from django.db.models import Count, Q
+from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.db.models.functions import Lower
-from django.core.files.storage import FileSystemStorage 
-from taggit.models import Tag
-import cloudinary
 from django.core.exceptions import ValidationError
-#import cloudinary.uploader
-from likes.models import Like
-from mainpage.utils import get_all_tags, get_page_obj, sort_by, get_tags_from_file
-from users.utils import get_username_list, get_users_from_file
-from .utils import get_published_entries
+import cloudinary
+
+from mainpage.utils import get_tags_from_file
+from users.utils import get_users_from_file
 from comments.forms import CommentForm
-from .forms import EntryForm
-from .models import Entry
-from users.forms import ProfileForm
 from comments.utils import process_comment_form
+from .models import Entry
+from .forms import EntryForm
+from .utils import get_published_entries
 
 
 def entry_details(request, slug):
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
     
-    entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
+    entry = get_object_or_404(
+        get_published_entries(request, Entry.objects), slug=slug)
     old_files = entry.old_files
-    print('In details:')
-    print(old_files.items())
-    sorted_files = dict(sorted(old_files.items(), key=lambda item: item[1][1], reverse=True))
-    print(sorted_files)
-    
+    sorted_files = dict(sorted(
+        old_files.items(), key=lambda item: item[1][1], reverse=True))
+
     comments = entry.all_comments.select_related('author', 'author__profile')
-  #  print(comments)
-   # entry_tags = entry.tags.prefetch_related('tagged_items__tag')
-   # print(entry_tags)
     
-    #users = get_username_list()
     users = get_users_from_file()
-    #tags = get_all_tags()
     tags = get_tags_from_file()
     
     if request.method == 'POST':

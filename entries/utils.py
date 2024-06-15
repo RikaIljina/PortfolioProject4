@@ -1,18 +1,28 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
 from django.db.models import Count, Q
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.db.models.functions import Lower
-from taggit.models import Tag
-
-from entries.models import Entry
-from likes.models import Like
 
 
 def get_published_entries(request, source, get_likes=True, get_comments=True):
-    if request.user.is_authenticated and get_likes:
+    """
+    Process a queryset to prefetch/select data and add annotations
+
+    Args:
+        request (HttpRequestObject): The request object
+        source (queryset): The relevant queryset to process; could be
+            Entry.objects or user.all_entries
+        get_likes (bool, optional): Whether to annotate with 'already_liked',
+            which can be 1 or 0, depending on whether user liked the entry or
+            not. Defaults to True.
+        get_comments (bool, optional): Whether to prefetch the entry comments.
+            Only needed on the entry details page. Defaults to True.
+
+    Returns:
+        entries (queryset): A queryset with published entries along with a
+            variety of annotations and related data.
+    """
+    
+    # likes_received and comments_received inform the like_comment_summary
+    # snippet of the 'likes' app
+    if request.user.is_authenticated and get_likes and get_comments:
         entries = source.filter(publish=1).annotate(
             already_liked=Count('all_likes', filter=Q(
                                 all_likes__user=request.user), distinct=True),
@@ -20,41 +30,62 @@ def get_published_entries(request, source, get_likes=True, get_comments=True):
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
             .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
-        print(f"Annotating: {request.user.liked}")
+
+    elif request.user.is_authenticated and not get_comments:
+        entries = source.filter(publish=1).annotate(
+            already_liked=Count('all_likes', filter=Q(
+                                all_likes__user=request.user), distinct=True),
+            likes_received=Count('all_likes', distinct=True), 
+            comments_received=Count('all_comments', distinct=True)) \
+            .select_related('author').select_related('author__profile') \
+            .prefetch_related('tagged_items__tag', 'tags')
+    
     elif get_comments:
         entries = source.filter(publish=1).annotate(
             likes_received=Count('all_likes', distinct=True), 
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
             .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
-            # .select_related('all_comments__comment') 
-            #, 'all_comments__author__profile')
+
     else:
         entries = source.filter(publish=1).annotate(
             likes_received=Count('all_likes', distinct=True), 
             comments_received=Count('all_comments', distinct=True)) \
             .select_related('author').select_related('author__profile') \
             .prefetch_related('tagged_items__tag', 'tags')
-            # .select_related('all_comments__comment') 
-            #, 'all_comments__author__profile')
 
     return entries
 
+
 def get_all_entries(request, source, get_comments=True):
-    if request.user.is_authenticated and get_comments:
-        entries = source.annotate(
-            likes_received=Count('all_likes', distinct=True),
-            comments_received=Count('all_comments', distinct=True)) \
-            .select_related('author').select_related('author__profile') \
-            .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
+    """
+    Process queryset for authenticated users, add related data and annotations
+
+    Args:
+        request (HttpRequestObject): The request object
+        source (queryset): The relevant queryset to process; should be
+            request.user.all_entries
+        get_comments (bool, optional): Whether to prefetch the entry comments.
+            Only needed on the entry details page. Defaults to True.
+
+    Returns:
+        entries (queryset): A queryset with the user's published and private
+            entries along with a variety of annotations and related data.
+    """
+    
+    if request.user.is_authenticated:
+        if get_comments:
+            entries = source.annotate(
+                likes_received=Count('all_likes', distinct=True),
+                comments_received=Count('all_comments', distinct=True)) \
+                .select_related('author').select_related('author__profile') \
+                .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
+
+        else:
+            entries = source.annotate(
+                likes_received=Count('all_likes', distinct=True),
+                comments_received=Count('all_comments', distinct=True)) \
+                .select_related('author').select_related('author__profile') \
+                .prefetch_related('tagged_items__tag', 'tags',)
+
         return entries
-            
-    elif request.user.is_authenticated:
-        entries = source.annotate(
-            likes_received=Count('all_likes', distinct=True),
-            comments_received=Count('all_comments', distinct=True)) \
-            .select_related('author').select_related('author__profile') \
-            .prefetch_related('tagged_items__tag', 'tags',)
-        return entries
-        
-        

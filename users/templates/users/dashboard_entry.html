@@ -85,7 +85,7 @@
 
 {% block extras %}
 
-<script>
+{% comment %} <script>
     var modalId = document.getElementById('modalId');
 
     modalId.addEventListener('show.bs.modal', function (event) {
@@ -96,6 +96,6 @@
 
         // Use above variables to manipulate the DOM
     });
-</script>
+</script> {% endcomment %}
 
 {% endblock %}

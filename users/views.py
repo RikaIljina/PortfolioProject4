@@ -89,6 +89,7 @@ def dashboard(request, username):
    # print(user.all_entries)
     if hasattr(user, 'all_entries'):
         # user.all_entries.all()
+       # messages.info(request, 'Getting all entries')
         entries = get_all_entries(
             request, user.all_entries, get_comments=False)
         most_liked = Entry.objects.annotate(likes_received=Count(

@@ -36,9 +36,9 @@
                 {% endfor %}
             </div>
             <p>
-                <!-- {{ entry.tags.all|join:", " }} -->
+                {{ entry.tags.all|join:", " }}
                   <!-- TODO: Check which one is better! -->
-                {{ entry.tag_list }}
+                {% comment %} {{ entry.tag_list }} {% endcomment %}
             </p>
 
             {% include 'likes/snippets/like_comment_summary.html' %}
