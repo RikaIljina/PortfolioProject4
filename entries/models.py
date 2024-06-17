@@ -16,11 +16,10 @@ class Entry(models.Model):
     title = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    audio_file = CloudinaryField('raw', resource_type='auto', format='mp3')
+    audio_file = CloudinaryField('video', resource_type='auto', format='mp3', validators=[])
     old_files = models.JSONField(default=dict, blank=True)
     description = models.TextField()
     tags = TaggableManager(verbose_name='Tags')
-   # tag_list = models.CharField(max_length=500, blank=True)
     slug = models.SlugField(max_length=250, unique=True, blank=True)
     publish = models.IntegerField(choices=STATUS, default=0)
 
@@ -33,6 +32,7 @@ class Entry(models.Model):
 
 
     def save(self, *args, **kwargs):
+        print('Within model save')
         new_slug = f'{self.title}-{self.author.username}'
         # unidecode is needed to process non-latin titles
         self.slug = slugify(unidecode(new_slug))

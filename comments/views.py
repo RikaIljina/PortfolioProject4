@@ -5,7 +5,8 @@ from .forms import CommentForm
 
 
 def edit_comment(request, current_path, comment_id):
-    """ Process the editing of an existing comment by an authenticated user
+    """
+    Process the editing of an existing comment by an authenticated user
 
     This view is triggered via comments.js after the user clicks the "Edit"
     button. Since the user could be coming from a variety of views, the path
@@ -53,7 +54,8 @@ def edit_comment(request, current_path, comment_id):
 
 
 def delete_comment(request, current_path, comment_id):
-    """ Handle the deletion of a comment by an authenticated user
+    """
+    Handle the deletion of a comment by an authenticated user
 
     This function retrieves a comment by its ID from the current authenticated 
     user's comments. If found, the comment is deleted and a success message is 

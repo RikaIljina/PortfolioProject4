@@ -13,7 +13,7 @@ class EntryFormExtension(forms.ModelForm):
 
     This class extends the Entry form shown on the Django Admin page by a
     checkbox. When updating an entry, the admin can check this box to make sure
-    the link to previously uploaded file is saved in the Entry model instance
+    the link to a previously uploaded file is saved in the Entry model instance
     and not deleted from Cloudinary.
     """
 
@@ -27,7 +27,7 @@ class EntryFormExtension(forms.ModelForm):
 @admin.register(Entry)
 class EntryAdmin(SummernoteModelAdmin):
     """
-    Handles admin form and summary display for the Entry model
+    Handle admin form and summary display for the Entry model
     
     list_display: Fields to show in the admin list view of all entries
     search_fields: Fields to consider in the admin free text search
@@ -49,11 +49,16 @@ class EntryAdmin(SummernoteModelAdmin):
     
     def get_form(self, request, obj=None, **kwargs):
         """
-        Extends super class with EntryFormExtension, adding a checkbox
+        Customize admin form to add a checkbox
 
         Args:
-            request (_type_): _description_
-            obj (_type_, optional): _description_. Defaults to None.
+            request (HttpRequest): The HTTP request object containing metadata 
+                about the request.
+            obj (Entry, optional): The model instance being modified.
+                Defaults to None.
+
+        Returns:
+            Form: The customized form class to be used in the admin interface.
         """
         
         kwargs['form'] = EntryFormExtension
@@ -69,40 +74,42 @@ class EntryAdmin(SummernoteModelAdmin):
         Since replacing an uploaded file with a new file doesn't automatically
         delete the uploaded file in the cloud, this method handles the
         destruction of the file if it is no longer needed.
-        The admin and the user can opt to keep the file as a previous version
-        by checking the 'keep_file' checkbox. In that case, the file url is
-        saved in the Entry model's json field 'old_files'.
+        The admin can opt to keep the file as a previous version by checking
+        the 'keep_file' checkbox. In that case, the file url is saved in the
+        Entry model's json field 'old_files'.
 
         Args:
-            request (_type_): _description_
-            obj (_type_): _description_
-            form (_type_): _description_
-            change (_type_): _description_
+            request (HttpRequest): The HTTP request object containing metadata
+                about the request.
+            obj (Entry): The model instance being saved. Represents the Entry
+                being edited.
+            form (ModelForm): The form instance with the submitted data.
+            change (bool): A flag indicating whether the object is being
+                changed (True) or created (False).
         """
 
         # Get checkbox value
         keep_file = form.data.get('keep_file')
-        # Better?
-        old_file = obj.audio_file
-        #old_file = form.initial.get('audio_file')
+        old_file = form.initial.get('audio_file')
         new_file = form.cleaned_data['audio_file']
-        old_id = old_file.public_id
+        if old_file:
+            old_id = old_file.public_id
 
-        # Just ask if new_file ??
-        if old_file != new_file and not keep_file:
-            print('file has changed')
-            result = cloudinary.uploader.destroy(
-                old_id, resource_type = "video", invalidate=True)
-            messages.info(result)
-        elif old_file != new_file:
-            instance = form.save(commit=False)
-            json_date = json.dumps(
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-            # Add old file to the json object 'old_files' together with
-            # a timestamp for ordering purposes
-            instance.old_files[old_id] = [
-                form.initial['audio_file'].url, json_date]
-            
+            # Potential BUG: If for some reason the new_file has the same name as
+            # the cloudinary id, the following logic won't work
+            if old_file != new_file and not keep_file:
+                result = cloudinary.uploader.destroy(
+                    old_id, resource_type = "video", invalidate=True)
+                messages.info(request, result)
+            elif old_file != new_file and keep_file:
+                instance = form.save(commit=False)
+                json_date = json.dumps(
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                # Add old file to the json object 'old_files' together with
+                # a timestamp for ordering purposes
+                instance.old_files[old_id] = [
+                    old_file.url, json_date]
+                
         super().save_model(request, obj, form, change)
 
   
@@ -111,14 +118,15 @@ class EntryAdmin(SummernoteModelAdmin):
         Overrides super method to delete uploaded Cloudinary files in bulk
         
         When deleting multiple objects at once in the admin panel, the 'delete'
-        method of the Entry class is not being called. Therefore, this method
-        is needed to delete the main audio file as well as all previous
-        versions of the file from the Cloudinary storage for every deleted
-        Entry object.
+        method of the Entry class is not being called. This method ensures that
+        the main audio file as well as all previous versions of the file are
+        deleted from Cloudinary storage for each deleted Entry object.
 
         Args:
-            request (_type_): _description_
-            queryset (_type_): _description_
+            request (HttpRequest): The HTTP request object containing metadata
+                about the request.
+            queryset (QuerySet): The queryset containing the Entry objects to
+                be deleted.
         """
         
         for obj in queryset:

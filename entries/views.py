@@ -58,13 +58,14 @@ def new_entry(request, username):
         entry_form = EntryForm(request.POST, request.FILES, user=request.user)
         if entry_form.is_valid():
             entry = entry_form.save(commit=False)
-            new_slug = Entry.objects.get(id=entry.id).slug
             
            # entry.author = request.user
             # cloudinary.uploader.upload(request.FILES['audio_file'])
             #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
+            new_slug = Entry.objects.get(id=entry.id).slug
+            
             messages.success(request, "Your entry has been saved.")
            # return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
             
@@ -114,7 +115,6 @@ def edit_entry(request, username, slug):
             print('form is valid')
             entry = entry_form.save(commit=False)
             print('in view now')
-            new_slug = Entry.objects.get(id=entry.id).slug
             #print(f'old: {id}')
             # if request.FILES.get('audio_file'):
             #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
@@ -124,6 +124,8 @@ def edit_entry(request, username, slug):
             #entry.likes = 0
             entry.save()
             entry_form.save_m2m()
+            new_slug = Entry.objects.get(id=entry.id).slug
+            
             messages.success(request, "Your entry has been saved.")
             
             print('finished saving in view')

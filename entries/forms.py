@@ -28,7 +28,6 @@ class EntryForm(forms.ModelForm):
     """
     
     keep_file = forms.BooleanField(required=False, label='Keep previous file?')
-    #tag_list = forms.CharField(required=False)
 
     class Meta:
         """
@@ -67,10 +66,18 @@ class EntryForm(forms.ModelForm):
 
     def clean_title(self):
         """
-        Checks all titles by the same user to make sure they are unique
+        Validate the uniqueness of the title for entries by the same user.
+
+        This method ensures that the title for an entry is unique among the
+        entries created by the same user. Raises a ValidationError if the user
+        has already used the same title for another entry.
+
+        Returns:
+            str: The validated title.
 
         Raises:
-            forms.ValidationError: Message to show to user if form is invalid
+            forms.ValidationError: If the user has already used this title for
+                another entry.
         """
         
         title = self.cleaned_data.get('title')
@@ -85,7 +92,7 @@ class EntryForm(forms.ModelForm):
     
     def save(self, commit=True):
         """
-        Override super save method to handle Cloudinary files
+        Override superclass save method to handle Cloudinary files
 
         This project uses Cloudinary for uploaded file storage.
         Since replacing an uploaded file with a new file doesn't automatically
@@ -93,15 +100,21 @@ class EntryForm(forms.ModelForm):
         destruction of the file if it is no longer needed.
         The user can opt to keep the file as a previous version by checking
         the 'keep_file' checkbox. In that case, the file url is saved in the
-        Entry model's json field 'old_files'.
+        Entry model's JSON field 'old_files'.
+        
+        Args:
+            commit (bool): If True, the changes are saved to the database. 
+                Defaults to True.
+
+        Returns:
+            Entry: The saved Entry model instance.
         """
         
         instance = super(EntryForm, self).save(commit=False)
         instance.author = self.user
         keep_file = self.data.get('keep_file')
-        
-        # What if new_file name and old_file name are the same??? check in admin
-        # Isn't there always a new file even when creating a new entry??
+
+        # new_file is only passed on from the edit_entry view
         if self.new_file and keep_file:
             old_id = self.initial['audio_file'].public_id
             json_date = json.dumps(
@@ -110,19 +123,12 @@ class EntryForm(forms.ModelForm):
             # a timestamp for ordering purposes
             instance.old_files[old_id] = [
                 self.initial['audio_file'].url, json_date ]
-            instance.save()
         elif self.new_file:
             old_id = self.initial['audio_file'].public_id
-            instance.save()
             print(cloudinary.uploader.destroy(
                 old_id, resource_type = "video", invalidate=True))
-            
-        else:
-            print('just saving in class')
-            instance.save()
-            
+
         if commit:
-            print('saving in class with commit true')
             instance.save()
             
         return instance
