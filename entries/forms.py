@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 from django import forms
 from django.forms import TextInput, RadioSelect, FileInput, CheckboxInput
@@ -7,6 +8,9 @@ from django_summernote.widgets import SummernoteWidget
 import cloudinary
 
 from .models import Entry
+
+from django.core.exceptions import ValidationError
+
 
 
 class EntryForm(forms.ModelForm):
@@ -90,6 +94,37 @@ class EntryForm(forms.ModelForm):
                 "choose a different title.")
         return title
     
+    # https://stackoverflow.com/a/6195691
+    def clean_audio_file(self):
+        """
+        Validate audio file before passing it on to Cloudinary
+        
+        This method performs a few basic checks before Cloudinary runs its own
+        validation and attempts to upload the file.
+
+        Raises:
+            ValidationError: If content type is not mpeg
+            ValidationError: If the audio file is too large ( > 10MB )
+            ValidationError: If none of the attributes could be read
+
+        Returns:
+            file (UploadedFile): An abstract uploaded file
+        """
+        file = self.cleaned_data.get('audio_file', False)
+        if file:
+            print('checking stuff')
+            if not file.content_type in ["audio/mpeg"]:
+                print('checking type')                
+                raise ValidationError("Content type is not mpeg")
+            if file.size > 10*1024*1024:
+                print('checking size')
+                raise ValidationError("Audio file too large ( > 10MB )")
+
+            return file
+        else:
+            raise ValidationError("Couldn't read uploaded file")
+         
+         
     def save(self, commit=True):
         """
         Override superclass save method to handle Cloudinary files

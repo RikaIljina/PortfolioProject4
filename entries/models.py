@@ -16,7 +16,7 @@ class Entry(models.Model):
     title = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    audio_file = CloudinaryField('video', resource_type='auto', format='mp3', validators=[])
+    audio_file = CloudinaryField('video', resource_type='auto', format='mp3')
     old_files = models.JSONField(default=dict, blank=True)
     description = models.TextField()
     tags = TaggableManager(verbose_name='Tags')
