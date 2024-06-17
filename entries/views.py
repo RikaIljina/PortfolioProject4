@@ -14,12 +14,26 @@ from .utils import get_published_entries
 
 
 def entry_details(request, slug):
+    """
+    Display a detailed view of a published entry
+
+    This view retrieves a published entry by its slug and displays it on the
+    main page. It gives access to all uploaded audio files and the comment
+    section.
+    The view also retrieves the user and tag names for the filter functionality
+    and handles POST requests whenever a new comment is submitted.
+
+    Args:
+        request (HttpObject): Http object
+        slug (string): Slug of the entry to be shown in detailed view
+    """
     
     entry = get_object_or_404(
         get_published_entries(request, Entry.objects), slug=slug)
-    old_files = entry.old_files
-    sorted_files = dict(sorted(
-        old_files.items(), key=lambda item: item[1][1], reverse=True))
+    # Sort old audio files by timestamp. The json object in entry.old_files
+    # has the structure {'cloudinary_id': ['cloudinary_url', 'timestamp'}
+    old_files = dict(sorted(
+        entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
 
     comments = entry.all_comments.select_related('author', 'author__profile')
     
@@ -28,13 +42,12 @@ def entry_details(request, slug):
     
     if request.method == 'POST':
         process_comment_form(request, entry)
-        # TODO: make sure to go back the same path, via js
         return redirect(f'{reverse('entry_details', args=[slug])}')
 
     comment_form = CommentForm()
 
     context = {'entry': entry,
-               'old_files': sorted_files,
+               'old_files': old_files,
                'comments': comments,
                'users': users,
                'tags': tags,
@@ -48,39 +61,48 @@ def entry_details(request, slug):
 
 
 def new_entry(request, username):
+    """
+    Handle the creation of a new entry
+
+    This view handles both the GET and POST requests for creating a new entry. 
+    If the request method is GET, it displays the entry form. 
+    If the request method is POST, it validates and saves the form data.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata 
+            about the request.
+        username (str): The username of the user attempting to create a new
+            entry.
+
+    Returns:
+        HttpResponse: Redirects to the home page if the user is not
+            authenticated or the username does not match the logged-in user.
+        HttpResponse: Redirects to the dashboard page with the entry details if
+            the form is successfully saved.
+        HttpResponse: Renders the entry form page with the entry form context
+            if the request method is GET or the form submission fails.
+    """
+    
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
-    
-    #all_titles = list(request.user.entries.all().values_list('title', flat=True))
-    #titles = [title.get('title') for title in all_titles]
     
     if request.method == 'POST':
         entry_form = EntryForm(request.POST, request.FILES, user=request.user)
         if entry_form.is_valid():
             entry = entry_form.save(commit=False)
-            
-           # entry.author = request.user
-            # cloudinary.uploader.upload(request.FILES['audio_file'])
-            #entry.likes = 0
+            # See overridden EntryForm clean_[field]() method for additional
+            # validation logic that is run before the final save() call
             entry.save()
             entry_form.save_m2m()
             new_slug = Entry.objects.get(id=entry.id).slug
-            
             messages.success(request, "Your entry has been saved.")
-           # return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
             
+            return HttpResponseRedirect(reverse(
+                'dashboard_entry', args=[username, new_slug]))
         else:
-            print('not valid')
-            print(entry_form.errors.as_data())
             messages.warning(request, "Your entry could not be saved.")
-            raise ValidationError("Your title is empty.")
-            
-            #return reverse('new_entry', args=[entry_form])
-        return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
+            # Validation errors are shown to the user on the web page
         
-
-        #print(request.POST)
-
     else:
         entry_form = EntryForm(user=request.user)
 
@@ -95,52 +117,72 @@ def new_entry(request, username):
 
 
 def edit_entry(request, username, slug):
+    """
+    Handle the editing of an existing entry
+
+    This view handles both the GET and POST requests for editing an existing
+    entry.
+    If the request method is GET, it displays the entry form pre-filled with
+    the current entry data. If the request method is POST, it validates and
+    saves the form data, including handling file updates.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata 
+            about the request.
+        username (str): The username of the user attempting to edit the entry.
+        slug (str): The slug of the entry being edited.
+
+    Returns:
+        HttpResponse: Redirects to the home page if the user is not
+            authenticated or the username does not match the logged-in user.
+        HttpResponse: Redirects to the dashboard page with entry details if the
+            form is successfully saved.
+        HttpResponse: Renders the entry form page with the entry form context
+            if the request method is GET or the form submission fails.
+    """
 
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
 
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
-    #id = entry.audio_file.public_id
-    old_files = dict(sorted(entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
-    # print('In details:')
-    # print(old_files.items())
-    # sorted_files = dict(sorted(entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
-    # print(sorted_files)
+    # Sort old audio files by timestamp. The json object in entry.old_files
+    # has the structure {'cloudinary_id': ['cloudinary_url', 'timestamp'}
+    old_files = dict(sorted(
+        entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
 
     if request.method == 'POST':
-
-        entry_form = EntryForm(request.POST, request.FILES, instance=entry, user=request.user, new_file=request.FILES.get('audio_file'))
+        entry_form = EntryForm(request.POST,
+                               request.FILES,
+                               instance=entry,
+                               user=request.user,
+                               new_file=request.FILES.get('audio_file'))
 
         if entry_form.is_valid():
-            print('form is valid')
             entry = entry_form.save(commit=False)
-            print('in view now')
-            #print(f'old: {id}')
-            # if request.FILES.get('audio_file'):
-            #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
-            #     print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
-            entry.author = request.user
-
-            #entry.likes = 0
+            # See overridden EntryForm clean_[field]() methods for additional
+            # validation logic that is run before the final save() call
             entry.save()
             entry_form.save_m2m()
             new_slug = Entry.objects.get(id=entry.id).slug
-            
             messages.success(request, "Your entry has been saved.")
             
-            print('finished saving in view')
-            return HttpResponseRedirect(reverse('dashboard_entry', args=[username, new_slug]))
+            return HttpResponseRedirect(reverse(
+                'dashboard_entry', args=[username, new_slug]))
             
         else:
-            print('not valid')
-            print(entry_form.errors.as_data())
             messages.warning(request, "Your entry could not be saved.")
-            
+            # Validation errors are shown to the user on the web page
 
     else:
         tag_list = [value['name'] for value in entry.tags.all().values()]
-        entry_form = EntryForm(instance=entry, user=request.user, initial={'title': entry.title, 'description': entry.description,
-                           'audio_file': entry.audio_file, 'keep_file': True, 'tags':(',').join(tag_list), 'publish': entry.publish})
+        entry_form = EntryForm(instance=entry,
+                               user=request.user,
+                               initial={'title': entry.title,
+                                        'description': entry.description,
+                                        'audio_file': entry.audio_file,
+                                        'keep_file': True,
+                                        'tags':(',').join(tag_list),
+                                        'publish': entry.publish})
 
     context = {
         'entry': entry,
@@ -159,20 +201,28 @@ def delete_entry(request, username, slug):
         return HttpResponseRedirect(reverse('home'))
     
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
-    print(entry.audio_file.public_id)
-    print(entry.audio_file.url)
-    #print(cloudinary.uploader.destroy(entry.audio_file.public_id, resource_type = "video", invalidate=True))
-#    storage_instance.delete(name=entry.audio_file.name)
-    #entry.audio_file.delete()
-
     entry.delete()
     messages.success(request, "Your entry has been deleted.")
-    
     
     return HttpResponseRedirect(reverse('dashboard', args=[username]))
 
 
 def delete_old_file(request, username, slug, file_id):
+    """
+    Handles the deletion of previous audio file versions
+
+    This view is called via entries.js after the user clicks the 'Delete'
+    button next to an audio file.
+
+    Args:
+        request (_type_): _description_
+        username (_type_): _description_
+        slug (_type_): _description_
+        file_id (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     if not request.user.is_authenticated or username != request.user.username:
         return HttpResponseRedirect(reverse('home'))
 

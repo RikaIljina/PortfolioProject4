@@ -56,7 +56,7 @@ class Entry(models.Model):
 
     def __str__(self):
         """
-        Return a string representation of the Entry instance.
+        Return a string representation of the Entry instance
 
         Returns:
             str: The title of the entry and the username of the author.
@@ -67,17 +67,13 @@ class Entry(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Override the save method to handle slug creation and tag cleanup
+        Override the save method to handle tag cleanup
 
-        This method generates a slug from the title and author's username,
-        ensures it is unique, and deletes tags that are no longer used by any entry.
+        This method deletes tags that are no longer used by any entry.
 
         Args:
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
-
-        Returns:
-            None
         """
 
         # new_slug = f'{self.title}-{self.author.username}'
@@ -96,6 +92,18 @@ class Entry(models.Model):
 
 
     def delete(self, *args, **kwargs):
+        """
+        Override the delete method to handle tag and file cleanup
+
+        This method deletes tags that are no longer used by any entry.
+        The method also ensures that the main audio file as well as all
+        previous versions of the file are deleted from Cloudinary storage.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+        """
+        
         # Delete tags that are no longer used by any entry
         Tag.objects.filter(entry=None).delete()
         # Destroy unused Cloudinary files

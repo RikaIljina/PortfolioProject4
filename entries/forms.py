@@ -101,10 +101,12 @@ class EntryForm(forms.ModelForm):
             # unidecode is needed to process non-latin titles
             new_slug = slugify(unidecode(new_slug))
             
-            if Entry.objects.filter(slug=new_slug).exists():
+            if Entry.objects.filter(slug=new_slug).exclude(
+                                                    id=instance.id).exists():
                 print('Error!')
-                raise ValidationError('Please choose a different title to make'
-                                    'sure the entry slug is unique.')
+                raise ValidationError(
+                    'Please choose a different title to make sure the entry '
+                    'slug is unique.')
             else:
                 instance = super(EntryForm, self).save(commit=False)
                 instance.slug = new_slug

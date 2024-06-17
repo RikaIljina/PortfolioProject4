@@ -28,9 +28,9 @@ class Like(models.Model):
         This makes sure that a user cannot like an entry twice and cannot
         like their own entry
         '''
-        if self.user.liked.all().filter(entry=self.entry.id).count() != 0 \
-            or self.entry.author == self.user:
-            print('You already liked it or this is your own entry')
+       # if self.user.liked.all().filter(entry=self.entry.id).count() != 0 \
+        if self.entry.author == self.user:
+            print('This is your own entry')
             return
         else:
            # self.entry.likes = self.entry.all_likes.count() + 1

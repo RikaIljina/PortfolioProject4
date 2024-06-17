@@ -4,15 +4,16 @@
 {% block content %}
 
 <h1>{{ entry.title }}</h1>
-{% if entry_form.errors %}
+{% comment %} {% if entry_form.errors %}
+<p>ERRORS!!</p>
 <ul>
     {% for field in entry_form %}
     {% for error in field.errors %}
-    <li>{{ field }} {{ error }}</li>
+    <li>{{ field.label_tag }} {{ error }}</li>
     {% endfor %}
     {% endfor %}
 </ul>
-{% endif %}
+{% endif %} {% endcomment %}
 
 
 <!-- <div class="d-flex flex-row justify-content-center">
