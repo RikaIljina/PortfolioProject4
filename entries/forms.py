@@ -5,6 +5,10 @@ from django import forms
 from django.forms import TextInput, RadioSelect, FileInput, CheckboxInput
 from django.utils.translation import gettext_lazy as _
 from django_summernote.widgets import SummernoteWidget
+from unidecode import unidecode
+from django.utils.text import slugify
+
+
 import cloudinary
 
 from .models import Entry
@@ -92,6 +96,20 @@ class EntryForm(forms.ModelForm):
             raise forms.ValidationError(
                 "You have already used this title for another entry. Please"
                 "choose a different title.")
+        else:
+            new_slug = f'{title}-{self.user.username}'
+            # unidecode is needed to process non-latin titles
+            new_slug = slugify(unidecode(new_slug))
+            
+            if Entry.objects.filter(slug=new_slug).exists():
+                print('Error!')
+                raise ValidationError('Please choose a different title to make'
+                                    'sure the entry slug is unique.')
+            else:
+                instance = super(EntryForm, self).save(commit=False)
+                instance.slug = new_slug
+                print('Unique slug')
+        
         return title
     
     # https://stackoverflow.com/a/6195691
@@ -111,7 +129,8 @@ class EntryForm(forms.ModelForm):
             file (UploadedFile): An abstract uploaded file
         """
         file = self.cleaned_data.get('audio_file', False)
-        if file:
+        print(type(file))
+        if file and 'cloudinary' not in str(type(file)):
             print('checking stuff')
             if not file.content_type in ["audio/mpeg"]:
                 print('checking type')                
@@ -120,6 +139,8 @@ class EntryForm(forms.ModelForm):
                 print('checking size')
                 raise ValidationError("Audio file too large ( > 10MB )")
 
+            return file
+        elif 'cloudinary' in str(type(file)):
             return file
         else:
             raise ValidationError("Couldn't read uploaded file")

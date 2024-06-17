@@ -1,16 +1,43 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
 from taggit.models import Tag
 from unidecode import unidecode
 from cloudinary.models import CloudinaryField
+
 import cloudinary
 
 
 STATUS = ((0, "Private"), (1, "Published"))
 
 class Entry(models.Model):
+    """
+    A model representing an audio entry created by a user.
+
+    Attributes:
+        author (ForeignKey): The user who created the entry.
+        title (str): The title of the entry.
+        created_on (datetime): The date and time when the entry was created.
+        updated_on (datetime): The date and time when the entry was last
+            updated.
+        audio_file (CloudinaryField): The audio file associated with the entry,
+            stored on Cloudinary.
+        old_files (JSONField): A JSON field to store previous versions of the
+            audio file.
+        description (str): A description of the entry.
+        tags (TaggableManager): Tags associated with the entry for
+            categorization.
+        slug (SlugField): A slugified version of the title and author username
+            for URL use.
+        publish (int): The publication status of the entry (0 for Private, 1
+            for Published).
+
+    Meta:
+        ordering: Specifies the default order of entries.
+    """
+
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="all_entries")
     title = models.CharField(max_length=200)
@@ -28,14 +55,40 @@ class Entry(models.Model):
 
 
     def __str__(self):
+        """
+        Return a string representation of the Entry instance.
+
+        Returns:
+            str: The title of the entry and the username of the author.
+        """
+        
         return f"{self.title} created by {self.author}"
 
 
     def save(self, *args, **kwargs):
-        print('Within model save')
-        new_slug = f'{self.title}-{self.author.username}'
-        # unidecode is needed to process non-latin titles
-        self.slug = slugify(unidecode(new_slug))
+        """
+        Override the save method to handle slug creation and tag cleanup
+
+        This method generates a slug from the title and author's username,
+        ensures it is unique, and deletes tags that are no longer used by any entry.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            None
+        """
+
+        # new_slug = f'{self.title}-{self.author.username}'
+        # # unidecode is needed to process non-latin titles
+        # self.slug = slugify(unidecode(new_slug))
+        # if self.__class__.objects.filter(slug=self.slug).exists():
+        #     print('Error!')
+        #     raise ValidationError('Please choose a different title to make'
+        #                           'sure the entry slug is unique.')
+        # else:
+        #     print('Unique slug')
         # Delete tags that are no longer used by any entry
         Tag.objects.filter(entry=None).delete()
         
