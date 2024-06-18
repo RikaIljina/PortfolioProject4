@@ -1,9 +1,23 @@
-.nav {
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sono:wght@200..800&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+
+body {
+    font-family: 'Ubuntu Mono', 'Courier New', Courier, monospace;
+    font-weight: 700;
+    /* overflow: auto; */
+}
+
+.nav-upper {
+    font-family: 'Sono', 'Courier New', Courier, monospace;
+}
+
+.nav, .logo, .username {
     color:antiquewhite;
     
 }
 .nav a {
-    color: aliceblue;
+    color: antiquewhite;
 }
 
 .active {

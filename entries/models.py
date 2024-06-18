@@ -53,7 +53,6 @@ class Entry(models.Model):
     class Meta:
         ordering = ["-created_on"]
 
-
     def __str__(self):
         """
         Return a string representation of the Entry instance
