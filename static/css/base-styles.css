@@ -1,45 +1,126 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Sono:wght@200..800&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Sono:wght@200..800&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=PT+Mono");
 
+/* *,
+*::before,
+*::after {
+  box-sizing: inherit;
+ } */
 
 body {
-    font-family: 'Ubuntu Mono', 'Courier New', Courier, monospace;
-    font-weight: 700;
-    /* overflow: auto; */
+  font-family: "Ubuntu Mono", "Courier New", Courier, monospace;
+  font-weight: 700;
+  color: rgb(39, 36, 36);
 }
+
+a {
+  cursor: pointer;
+}
+
+/* Navbar styles */
 
 .nav-upper {
-    font-family: 'Sono', 'Courier New', Courier, monospace;
+  background-color: rgb(246, 246, 203);
+  /* background: url('../images/stacked-steps-haikei.png') border-box center/cover no-repeat fixed; */
+  font-family: "Sono", "Courier New", Courier, monospace;
+  font-weight: 400;
 }
 
-.nav, .logo, .username {
-    color:antiquewhite;
-    
-}
-.nav a {
-    color: antiquewhite;
-}
-
-.active {
-    background-color: rgb(95, 111, 106);
+.navbar,
+.nav-link,
+.username,
+.navbar-toggler-icon {
+  color: rgb(39, 36, 36);
 }
 
-.like-btn:focus,.like-btn:active {
-    outline: none !important;
-    box-shadow: none;
- }
+.nav-link:hover,
+.nav-link:focus {
+  color: rgb(51, 48, 38);
+}
 
- a {
-    cursor: pointer;
- }
- 
- .like {
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
- }
+/* .hvr-grow-rotate:before {
+    border: rgb(0, 0, 0);
+} */
 
- .like-red
- {
-    color: red;
- }
+.box {
+  border: 1px solid rgb(27, 1, 49);
+  border-radius: 0px;
+  transition: all 0.3s;
+}
+
+.box:hover,
+.box:focus {
+  background-color: rgb(238, 238, 24);
+  transition: all 0.3s;
+}
+
+/* .active {
+  background-color: rgb(101, 47, 32);
+} */
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  /* fallback for old browsers */
+  background: rgb(29, 29, 28);
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right bottom,
+    rgb(117, 113, 113),
+    rgb(35, 34, 33)
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(
+    to right bottom,
+    rgba(117, 113, 113, 1),
+    rgba(35, 34, 33, 1)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo-image {
+    /* max-height: 80px; */
+    max-width: 330px;
+}
+
+/* Like button styles */
+
+.like-btn:focus,
+.like-btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.like {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.like-red {
+  color: red;
+}
+
+@media screen and (max-width: 768px) {
+
+    .logo-image {
+        margin: 0;
+        padding: 0 !important;
+        max-width: 230px;
+    }
+
+}
+
+@media screen and (max-width: 576px) {
+
+    .logo-image {
+        margin: 0;
+        padding: 0 !important;
+        max-width: 200px;
+    }
+
+}
