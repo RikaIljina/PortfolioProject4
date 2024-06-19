@@ -4,6 +4,7 @@
 {% url 'account_login' as login_url %}
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
+{% url '' as about_url %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +18,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
     <!-- Hover CSS styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.1.1/css/hover-min.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.1.1/css/hover-min.css"
+        type="text/css" />
     <!-- Font Awesome JS -->
     <script src="https://kit.fontawesome.com/936b3a8c94.js" crossorigin="anonymous"></script>
     <!-- jQuery JS -->
@@ -37,50 +39,94 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md nav nav-upper justify-content-center">
         <div class="container-fluid">
-            <div class="logo-image my-auto ps-md-4 ps-sm-2 py-md-2">
-                <img class="img-fluid" src="{% static 'images/logo-inst-l.png' %}" alt="Logo showing stylized musical instruments" height="80">
-            </div>
+            <a class="navbar-brand order-0" href="{% url 'home' %}">
+                <div class="logo-image my-auto ps-md-4 ps-sm-2">
+                    <img class="img-fluid" src="{% static 'images/logo-inst-l.png' %}"
+                        alt="Logo showing stylized musical instruments" height="80">
+                </div>
+            </a>
 
             <div class="flex-fill"></div>
 
-            <button class="d-inline d-md-none navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"><i class="fa-solid fa-bars"></i></span>
+            <button class="d-inline d-md-none btn-lg nav-btn hvr-grow-rotate order-2" id="toggler-btn" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon navbar-icon ">
+                    <img src="{% static 'images/menu-notes-blank.png' %}" class="img-fluid" width="80" height="80"
+                        alt="Menu toggle button with three musical notes">
+                </span>
             </button>
-            <div class="collapse navbar-collapse flex-grow-0" id="navbarContent">
-                <div class="box d-block d-md-inline me-2 mb-2 mb-sm-0 hvr-grow-rotate ">
+
+            <div class="collapse navbar-collapse flex-grow-0 mt-2 mt-md-0 order-3" id="navbarContent">
+                <!-- d-none to make sure the wrong styles aren't shown while the uncollapse action 
+                 triggers the css with the correct link styles -->
+                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate ">
                     <a class="nav-link my-auto {% if request.path == home_url %}active" aria-current="page{% endif %}"
                         href="{% url 'home' %}">Home</a>
                 </div>
-                <div transition-style class="box d-block d-md-inline me-2 hvr-grow-rotate">
-                    <a class="nav-link my-auto {% if request.path == home_url %} " aria-current="page{% endif %}"
+                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate">
+                    <a class="nav-link my-auto {% if request.path == about_url %} active" aria-current="page{% endif %}"
                         href="{% url 'home' %}">About</a>
                 </div>
-                <div class="box d-block d-md-inline me-2 hvr-grow-rotate">
-                    <a class="nav-link my-auto {% if request.path == login_url %} active"
-                        aria-current="page{% endif %}" href="{% url 'account_login' %}">Sign in</a>
+
+                {% if not user.is_authenticated %}
+
+                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate">
+                    <a class="nav-link my-auto {% if request.path == login_url %} active" aria-current="page{% endif %}"
+                        href="{% url 'account_login' %}">Sign in</a>
                 </div>
-                <div class="box d-block d-md-inline me-2 me-sm-0 hvr-grow-rotate">
+                <div class="nav-link-box d-none d-md-inline mx-auto mb-2 mb-md-0 hvr-grow-rotate">
                     <a class="nav-link my-auto {% if request.path == signup_url %} active"
                         aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
                 </div>
             </div>
+            {% else %}
+            </div>
+
+            <div class="my-auto pe-4 d-inline-flex flex-row order-1 order-md-last">
+                <div class="dropdown flex-shrink-0 py-1 ps-3">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if "placeholder" in user.profile.pic.url %}
+                        <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
+                            height="30" class="rounded-circle">
+                        {% else %}
+                        <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
+                            class="rounded-circle">
+                        {% endif %}
+                        <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'dashboard' user.username %}">Dashboard</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" >
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
         </div>
-
-
     </nav>
+
+<!-- 
     <nav class="navbar navbar-expand-md nav nav-upper justify-content-center bg-dark">
         <h2 class="logo my-auto ps-4 py-2">MusicLab</h2>
         <div class="flex-fill"></div>
-        <button class="d-inline d-sm-none navbar-toggler" type="button" data-bs-toggle="collapse"
+        <button class="d-inline d-sm-none navbar-toggler navbar-icon" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"><i class="fa-solid fa-bars"></i></span>
+
+
+            <i class="fa-solid fa-bars"></i> 
         </button>
+
         <div class="my-auto pe-4 d-flex flex-row">
-            <a class="d-none d-sm-inline nav-link my-auto {% if request.path == home_url %} active"
-                aria-current="page{% endif %}" href="{% url 'home' %}">Home</a>
 
             {% if user.is_authenticated %}
             <div class="dropdown flex-shrink-0 py-2 px-4">
@@ -115,7 +161,7 @@
                 aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
             {% endif %}
         </div>
-    </nav>
+    </nav> -->
 
     <!-- Main -->
     <main class="flex-grow-1 flex-shrink-0  main-bg">
@@ -209,6 +255,7 @@
                         </div>
                     </div>
                     <div class="m-auto h-100">
+
                         {% block content %}
                         {% endblock content %}
                     </div>
@@ -229,8 +276,7 @@
         crossorigin="anonymous"></script>
 
     <!-- Custom scripts -->
-    {% comment %}
-    <script src="{% static 'js/base.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js/base.js' %}"></script>
 
     {% block extras %}
     {% endblock %}
