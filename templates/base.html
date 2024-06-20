@@ -36,7 +36,9 @@
 </head>
 
 <body class="d-flex flex-column vh-100">
-    <!-- Navbar -->
+    <!------------------------------ Navbar ------------------------------------->
+    <!-- The 'order' class is needed to make sure the profile dropdown in the navbar
+      is shown left to the menu toggle button in mobile view -->
     <nav class="navbar navbar-expand-md nav nav-upper justify-content-center">
         <div class="container-fluid">
             <a class="navbar-brand order-0" href="{% url 'home' %}">
@@ -81,63 +83,18 @@
                 </div>
             </div>
             {% else %}
-            </div>
-
-            <div class="my-auto pe-4 d-inline-flex flex-row order-1 order-md-last">
-                <div class="dropdown flex-shrink-0 py-1 ps-3">
-                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if "placeholder" in user.profile.pic.url %}
-                        <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
-                            height="30" class="rounded-circle">
-                        {% else %}
-                        <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
-                            class="rounded-circle">
-                        {% endif %}
-                        <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                        <li>
-                            <a class="dropdown-item" href="{% url 'dashboard' user.username %}">Dashboard</a>
-                        </li>
-                        <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider" >
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        {% endif %}
         </div>
-    </nav>
 
-<!-- 
-    <nav class="navbar navbar-expand-md nav nav-upper justify-content-center bg-dark">
-        <h2 class="logo my-auto ps-4 py-2">MusicLab</h2>
-        <div class="flex-fill"></div>
-        <button class="d-inline d-sm-none navbar-toggler navbar-icon" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-
-
-            <i class="fa-solid fa-bars"></i> 
-        </button>
-
-        <div class="my-auto pe-4 d-flex flex-row">
-
-            {% if user.is_authenticated %}
-            <div class="dropdown flex-shrink-0 py-2 px-4">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="my-auto pe-4 d-inline-flex flex-row order-1 order-md-last">
+            <div class="dropdown flex-shrink-0 py-1 ps-3">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     {% if "placeholder" in user.profile.pic.url %}
                     <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
-                        height="30" class="rounded-circle" />
+                        height="30" class="rounded-circle">
                     {% else %}
                     <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
-                        class="rounded-circle" />
+                        class="rounded-circle">
                     {% endif %}
                     <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
                 </a>
@@ -147,100 +104,119 @@
                     </li>
                     <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Profile</a></li>
                     <li>
-                        <hr class="dropdown-divider" />
+                        <hr class="dropdown-divider">
                     </li>
                     <li>
                         <a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a>
                     </li>
                 </ul>
             </div>
-            {% else %}
-            <a class="d-none d-sm-inline nav-link {% if request.path == login_url %} active"
-                aria-current="page{% endif %}" href="{% url 'account_login' %}">Sign in</a>
-            <a class="d-none d-sm-inline nav-link {% if request.path == signup_url %} active"
-                aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
-            {% endif %}
         </div>
-    </nav> -->
+        {% endif %}
+        </div>
+    </nav>
 
     <!-- Main -->
-    <main class="flex-grow-1 flex-shrink-0  main-bg">
-        <!-- Sidebar from https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb -->
-        <div class="container-fluid h-100">
-            <div class="row flex-nowrap h-100">
-                <div
-                    class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark {% if request.path == login_url or request.path == signup_url %}visually-hidden{% endif %}">
+    <main class="flex-grow-1 flex-shrink-0 main-bg">
+        <!-- Sidebar adapted from https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb -->
+        <div class="container-fluid h-100 m-0 p-0 ">
+            <div class="row g-0 ms-0 ps-0 flex-nowrap h-100 pos-relative">
+                <!-- Sidebar column -->
+                <div class="col-auto sidebar ms-0 me-5 px-sm-0 px-0 
+                    {% if request.path == login_url or request.path == signup_url %}visually-hidden{% endif %}" id="sidebar" role="navigation">
 
-                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white ">
-                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-                            id="menu">
-                            {% if request.path|slice:'11' == '/dashboard/' %}
+                    <!-- Toggle button to expand/collapse sidebar -->
+                    <div class="row g-0 sidebar-toggle-div pos-relative">
+                        <button class="btn sidebar-toggle-btn" id="sidebar-toggle-btn" href="#">
+                            <span class="toggle-icon-expand d-none d-md-inline"><i
+                                    class="fa-solid fa-angles-left"></i></span>
+                            <span class="toggle-icon-collapse d-inline d-md-none"><i
+                                    class="fa-solid fa-angles-right"></i></span>
+                        </button>
+                    </div>
 
-                            <li>
-                                <a href="{% url 'dashboard' user.username %}" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-folder-open"></i>
-                                    <span class="ms-1 d-none d-sm-inline">Dashboard</span></a>
-                            </li>
-                            <li>
-                                <a href="{% url 'new_entry' user.username %}" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-folder-open"></i>
-                                    <span class="ms-1 d-none d-sm-inline">New Entry</span></a>
-                            </li>
-                            <hr>
-                            <li>
-                                <a href="{% url 'user_favorites' user.username %}" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-folder-open"></i>
-                                    <span class="ms-1 d-none d-sm-inline">My Favorites</span></a>
-                            </li>
-                            <li>
-                                <a href="{% url 'user_comments' user.username %}" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-folder-open"></i>
-                                    <span class="ms-1 d-none d-sm-inline">My Comments</span></a>
-                            </li>
+                    <div class="row g-0">
+                        <!-- remove this div -->
+                        <div class="d-flex flex-column align-items-center align-items-md-start px-3 pt-2">
+                            <ul class="navbar-nav mb-sm-auto mb-0 align-content-center align-content-md-start"
+                                id="menu">
 
-                            {% else %}
+                                {% if request.path|slice:'11' == '/dashboard/' %}
 
-                            <li>
-                                <a href="{% url 'home' %}" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-xmark"></i>
-                                    <span class="ms-1 d-none d-sm-inline">Delete filters</span></a>
-                            </li>
-                            <li>
-                                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span class="ms-1 d-none d-sm-inline">Filter by user</span>
-                                </a>
-                                <ul class="collapse {% if request.path|slice:':9' == '/filter/u' %}show{% endif %} nav flex-column ms-1"
-                                    id="submenu2" data-bs-parent="#menu">
-                                    {% for user in users %}
-                                    <li class="w-100">
-                                        <a href="{% url 'filter_user' user %}" class="nav-link px-0">
-                                            <span class="d-none d-sm-inline">{{ user }}</span></a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fa-solid fa-tag"></i>
-                                    <span class="ms-1 d-none d-sm-inline">Filter by tag</span>
-                                </a>
-                                <ul class="collapse {% if request.path|slice:':9' == '/filter/t' %}show{% endif %} nav flex-column ms-1"
-                                    id="submenu3" data-bs-parent="#menu">
-                                    {% for tag, amount in tags.items %}
-                                    <li class="w-100">
-                                        <a href="{% url 'filter_tag' tag %}" class="nav-link px-0">
-                                            <span class="d-none d-sm-inline">{{ tag }}</span> ({{ amount }})</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
+                                <li>
+                                    <a href="{% url 'dashboard' user.username %}" class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <span class="ms-1 d-none d-sm-inline">Dashboard</span></a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'new_entry' user.username %}" class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <span class="ms-1 d-none d-sm-inline">New Entry</span></a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a href="{% url 'user_favorites' user.username %}"
+                                        class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <span class="ms-1 d-none d-sm-inline">My Favorites</span></a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'user_comments' user.username %}"
+                                        class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <span class="ms-1 d-none d-sm-inline">My Comments</span></a>
+                                </li>
 
-                            {% endif %}
-                        </ul>
+                                {% else %}
+
+                                <li class="nav-item">
+                                    <a href="{% url 'home' %}" class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-xmark"></i>
+                                        <span class="ms-1 d-none d-md-inline">Delete filters</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span class="ms-1 d-none d-md-inline">Filter by user</span>
+                                    </a>
+                                    <ul class="collapse navbar-nav ms-1 filter-cat {% if request.path|slice:':9' == '/filter/u' %}force-show{% endif %}"
+                                        id="submenu2" data-bs-parent="#menu">
+
+                                        {% for user in users %}
+                                        <li class="nav-item">
+                                            <a href="{% url 'filter_user' user %}" onclick="hideFilter(this)" class="nav-link px-0">
+                                                <span class="ms-1 d-inline">{{ user }}</span>
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                        <i class="fa-solid fa-tag"></i>
+                                        <span class="ms-1 d-none d-md-inline">Filter by tag</span>
+                                    </a>
+                                    <ul class="collapse navbar-nav ms-1 filter-cat {% if request.path|slice:':9' == '/filter/t' %}force-show{% endif %}"
+                                        id="submenu3" data-bs-parent="#menu">
+
+                                        {% for tag, amount in tags.items %}
+                                        <li class="nav-item">
+                                            <a href="{% url 'filter_tag' tag %}" class="nav-link px-0">
+                                                <span class="ms-1 d-inline">{{ tag }}</span> ({{ amount }})</a>
+                                        </li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </li>
+
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="col py-3 w-100">
+
+                <!-- Content column -->
+                <div class="col py-3 mx-md-1 w-100 main-content">
                     <div class="container msg-container" style="background-color: #64ce88;">
                         <div class="row">
                             <div class="col-md-8 offset-md-2">
@@ -266,8 +242,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer w-100 py-3 bg-dark">
-        <p class="m-0 text-center text-white">FOOTER</p>
+    <footer class="footer w-100 py-3">
+        <p class="m-0 text-center">FOOTER</p>
     </footer>
 
     <!-- Bootstrap JS -->
