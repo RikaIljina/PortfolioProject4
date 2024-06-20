@@ -94,7 +94,7 @@ class EntryForm(forms.ModelForm):
         if Entry.objects.filter(
             author=self.user, title=title).exclude(id=instance.id).exists():
             raise forms.ValidationError(
-                "You have already used this title for another entry. Please"
+                "You have already used this title for another entry. Please "
                 "choose a different title.")
         else:
             new_slug = f'{title}-{self.user.username}'
