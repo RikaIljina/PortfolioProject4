@@ -1,207 +1,188 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block styles %}
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
+{% endblock %}
+
 {% block content %}
+<div class="row g-0 sidebar-margin m-auto h-100">
 
-<h1>{{ entry.title }}</h1>
-{% comment %} {% if entry_form.errors %}
-<p>ERRORS!!</p>
-<ul>
-    {% for field in entry_form %}
-    {% for error in field.errors %}
-    <li>{{ field.label_tag }} {{ error }}</li>
-    {% endfor %}
-    {% endfor %}
-</ul>
-{% endif %} {% endcomment %}
+    <h1>{{ entry.title }}</h1>
 
-
-<!-- <div class="d-flex flex-row justify-content-center">
-    <div class="col-8 d-flex flex-column p-4">
-        <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
-            {% csrf_token %}
-            <audio controls class="w-100">
-                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                Your browser does not support the audio tag.
-            </audio>
-            {% for form in entry_form %}
-            <div class="d-flex flex-row my-3">
-
-                <div class="col-4">{{ form.label_tag }}</div>
-                 {% if form.field.widget.input_type == 'file' %}
-                <div>{{ form.field }}</div>
-                {% endif %}
-                {% if form.label == 'Old files' %}
-                <div>
-                    {% for key, value in old_files.items %}
-                    <audio controls preload="none">
-                        <source src="{{ value }}" type="audio/mpeg">
-                        Your browser does not support the audio tag.
-                    </audio>
-                    <button type="button" class="btn btn-danger btn-delete" data-file_id="{{ key }}"
-                        data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button>
-                    {% endfor %}
+    <div class="d-flex flex-row justify-content-center">
+        <div class="col-8 d-flex flex-column p-4">
+            <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.title.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% if entry_form.title.errors %}
+                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.title.errors.0|escape}}">
+                            {% endif %}
+                            {{ entry_form.title }}
+                        </p>
+                    </div>
                 </div>
-                {% else %}
-                <div class="col-8">{{ form }}</div>
-                {% endif %}
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.description.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% if entry_form.description.errors %}
+                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.description.errors.0|escape}}">
+                            {% endif %}
+                            {{ entry_form.description }}
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>Your current audio file:</p>
+                    </div>
+                    <div class="col-8">
+                        <audio controls class="w-100">
+                            <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
+                            Your browser does not support the audio tag.
+                        </audio>
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.audio_file.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% if entry_form.audio_file.errors %}
+                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.audio_file.errors.0|escape}}">
+                            {% endif %}
+                            {{ entry_form.audio_file }}
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.keep_file.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% if entry_form.keep_file.errors %}
+                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.keep_file.errors.0|escape}}">
+                            {% endif %}
+                            {{ entry_form.keep_file }}
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.old_files.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% for key, value in old_files.items %}
+                        <p>added {{ value.1 }}</p>
+                        <audio controls preload="none">
+                            <source src="{{ value.0 }}" type="audio/mpeg">
+                            Your browser does not support the audio tag.
+                        </audio>
+                        <button type="button" class="btn btn-danger btn-delete" data-file_id="{{ key }}"
+                            data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button>
+                        {% empty %}
+                        <p>No files yet</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.tags.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% if entry_form.tags.errors %}
+                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.tags.errors.0|escape}}">
+                            {% endif %}
+                            {{ entry_form.tags }}
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p>{{ entry_form.publish.label }}</p>
+                    </div>
+                    <div class="col-8">
+                        {% if entry_form.publish.errors %}
+                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.publish.errors.0|escape}}">
+                            {% endif %}
+                            {{ entry_form.publish }}
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p></p>
+                    </div>
+                    <div class="col-8">
+                        <button id="submitButton" name="submit" type="submit" class="btn btn-success"
+                            id="btn-save-entry">Save</button>
+                    </div>
+                </div>
 
-            </div>
-            {% endfor %}
-            <button id="submitButton" name="submit" type="submit" class="btn btn-success">Save</button>
-        </form>
+            </form>
 
+        </div>
     </div>
-</div> -->
-
-
-<div class="d-flex flex-row justify-content-center">
-    <div class="col-8 d-flex flex-column p-4">
-        <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.title.label }}</p>
-                </div>
-                <div class="col-8">
-                    {{ entry_form.title.errors }}
-                    {{ entry_form.title }}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.description.label }}</p>
-                </div>
-                <div class="col-8">
-                    {{ entry_form.description.errors }}
-                    {{ entry_form.description }}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>Your current audio file:</p>
-                </div>
-                <div class="col-8">
-                    <audio controls class="w-100">
-                        <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                        Your browser does not support the audio tag.
-                    </audio>
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.audio_file.label }}</p>
-                </div>
-                <div class="col-8">
-                    {{ entry_form.audio_file.errors }}
-                    {{ entry_form.audio_file }}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.keep_file.label }}</p>
-                </div>
-                <div class="col-8">
-                    {{ entry_form.keep_file.errors }}
-                    {{ entry_form.keep_file }}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.old_files.label }}</p>
-                </div>
-                <div class="col-8">
-                    {% for key, value in old_files.items %}
-                    <p>added {{ value.1 }}</p>
-                    <audio controls preload="none">
-                        <source src="{{ value.0 }}" type="audio/mpeg">
-                        Your browser does not support the audio tag.
-                    </audio>
-                    <button type="button" class="btn btn-danger btn-delete" data-file_id="{{ key }}"
-                        data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button>
-                    {% empty %}
-                    <p>No files yet</p>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.tags.label }}</p>
-                </div>
-                <div class="col-8">
-                    {{ entry_form.tags.errors }}
-                    {{ entry_form.tags }}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p>{{ entry_form.publish.label }}</p>
-                </div>
-                <div class="col-8">
-                    {{ entry_form.publish.errors }}
-                    {{ entry_form.publish }}
-                </div>
-            </div>
-            <div class="d-flex flex-row my-3">
-                <div class="col-4">
-                    <p></p>
-                </div>
-                <div class="col-8">
-                    <button id="submitButton" name="submit" type="submit" class="btn btn-success" id="btn-save-entry"
-                    >Save</button>
-                </div>
-            </div>
-
-        </form>
-
-    </div>
-</div>
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitleId">
-                    Delete comment?
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">Are you sure you want to delete your comment? This action cannot be undone!
+    <!-- Modal -->
+    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        Delete comment?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    No, cancel
-                </button>
-                <a id="deleteConfirm" href="{{ request.path }}" class="btn btn-danger" role="button">Yes, delete</a>
+                <div class="modal-body">
+                    <div class="container-fluid">Are you sure you want to delete your comment? This action cannot be
+                        undone!
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        No, cancel
+                    </button>
+                    <a id="deleteConfirm" href="{{ request.path }}" class="btn btn-danger" role="button">Yes, delete</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-{% if not entry_form.errors %}
-<!-- Modal data-bs-toggle="modal" data-bs-target="#modalSave_" -->
-<div class="modal fade" id="modalSave" tabindex="-1" role="dialog" aria-labelledby="saveModalTitleId" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="saveModalTitleId">
-                    Upload in progress
-                </h5>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">Please do not close this page while your file is being uploaded. You will be redirected shortly.
+    {% if not entry_form.errors %}
+    <!-- Modal data-bs-toggle="modal" data-bs-target="#modalSave_" -->
+    <div class="modal fade" id="modalSave" tabindex="-1" role="dialog" aria-labelledby="saveModalTitleId"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveModalTitleId">
+                        Upload in progress
+                    </h5>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <div class="modal-body">
+                    <div class="container-fluid">Please do not close this page while your file is being uploaded. You
+                        will be redirected shortly.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 {% endif %}
 

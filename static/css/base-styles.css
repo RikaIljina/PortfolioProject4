@@ -11,6 +11,7 @@ body {
   font-family: "Ubuntu Mono", "Courier New", Courier, monospace;
   font-weight: 700;
   color: rgb(39, 36, 36);
+  background-color: rgb(255, 255, 251);
 }
 
 a {
@@ -134,7 +135,8 @@ a:focus-visible {
 
 .sidebar {
   background-color: rgb(243, 243, 228);
-  min-width: 20%;
+  /* min-width: 15%; */
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px -1px 2.2px;
 }
 
 .sidebar-toggle-div {
@@ -160,8 +162,8 @@ a:focus-visible {
   color: rgb(243, 243, 228);
   /* Make toggle button stick out to the right */
   position: absolute;
-  max-width: calc(100% + 0.5rem );
-  width: calc(100% + 0.5rem );
+  max-width: calc(100% + 0.5rem);
+  width: calc(100% + 0.5rem);
   left: 0;
 }
 
@@ -185,6 +187,19 @@ a:focus-visible {
 .nav#submenu2 {
   flex-direction: column;
 } */
+
+/* -------------Main content styles ---------- */
+
+.main-content {
+  /* background-color: rgb(243, 243, 228); */
+}
+
+/* ----------- Input field styles ------------ */
+
+textarea,
+input[type] {
+  width: 100%;
+}
 
 /* ----------- Like button styles ------------ */
 
@@ -213,7 +228,6 @@ a:focus-visible {
   font-weight: 400;
 }
 
-
 @media screen and (max-width: 768px) {
   .logo-image {
     margin: 0;
@@ -228,10 +242,9 @@ a:focus-visible {
     z-index: 1;
   }
 
-  .main-content {
-    margin-left: 5rem;
+  .sidebar-margin {
+    margin-left: 5rem !important;
   }
-
 }
 
 @media screen and (max-width: 576px) {
@@ -245,9 +258,7 @@ a:focus-visible {
     min-width: 3rem;
   }
 
-  .main-content {
-    margin-left: 5rem;
+  .sidebar-margin {
+    margin-left: 4rem !important;
   }
 }
-
-
