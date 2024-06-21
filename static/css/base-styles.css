@@ -11,11 +11,20 @@ body {
   font-family: "Ubuntu Mono", "Courier New", Courier, monospace;
   font-weight: 700;
   color: rgb(39, 36, 36);
-  background-color: rgb(255, 255, 251);
+  background-color: rgb(243, 243, 237);
 }
 
 a {
   cursor: pointer;
+}
+
+.text-color {
+  color: rgb(39, 36, 36);
+}
+
+.font-light {
+  font-weight: 400;
+  opacity: 0.4;
 }
 
 /* Navbar styles */
@@ -131,11 +140,29 @@ a:focus-visible {
   text-align: center;
 }
 
+/* ------------- Dropdown menu styles ---------------- */
+
+.dropdown-menu {
+  background-color: rgb(205, 205, 193);
+  color: rgb(243, 243, 228);
+  border: none;
+  border-radius: 0;
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 5px !important;
+
+}
+
+.dropdown-divider {
+  color: #333232;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(238, 238, 84);
+}
 /* ------------- Sidebar styles ---------------- */
 
 .sidebar {
   background-color: rgb(243, 243, 228);
-  box-shadow: rgba(0, 0, 0, 0.4) 1.5px -1px 2.2px;
+  box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
   min-width: 4rem;
   z-index: 99;
 
@@ -193,10 +220,11 @@ a:focus-visible {
   background-color: rgb(238, 238, 84);
 }
 
+
 .disabled:hover,
 .disabled:focus,
 .disabled:active {
-  background-color: inherit;
+  background-color: rgb(243, 243, 228);
   pointer-events: none;
 }
 
@@ -204,7 +232,26 @@ a:focus-visible {
   border: 1px solid #555555;
   width: 2rem;
   text-align: center;
+  margin: -8px;
+  transition: all 0.3s;
+
 }
+
+.filter-name:hover .tag-amount {
+  transform: translateX(20px);
+  transition: all 0.3s;
+}
+
+.filter-name:hover .tag-decor {
+  transform: translateX(10px);
+  transition: all 0.3s;
+}
+
+.tag-decor {
+  margin: -1px;
+  transition: all 0.3s;
+}
+
 
 .tag-name {
   border: 1px solid black;

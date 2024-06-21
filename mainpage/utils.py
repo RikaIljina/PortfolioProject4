@@ -28,7 +28,7 @@ def get_mainpage_context(request, entries):
     
     
 
-def get_page_obj(request, entries, amount=3):
+def get_page_obj(request, entries, amount=12):
     paginator = Paginator(entries, amount)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

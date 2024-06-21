@@ -6,9 +6,74 @@ h3 {
   background-color: rgb(238, 238, 84);
 }
 
+/* .card-container {
+  justify-content: start;
+} */
+
+.card-outer {
+  min-width: 300px;
+  max-width: 300px;
+  flex-grow: 0;
+}
+
+.inner-card {
+  border: 1px solid black;
+  border-radius: 0;
+  min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.inner-card:hover,
+.inner-card:focus {
+    box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
+}
+
+.inner-card a {
+  text-decoration: none;
+  color: rgb(39, 36, 36);
+}
+
+
+.card-header,
+.card-footer {
+    background-color: rgb(243, 243, 228);
+}
+
+.card-body {
+    padding: 0.5rem;
+    /* word-break: break-word; */
+}
+.card-footer {
+    padding: 0.5rem 0.3rem;
+}
+
+.title-link {
+    display: block;
+}
+
+/* .title-link:hover,
+.user-link:hover {
+} */
+
+.tag {
+    padding: 1px;
+    border: 1px solid black;
+}
+
+
 @media screen and (max-width: 768px) {
   h3 {
     font-size: 1.2rem;
+  }
+
+  /* .card-container {
+    justify-content: center;
+  } */
+
+  .card-outer {
+    max-width: 400px;
+    flex-grow: 1;
   }
 }
 

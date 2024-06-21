@@ -1,7 +1,6 @@
 {% load static %}
 
-<div class="card-footer">
-    <p>
+    <p class="ms-2 mb-0">
         {% if user.is_authenticated and entry.author != user %}
             
             <a class="btn-like like" data-entry_id="{{ entry.id }}" href="{{ request.path }}">
@@ -17,5 +16,4 @@
         {% endif %}
         {{ entry.likes_received }} | <i class="fa-regular fa-comment"></i> {{entry.comments_received }}
     </p>
-</div>
 

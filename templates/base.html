@@ -98,7 +98,7 @@
                     {% endif %}
                     <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                     <li>
                         <a class="dropdown-item" href="{% url 'dashboard' user.username %}">Dashboard</a>
                     </li>
@@ -177,7 +177,7 @@
 
                                 <hr>
 
-                                <li class="nav-item hover-highlight">
+                                <li class="nav-item hover-highlight {% if request.path|slice:':5' == '/song' %}disabled{% endif %}">
                                     <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if request.path|slice:':5' == '/song' %}disabled{% endif %}"
                                         {% if not request.path|slice:':5' == '/song' %}
                                         href="{{ request.path }}?sorted=by_likes" {% endif%}>
@@ -186,7 +186,7 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item hover-highlight">
+                                <li class="nav-item hover-highlight {% if request.path|slice:':5' == '/song' %}disabled{% endif %}">
                                     <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if request.path|slice:':5' == '/song' %}disabled{% endif %}"
                                         {% if not request.path|slice:':5' == '/song' %}
                                         href="{{ request.path }}?sorted=by_date" {% endif%}>
@@ -238,7 +238,7 @@
                                             <a href="{% url 'filter_tag' tag %}"
                                                 class="nav-link mx-md-4 px-3 filter-name">
                                                 <span class="ms-1 d-inline tag-name">{{ tag }}</span><i
-                                                    class="fa-solid fa-equals text-muted"></i>
+                                                    class="fa-solid fa-equals text-muted tag-decor"></i>
                                                 <div class="text-muted tag-amount d-inline-block">{{ amount }}</div>
                                             </a>
                                         </li>
@@ -279,9 +279,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer w-100 py-3">
+    <!-- <footer class="footer w-100 py-3">
         <p class="m-0 text-center">FOOTER</p>
-    </footer>
+    </footer> -->
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

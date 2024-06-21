@@ -1,48 +1,50 @@
-
 <div class="row">
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page=1" class="page-link">&laquo;
-                first</a>
-        </li>
-        <li class="page-item">
-            <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.previous_page_number }}"
-                class="page-link">previous</a>
-        </li>
-        {% else %}
-        <li class="page-item page-link text-muted">
-            &laquo; first
-        </li>
-        <li class="page-item page-link text-muted">
-            previous
-        </li>
+    <div class="col-12 col-md-10 m-auto">
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination d-flex justify-content-center mt-3 mb-5">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page=1" class="page-link text-color">
+                        <i class="fa-solid fa-angles-left"></i></a>
+                </li>
+                <li class="page-item">
+                    <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.previous_page_number }}"
+                        class="page-link text-color"><i class="fa-solid fa-chevron-left"></i></a>
+                </li>
+                {% else %}
+                <li class="page-item page-link text-muted font-light">
+                    <i class="fa-solid fa-angles-left"></i>
+                </li>
+                <li class="page-item page-link text-muted font-light">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </li>
+                {% endif %}
+
+                <li class="page-item page-link current text-color">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.next_page_number }}"
+                        class="page-link text-color"><i class="fa-solid fa-chevron-right"></i></a>
+                </li>
+                <li class="page-item">
+                    <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.paginator.num_pages }}"
+                        class="page-link text-color"><i class="fa-solid fa-angles-right"></i></a>
+                </li>
+                {% else %}
+                <li class="page-item page-link text-muted font-light">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </li>
+                <li class="page-item page-link text-muted font-light">
+                    <i class="fa-solid fa-angles-right"></i>
+                </li>
+                {% endif %}
+
+            </ul>
+        </nav>
         {% endif %}
-
-        <li class="page-item page-link current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </li>
-
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.next_page_number }}"
-                class="page-link">next</a>
-        </li>
-        <li class="page-item">
-            <a href="{% if sorted_param %}{{ sorted_param }}&{% else %}?{% endif %}page={{ page_obj.paginator.num_pages }}"
-                class="page-link">last
-                &raquo;</a>
-        </li>
-        {% else %}
-        <li class="page-item page-link text-muted">
-            next
-        </li>
-        <li class="page-item page-link text-muted">
-            last&raquo;
-        </li>
-        {% endif %}
-
-    </ul>
-</nav>
+    </div>
 </div>
