@@ -82,9 +82,21 @@ class Entry(models.Model):
         #     print('Error!')
         #     raise ValidationError('Please choose a different title to make'
         #                           'sure the entry slug is unique.')
+            
+        # new_slug = f'{self.title}-{self.author.username}'
+        # # unidecode is needed to process non-latin titles
+        # new_slug = slugify(unidecode(new_slug))
+        
+        # if Entry.objects.filter(slug=new_slug).exclude(
+        #                                         id=self.id).exists():
+        #     print('Error!')
+        #     raise ValidationError(
+        #         'Please choose a different title to make sure the entry '
+        #         'slug is unique.')
         # else:
         #     print('Unique slug')
-        # Delete tags that are no longer used by any entry
+        #Delete tags that are no longer used by any entry
+        
         Tag.objects.filter(entry=None).delete()
         
         return super(Entry, self).save(*args, **kwargs)

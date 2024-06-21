@@ -1,31 +1,332 @@
-.nav {
-    color:antiquewhite;
-    
+@import url("https://fonts.googleapis.com/css2?family=Sono:wght@200..800&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=PT+Mono");
+
+/* *,
+*::before,
+*::after {
+  box-sizing: inherit;
+ } */
+
+body {
+  font-family: "Ubuntu Mono", "Courier New", Courier, monospace;
+  font-weight: 700;
+  color: rgb(39, 36, 36);
+  background-color: rgb(243, 243, 237);
+  width: 100vw;
+  overflow-x: hidden;
 }
-.nav a {
-    color: aliceblue;
+
+a {
+  cursor: pointer;
 }
 
-.active {
-    background-color: rgb(95, 111, 106);
+.text-color {
+  color: rgb(39, 36, 36);
 }
 
-.like-btn:focus,.like-btn:active {
-    outline: none !important;
-    box-shadow: none;
- }
+.font-light {
+  font-weight: 400;
+  opacity: 0.4;
+}
 
- a {
-    cursor: pointer;
- }
- 
- .like {
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
- }
+/* Navbar styles */
 
- .like-red
- {
-    color: red;
- }
+.nav-upper {
+  background-color: rgb(246, 246, 203);
+  /* background: url('../images/stacked-steps-haikei.png') border-box center/cover no-repeat fixed; */
+  font-family: "Sono", "Courier New", Courier, monospace;
+  font-weight: 400;
+  border-bottom: 5px solid rgb(56, 55, 55);
+}
+
+.navbar,
+.nav-link,
+.username {
+  color: rgb(39, 36, 36);
+}
+
+.nav-link {
+  padding: 0.5rem 0.8rem;
+  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+}
+
+.nav-link.active {
+  background-color: rgb(194, 240, 128);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  color: rgb(51, 48, 38);
+}
+
+/* .hvr-grow-rotate:before {
+  background-color: rgb(0, 0, 0);
+} */
+
+.hvr-grow-rotate {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(0.5px) translateZ(0);
+  transform: perspective(0.5px) translateZ(0);
+  box-shadow: 0 0 1px transparent;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+
+.nav-btn {
+  padding: 0.25rem;
+  margin-right: 0.5rem;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  width: 60px !important;
+  height: 55px !important;
+
+  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+}
+
+.navbar-icon {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+/* .nav-btn:focus,
+.nav-btn:active {
+   outline: 1px solid black; 
+  -webkit-transform: initial;
+  transform: initial;
+} */
+
+.nav-link-box {
+  border: 1px solid rgb(27, 1, 49);
+  border-radius: 0px;
+  transition: all 0.3s;
+}
+
+.nav-link-box:hover,
+.nav-link-box:focus {
+  background-color: rgb(238, 238, 84);
+  transition: all 0.3s;
+}
+
+a:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.logo-image {
+  max-width: 330px;
+}
+
+/* Navbar collapsed content styles */
+#navbarContent.show > div {
+  display: block !important;
+  max-width: 10rem;
+  align-items: center;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+/* ------------- Dropdown menu styles ---------------- */
+
+.dropdown-menu {
+  background-color: rgb(205, 205, 193);
+  color: rgb(243, 243, 228);
+  border: none;
+  border-radius: 0;
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 5px !important;
+
+}
+
+.dropdown-divider {
+  color: #333232;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(238, 238, 84);
+}
+/* ------------- Sidebar styles ---------------- */
+
+.sidebar {
+  background-color: rgb(243, 243, 228);
+  box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
+  min-width: 4rem;
+  z-index: 99;
+
+}
+
+.sidebar-toggle-div {
+  display: flex;
+  justify-content: flex-end;
+  position: static;
+  height: 3rem;
+  margin-bottom: 1rem;
+}
+
+.pos-relative {
+  position: relative;
+}
+
+.sidebar-toggle-btn {
+  display: flex;
+  justify-content: flex-end;
+  /* border-bottom: 1px solid rgb(195, 195, 182);
+  border-right: 1px solid rgb(195, 195, 182); */
+  border-radius: 0px 0px 5px 0px;
+  background-color: rgb(205, 205, 193);
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 2.2px;
+  color: rgb(243, 243, 228);
+  /* Make toggle button stick out to the right */
+  position: absolute;
+  max-width: calc(100% + 0.5rem);
+  width: calc(100% + 0.5rem);
+  left: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: rgb(238, 238, 84);
+}
+
+.toggle-icon-expand,
+.toggle-icon-collapse {
+  align-self: center;
+  font-size: 1.3rem;
+  background-color: #333232;
+  color: transparent;
+  text-shadow: 0.5px 0.5px 0.5px rgba(240, 240, 227, 0.3);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+}
+
+/* ------ Sidebar item styles ------------- */
+
+.hover-highlight:hover,
+.hover-highlight:focus,
+.hover-highlight:active {
+  background-color: rgb(238, 238, 84);
+}
+
+
+.disabled:hover,
+.disabled:focus,
+.disabled:active {
+  background-color: rgb(243, 243, 228);
+  pointer-events: none;
+}
+
+.tag-amount {
+  border: 1px solid #555555;
+  width: 2rem;
+  text-align: center;
+  margin: -8px;
+  transition: all 0.3s;
+
+}
+
+.filter-name:hover .tag-amount {
+  transform: translateX(20px);
+  transition: all 0.3s;
+}
+
+.filter-name:hover .tag-decor {
+  transform: translateX(10px);
+  transition: all 0.3s;
+}
+
+.tag-decor {
+  margin: -1px;
+  transition: all 0.3s;
+}
+
+
+.tag-name {
+  border: 1px solid black;
+  padding: 0.5rem;
+  margin-bottom: auto;
+}
+
+
+/* ----------- Input field styles ------------ */
+
+textarea,
+input[type] {
+  width: 100%;
+}
+
+/* ----------- Like button styles ------------ */
+
+.like-btn:focus,
+.like-btn:active {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.like {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+.like-red {
+  color: red;
+}
+
+/* --------- Footer styles --------------- */
+
+.footer {
+  background-color: rgb(246, 246, 203);
+  color: rgb(39, 36, 36);
+  font-family: "Sono", "Courier New", Courier, monospace;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 768px) {
+  .logo-image {
+    margin: 0;
+    padding: 0 !important;
+    max-width: 230px;
+  }
+
+  .sidebar {
+    min-width: 4rem;
+    position: absolute;
+    height: 100%;
+    z-index: 99;
+  }
+
+  .sidebar-margin {
+    margin-left: 5rem !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .logo-image {
+    margin: 0;
+    padding: 0 !important;
+    max-width: 200px;
+  }
+
+  .sidebar {
+    min-width: 3rem;
+  }
+
+  .sidebar-margin {
+    margin-left: 4rem !important;
+  }
+}

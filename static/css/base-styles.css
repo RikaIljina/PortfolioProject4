@@ -12,6 +12,8 @@ body {
   font-weight: 700;
   color: rgb(39, 36, 36);
   background-color: rgb(243, 243, 237);
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 a {

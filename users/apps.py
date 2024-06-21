@@ -7,6 +7,6 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         import users.signals
-        from .utils import get_username_list
-        get_username_list()
+       # from .utils import get_username_list
+       # get_username_list()
         

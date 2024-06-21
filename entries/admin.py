@@ -1,7 +1,11 @@
 from django import forms
 from django.contrib import admin, messages
 from django_summernote.admin import SummernoteModelAdmin
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from datetime import datetime
+from unidecode import unidecode
 import cloudinary
 import json
 
@@ -22,6 +26,23 @@ class EntryFormExtension(forms.ModelForm):
     class Meta:
         model = Entry
         fields = '__all__'
+        
+    def clean(self):
+        print('cleaning')
+        instance = self.save(commit=False)
+        new_slug = f'{self.cleaned_data['title']}-{self.cleaned_data['author'].username}'
+        # unidecode is needed to process non-latin titles
+        new_slug = slugify(unidecode(new_slug))
+        print(new_slug)
+        if Entry.objects.filter(slug=new_slug).exclude(
+                                                id=instance.id).exists():
+            raise ValidationError(
+                'Please choose a different title to make sure the entry '
+                'slug is unique.')
+        else:
+            instance.slug = new_slug
+    
+        super(EntryFormExtension, self).clean()
 
 
 @admin.register(Entry)
@@ -87,7 +108,30 @@ class EntryAdmin(SummernoteModelAdmin):
             change (bool): A flag indicating whether the object is being
                 changed (True) or created (False).
         """
+        
+        instance = form.save(commit=False)
 
+       # new_slug = f'{form.cleaned_data['title']}-{form.cleaned_data['author'].username}'
+        # unidecode is needed to process non-latin titles
+       # new_slug = slugify(unidecode(new_slug))
+        
+        # if Entry.objects.filter(slug=new_slug).exclude(
+        #                                         id=instance.id).exists():
+        #     print(request.path)
+            
+        #     print('path Error!')
+        #     print(request.path)
+        #     redirect('admin')
+        #     messages.error('The title is not unique')
+        
+            
+        #     raise ValidationError(
+        #         'Please choose a different title to make sure the entry '
+        #         'slug is unique.')
+        # else:
+       # instance.slug = new_slug
+       # print('Unique slug')
+            
         # Get checkbox value
         keep_file = form.data.get('keep_file')
         old_file = form.initial.get('audio_file')
@@ -102,7 +146,6 @@ class EntryAdmin(SummernoteModelAdmin):
                     old_id, resource_type = "video", invalidate=True)
                 messages.info(request, result)
             elif old_file != new_file and keep_file:
-                instance = form.save(commit=False)
                 json_date = json.dumps(
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 # Add old file to the json object 'old_files' together with
@@ -110,6 +153,8 @@ class EntryAdmin(SummernoteModelAdmin):
                 instance.old_files[old_id] = [
                     old_file.url, json_date]
                 
+        #instance.save()
+
         super().save_model(request, obj, form, change)
 
   
