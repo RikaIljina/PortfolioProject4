@@ -135,8 +135,10 @@ a:focus-visible {
 
 .sidebar {
   background-color: rgb(243, 243, 228);
-  /* min-width: 15%; */
   box-shadow: rgba(0, 0, 0, 0.4) 1.5px -1px 2.2px;
+  min-width: 4rem;
+  z-index: 99;
+
 }
 
 .sidebar-toggle-div {
@@ -183,16 +185,33 @@ a:focus-visible {
   background-clip: text;
 }
 
-/* 
-.nav#submenu2 {
-  flex-direction: column;
-} */
+/* ------ Sidebar item styles ------------- */
 
-/* -------------Main content styles ---------- */
-
-.main-content {
-  /* background-color: rgb(243, 243, 228); */
+.hover-highlight:hover,
+.hover-highlight:focus,
+.hover-highlight:active {
+  background-color: rgb(238, 238, 84);
 }
+
+.disabled:hover,
+.disabled:focus,
+.disabled:active {
+  background-color: inherit;
+  pointer-events: none;
+}
+
+.tag-amount {
+  border: 1px solid #555555;
+  width: 2rem;
+  text-align: center;
+}
+
+.tag-name {
+  border: 1px solid black;
+  padding: 0.5rem;
+  margin-bottom: auto;
+}
+
 
 /* ----------- Input field styles ------------ */
 
@@ -239,7 +258,7 @@ input[type] {
     min-width: 4rem;
     position: absolute;
     height: 100%;
-    z-index: 1;
+    z-index: 99;
   }
 
   .sidebar-margin {

@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 import cloudinary
 
 from mainpage.utils import get_tags_from_file
-from users.utils import get_users_from_file
+from users.utils import get_users_from_file, get_username_list
 from comments.forms import CommentForm
 from comments.utils import process_comment_form
 from .models import Entry
@@ -37,7 +37,7 @@ def entry_details(request, slug):
 
     comments = entry.all_comments.select_related('author', 'author__profile')
     
-    users = get_users_from_file()
+    users = get_username_list()
     tags = get_tags_from_file()
     
     if request.method == 'POST':

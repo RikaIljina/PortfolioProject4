@@ -1,6 +1,4 @@
-// The menu toggle button in the navbar has a hover effect that stops working
-// once the button is clicked and therefore focused. The following code removes
-// the focus from the button.
+
 var sidebarCollapsed = false;
 
 
@@ -19,7 +17,6 @@ window.addEventListener("DOMContentLoaded", function () {
       sideBarState != "absolute" &&
       filterCat.classList.contains("force-show") && !sidebarCollapsed
     ) {
-      alert('adding show')
       filterCat.classList.add("show");
     } else if (sidebarCollapsed) {
       filterCat.classList.remove("show");
@@ -79,6 +76,9 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// The menu toggle button in the navbar has a hover effect that stops working
+// once the button is clicked and therefore focused. The following code removes
+// the focus from the button.
 document.getElementById("toggler-btn").addEventListener("click", function () {
   // Use setTimeout to remove focus from the icon after clicking it
   setTimeout(() => {

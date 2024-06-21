@@ -1,0 +1,19 @@
+h3 {
+  font-size: 1.4rem;
+}
+
+.filter-results {
+  background-color: rgb(238, 238, 84);
+}
+
+@media screen and (max-width: 768px) {
+  h3 {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  h3 {
+    font-size: 1rem;
+  }
+}

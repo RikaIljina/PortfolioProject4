@@ -16,13 +16,18 @@ from likes.models import Like
 
 
 def get_username_list():
+    all_users = User.objects.select_related('profile')
 # order list after db query!
-    current_usernames = list(User.objects.values_list(
-                'username', flat=True).order_by(Lower('username')))
-    with open(os.path.join(django_settings.STATIC_ROOT, 'usernames.txt'), 'w') as file:
-        file.writelines(line + '\n' for line in current_usernames)
+    # current_usernames = list(User.objects.values_list(
+    #             'username', flat=True).order_by(Lower('username')))
+    current_users = dict({value.username: value.profile.pic.url for value in all_users})
+    print(current_users)
+    users = dict(sorted(current_users.items()))
+     
+    # with open(os.path.join(django_settings.STATIC_ROOT, 'usernames.txt'), 'w') as file:
+    #     file.writelines(line + '\n' for line in current_usernames)
     
-    return current_usernames
+    return users
 
 def get_users_from_file():
     with open('staticfiles/usernames.txt') as f:

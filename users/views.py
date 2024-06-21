@@ -44,9 +44,9 @@ def user_profile(request, username):
 
         page_obj = get_page_obj(request, entries)
 
-        #users = get_username_list()
+        users = get_username_list()
         
-        users = get_users_from_file()
+        #users = get_users_from_file()
         
         #tags = get_all_tags()
         tags = get_tags_from_file()

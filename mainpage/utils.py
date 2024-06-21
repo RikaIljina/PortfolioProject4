@@ -12,8 +12,21 @@ import json
 
 from entries.models import Entry
 from likes.models import Like
+from users.utils import get_username_list
 
 # Helper functions
+
+
+def get_mainpage_context(request, entries):
+    entries, sorted_param = sort_by(request, entries)
+    page_obj = get_page_obj(request, entries)
+    users = get_username_list()
+    # users = get_users_from_file()
+    tags = get_tags_from_file()
+    
+    return entries, sorted_param, page_obj, users, tags
+    
+    
 
 def get_page_obj(request, entries, amount=3):
     paginator = Paginator(entries, amount)
