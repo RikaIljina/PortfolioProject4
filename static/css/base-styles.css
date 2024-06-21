@@ -82,7 +82,7 @@ a {
   transition-property: transform;
 }
 
-.nav-btn {
+.toggler-btn {
   padding: 0.25rem;
   margin-right: 0.5rem;
   background-color: transparent;

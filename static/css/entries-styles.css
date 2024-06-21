@@ -1,7 +1,143 @@
 /* ---- Entry form -------- */
 
 .tooltip-inner {
-    max-width: 400px;
-    background-color: #e6646e;
+  max-width: 400px;
+  background-color: #e6646e;
+  font-size: 1.2rem;
+}
+
+/* ---- Entry cards ----- */
+
+h3 {
+  font-size: 1.4rem;
+}
+
+.larger-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.filter-results {
+  background-color: rgb(238, 238, 84);
+}
+
+/* .card-container {
+    justify-content: start;
+  } */
+
+.card-outer {
+  min-width: 300px;
+  max-width: 300px;
+  flex-grow: 0;
+}
+
+.card-full-page {
+  min-width: 90%;
+}
+
+.inner-card {
+  border: 1px solid black;
+  border-radius: 0;
+  min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.inner-card:hover,
+.inner-card:focus {
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
+}
+
+.no-shadow:hover,
+.no-shadow.focus {
+  box-shadow: none;
+}
+
+.inner-card a {
+  text-decoration: none;
+  color: rgb(39, 36, 36);
+}
+
+.card-header,
+.card-footer {
+  background-color: rgb(243, 243, 228);
+}
+
+.card-body {
+  padding: 0.5rem;
+  /* word-break: break-word; */
+}
+.card-footer {
+  padding: 0.5rem 0.3rem;
+}
+
+.title-link {
+  display: block;
+}
+
+/* .title-link:hover,
+  .user-link:hover {
+  } */
+
+.tag {
+  padding: 1px;
+  border: 1px solid black;
+}
+
+/* ---------- Comment section styles ----------- */
+
+#submitButton {
+  min-width: 8rem;
+}
+
+.btn {
+    min-width: 8rem;
+  border: 2px solid #4d4d4d;
+
+  border-radius: 0px;
+  transition: all 0.3s;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: rgb(238, 238, 84);
+  transition: all 0.3s;
+}
+
+.btn-edit,
+.btn-delete {
+    font-size: 0.8rem;
+    min-width: 6rem;
+}
+
+.btn-edit {
+    border: 1px solid #75ed6f;
+}
+
+.btn-delete {
+    border: 1px solid #e6646e;
+}
+
+.form-control {
+    border: 1px solid gray;
+    border-radius: 0;
+}
+
+/* ---------- Media queries ----------- */
+
+@media screen and (max-width: 768px) {
+  h3 {
     font-size: 1.2rem;
+  }
+
+  .card-outer {
+    max-width: 400px;
+    flex-grow: 1;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  h3 {
+    font-size: 1rem;
+  }
 }
