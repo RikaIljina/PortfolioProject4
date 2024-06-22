@@ -59,7 +59,7 @@
                 </span>
             </button>
 
-            <div class="collapse navbar-collapse flex-grow-0 mt-2 mt-md-0 order-3" id="navbarContent">
+            <div class="collapse navbar-collapse flex-grow-0 mt-2 mt-md-0 me-md-3 order-3" id="navbarContent">
                 <!-- d-none to make sure the wrong styles aren't shown while the uncollapse action 
                  triggers the css with the correct link styles -->
                 <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate ">
@@ -140,33 +140,42 @@
                         <div class="d-flex flex-column align-items-center align-items-md-start pt-2">
                             <ul class="navbar-nav mb-sm-auto mb-0 align-content-start align-content-md-start" id="menu">
 
-                                {% if request.path|slice:'11' == '/dashboard/' %}
+                                {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
 
-                                <li class="nav-item">
-                                    <a href="{% url 'dashboard' user.username %}" class="nav-link px-0 align-middle">
+                                <li class="nav-item hover-highlight">
+                                    <a href="{% url 'dashboard' user.username %}" class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-sm-inline">Dashboard</span></a>
+                                        <span class="ms-1 d-none d-md-inline filter-title">Dashboard</span></a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{% url 'new_entry' user.username %}" class="nav-link px-0 align-middle">
-                                        <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-sm-inline">New Entry</span></a>
+                                <li class="nav-item hover-highlight">
+                                    <a href="{% url 'new_entry' user.username %}" class="nav-link mx-md-2 px-3 align-middle">
+                                        <i class="fa-solid fa-square-plus"></i>
+                                        <span class="ms-1 d-none d-md-inline filter-title">New Entry</span></a>
                                 </li>
                                 <hr>
-                                <li class="nav-item">
+                                <li class="nav-item hover-highlight">
                                     <a href="{% url 'user_favorites' user.username %}"
-                                        class="nav-link px-0 align-middle">
-                                        <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-sm-inline">My Favorites</span></a>
+                                        class="nav-link mx-md-2 px-3 align-middle">
+                                        <i class="fa-solid fa-heart"></i>
+                                        <span class="ms-1 d-none d-md-inline filter-title">My Favorites</span></a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item hover-highlight">
                                     <a href="{% url 'user_comments' user.username %}"
-                                        class="nav-link px-0 align-middle">
-                                        <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-sm-inline">My Comments</span></a>
+                                        class="nav-link mx-md-2 px-3 align-middle">
+                                        <i class="fa-solid fa-comment"></i>
+                                        <span class="ms-1 d-none d-md-inline filter-title">My Comments</span></a>
                                 </li>
 
                                 {% else %}
+
+                                {% if request.user.is_authenticated %}
+                                <li class="nav-item hover-highlight">
+                                    <a href="{% url 'dashboard' user.username %}" class="nav-link mx-md-2 px-3 align-middle">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                        <span class="ms-1 d-none d-md-inline filter-title">Dashboard</span></a>
+                                </li>
+                                <hr>
+                                {% endif %}
 
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
@@ -232,7 +241,6 @@
                                     </a>
                                     <ul class="collapse navbar-nav ms-1 filter-cat {% if request.path|slice:':9' == '/filter/t' %}force-show{% endif %}"
                                         id="submenu3" data-bs-parent="#menu">
-
                                         {% for tag, amount in tags.items %}
                                         <li class="nav-item hover-highlight">
                                             <a href="{% url 'filter_tag' tag %}"

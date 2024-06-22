@@ -22,7 +22,10 @@ def get_mainpage_context(request, entries):
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
     # users = get_users_from_file()
-    tags = get_tags_from_file()
+    #tags = get_tags_from_file()
+    tags = get_all_tags()
+    #tags = get_tags_from_file()
+    print(tags)
     
     return entries, sorted_param, page_obj, users, tags
     
@@ -49,13 +52,15 @@ def get_all_tags():
     tag_list = {str(value['name']): str(value['amount']) for value in tags.values()}
     tag_dict = json.dumps(tag_list)
     #print(tags) # tags.values_list('name', flat=True): })
-    with open(os.path.join(django_settings.STATIC_ROOT, 'tags.txt'), 'w') as file:
-        #file.writelines(str(line) + '\n' for line in tag_list)
-        file.write(tag_dict)
+    # with open(os.path.join(django_settings.STATIC_ROOT, 'tags.txt'), 'w') as file:
+    #     #file.writelines(str(line) + '\n' for line in tag_list)
+    #     file.write(tag_dict)
         
    # tags.filter(amount=0).delete()
+    #print(tag_dict)
     
-    return tags
+    return tag_list
+
 
 def delete_tags():
     Tag.objects.filter(entry=None).delete()
@@ -65,7 +70,7 @@ def get_tags_from_file():
         data = f.read()
     #print(data)
     tags = json.loads(data)
-    #print(tags)
+    print(tags)
     return tags
 
 

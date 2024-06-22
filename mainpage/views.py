@@ -26,7 +26,7 @@ def index(request):
     entries = get_published_entries(request, Entry.objects, get_comments=False)
     
     entries, sorted_param, page_obj, users, tags = get_mainpage_context(request, entries)
-    
+   # print(tags)
     # entries, sorted_param = sort_by(request, entries)
 
     # page_obj = get_page_obj(request, entries)

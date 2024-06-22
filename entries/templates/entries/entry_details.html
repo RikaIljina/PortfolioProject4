@@ -15,7 +15,7 @@
         <!-- <div class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start "> -->
         <div class="row g-0 justify-content-center">
             <div class="card-outer card-full-page mt-1 mt-md-2 mb-md-2 p-1">
-                <div class="card inner-card no-shadow h-100">
+                <div class="card inner-card no-shadow ">
                     <div class="card-header p-2 p-md-3">
                         <p>
                             {% if "placeholder" in entry.author.profile.pic.url %}
@@ -25,7 +25,9 @@
                             <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30"
                                 height="30" class="rounded-circle">
                             {% endif %}
-                            <a href="{% url 'user_profile' entry.author.username %}" class="user-link">{{ entry.author }}</a>
+                            <a href="{% url 'user_profile' entry.author.username %}" class="user-link">
+                                {{ entry.author }}
+                            </a>
                         </p>
                         <h3 class="larger-title">{{ entry.title }}</h3>
 
@@ -63,14 +65,13 @@
                     <div class="card-footer d-flex flex-wrap align-content-center px-2 px-md-3">
                         {% include 'likes/snippets/like_comment_summary.html' %}
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <div class="p-2 p-md-3">
-                            <p class="text-muted">About this entry</p>
-                            <p>
-                                {{ entry.description | safe}}
-                            </p>
-                        </div>
-
+                </div>
+                <div class="card card-desc no-shadow d-flex flex-column">
+                    <div class="p-2 p-md-3">
+                        <p class="text-muted">About this entry</p>
+                        <p>
+                            {{ entry.description | safe}}
+                        </p>
                     </div>
                 </div>
             </div>

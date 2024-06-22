@@ -220,6 +220,7 @@ a:focus-visible {
 .hover-highlight:focus,
 .hover-highlight:active {
   background-color: rgb(238, 238, 84);
+  transition: all 0.3s;
 }
 
 

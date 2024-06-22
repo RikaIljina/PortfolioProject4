@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load humanize %}
 
 
 <!-- https://bbbootstrap.com/snippets/bootstrap-comment-section-reply-input-and-vote-up-and-down-73363704 -->
@@ -7,88 +7,92 @@
 
 
 <!-- <div class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start "> -->
-<div class="row g-0 justify-content-center">
+<div class="row g-0 justify-content-center mb-5">
     <div class="card-outer card-full-page mt-1 mt-md-2 mb-md-2 p-1">
         <div class="card inner-card no-shadow h-100">
 
-            <div class="comment-bottom bg-white p-2 px-4">
+            <div class="col-md-10 m-auto">
 
-                {% if user.is_authenticated %}
-                <div class="d-flex flex-row add-comment-section justify-content-center mt-4 mb-4">
-                    <div class="d-flex flex-column">
-                        {% if "placeholder" in user.profile.pic.url %}
-                        <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
-                            src="{% static 'images/default_profile.jpg' %}" width="38">
-                        {% else %}
-                        <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
-                            src="{{ user.profile.pic.url }}" width="38">
-                        {% endif %}
-                    </div>
+                <div class="comment-bottom bg-white p-2 px-4">
 
-                    <form method="POST" action="" id="commentForm"
-                        class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
-                        {% csrf_token %}
-                        <span class="visually-hidden">{{ comment_form.label }}</span>
-                        {{ comment_form.content }}
+                    {% if user.is_authenticated %}
+                    <div class="d-flex flex-row add-comment-section justify-content-center mt-4 mb-4">
                         <div class="d-flex flex-column">
-                            <button class="btn" id="submitButton" name="addNew" type="submit">Comment</button>
+                            {% if "placeholder" in user.profile.pic.url %}
+                            <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
+                                src="{% static 'images/default_profile.jpg' %}" width="38">
+                            {% else %}
+                            <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
+                                src="{{ user.profile.pic.url }}" width="38">
+                            {% endif %}
                         </div>
-                    </form>
 
-                </div>
-                {% else %}
-                <p>Log in to leave a comment</p>
-                {% endif %}
-                {% for comment in comments %}
-                <div class="commented-section mt-2">
-                    <hr>
-                    <div class="d-flex flex-row align-items-center commented-user">
-                        {% if "placeholder" in comment.author.profile.pic.url %}
-                        <img class="img-fluid img-responsive rounded-circle me-2"
-                            src="{% static 'images/default_profile.jpg' %}" width="30">
-                        {% else %}
-                        <img class="img-fluid img-responsive rounded-circle me-2"
-                            src="{{ comment.author.profile.pic.url }}" width="30">
-                        {% endif %}
-                        <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1">
-                            <h5>{{ comment.author }}</h5>
-                        </a>
-                        <p class="flex-fill"></p>
-                        <p class="mt-1 ms-2 text-muted text-end">on {{ comment.created_on }}</p>
-                    </div>
-
-                    <div id="comment{{ comment.id }}" class="comment-text-sm my-2">
-                        <span>{{ comment.content|linebreaks }}</span>
-                    </div>
-                    <!--  Set aria hidden!!! Unhide in js -->
-                    {% if user.is_authenticated and comment.author == user %}
-                    <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 visually-hidden">
-                        <form method="POST" action="" id="editCommentForm{{ comment.id }}"
+                        <form method="POST" action="" id="commentForm"
                             class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
                             {% csrf_token %}
-
-                            <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your
-                                Comment:</label>
-                            <textarea type="text" class="flex-fill form-control" name="content"
-                                id="updatedComment{{ comment.id }}"></textarea>
-                            <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
-                            <div class="d-flex flex-column flex-shrink-0 ms-2">
-                                <button class="btn" name="updateOld" type="submit">Update</button>
+                            <span class="visually-hidden">{{ comment_form.label }}</span>
+                            {{ comment_form.content }}
+                            <div class="d-flex flex-column">
+                                <button class="btn btn-comment hover-highlight" id="submitButton" name="addNew" type="submit">Comment</button>
                             </div>
                         </form>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-edit" data-comment_id="{{ comment.id }}">Edit</button>
-                        <button type="button" class="btn btn-delete" data-comment_id="{{ comment.id }}"
-                            data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button>
-                        <!--  -->
 
                     </div>
+                    {% else %}
+                    <div class="m-2 text-muted">Log in to leave a comment</div>
                     {% endif %}
 
-                </div>
-                {% endfor %}
+                    {% for comment in comments %}
+                    <div class="commented-section mt-2">
+                        <hr>
+                        <div class="d-flex flex-row align-items-center commented-user">
+                            {% if "placeholder" in comment.author.profile.pic.url %}
+                            <img class="img-fluid img-responsive rounded-circle me-2"
+                                src="{% static 'images/default_profile.jpg' %}" width="30">
+                            {% else %}
+                            <img class="img-fluid img-responsive rounded-circle me-2"
+                                src="{{ comment.author.profile.pic.url }}" width="30">
+                            {% endif %}
+                            <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1">
+                                <h5>{{ comment.author }}</h5>
+                            </a>
+                            <p class="flex-fill"></p>
+                            <p class="mt-1 ms-2 text-muted text-end">{{ comment.created_on|naturalday }}</p>
+                        </div>
 
+                        <div id="comment{{ comment.id }}" class="comment-text-sm my-2">
+                            <span>{{ comment.content|linebreaks }}</span>
+                        </div>
+                        <!--  Set aria hidden!!! Unhide in js -->
+                        {% if user.is_authenticated and comment.author == user %}
+                        <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 visually-hidden">
+                            <form method="POST" action="" id="editCommentForm{{ comment.id }}"
+                                class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
+                                {% csrf_token %}
+
+                                <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your
+                                    Comment:</label>
+                                <textarea type="text" class="flex-fill form-control" name="content"
+                                    id="updatedComment{{ comment.id }}"></textarea>
+                                <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
+                                <div class="d-flex flex-column flex-shrink-0 ms-2">
+                                    <button class="btn btn-update hover-highlight" name="updateOld" type="submit">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-edit hover-highlight" data-comment_id="{{ comment.id }}"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" class="btn btn-delete hover-highlight" data-comment_id="{{ comment.id }}"
+                                data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fa-solid fa-trash"></i></button>
+                            <!--  -->
+
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    {% endfor %}
+
+                </div>
             </div>
         </div>
 

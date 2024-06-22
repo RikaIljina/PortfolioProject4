@@ -35,12 +35,18 @@ h3 {
   min-width: 90%;
 }
 
-.inner-card {
+.inner-card,
+.card-desc {
   border: 1px solid black;
   border-radius: 0;
   min-height: 350px;
   font-weight: 400;
   word-break: break-word;
+}
+
+.card-desc {
+  min-height: fit-content;
+  border-top: none;
 }
 
 .inner-card:hover,
@@ -90,24 +96,30 @@ h3 {
   min-width: 8rem;
 }
 
-.btn {
-    min-width: 8rem;
+.btn-comment,
+.btn-update {
+  min-width: 8rem;
   border: 2px solid #4d4d4d;
 
   border-radius: 0px;
   transition: all 0.3s;
 }
 
-.btn:hover,
-.btn:focus {
+/* .btn-comment:hover,
+.btn-comment:focus,
+.btn-update:hover,
+.btn-update:focus,
+.btn-edit,
+.btn-delete {
   background-color: rgb(238, 238, 84);
   transition: all 0.3s;
-}
+} */
 
 .btn-edit,
 .btn-delete {
     font-size: 0.8rem;
-    min-width: 6rem;
+    border-radius: 0;
+    min-width: 3rem;
 }
 
 .btn-edit {
