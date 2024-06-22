@@ -8,5 +8,5 @@ class UsernameMaxAdapter(DefaultAccountAdapter):
     def clean_username(self, username):
         if len(username) > 20:
             raise ValidationError(
-                'Please choose a username with less than 20 characters')
+                'Please choose a username with max 20 characters')
         return DefaultAccountAdapter.clean_username(self, username)
