@@ -82,7 +82,7 @@ a {
   transition-property: transform;
 }
 
-.nav-btn {
+.toggler-btn {
   padding: 0.25rem;
   margin-right: 0.5rem;
   background-color: transparent;
@@ -220,6 +220,7 @@ a:focus-visible {
 .hover-highlight:focus,
 .hover-highlight:active {
   background-color: rgb(238, 238, 84);
+  transition: all 0.3s;
 }
 
 

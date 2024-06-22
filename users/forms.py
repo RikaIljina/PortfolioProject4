@@ -2,6 +2,8 @@ from django import forms
 from django.forms import TextInput, Textarea, RadioSelect, FileInput, EmailInput, URLInput
 from django.utils.translation import gettext_lazy as _
 from cloudinary.forms import CloudinaryFileField
+from django.core.exceptions import ValidationError
+
 from django_summernote.widgets import SummernoteWidget
 import cloudinary
 
@@ -20,19 +22,31 @@ class ProfileForm(forms.ModelForm):
         Specify the django model and order of the fields
         """
         model = Profile
-        fields = ('bio', 'pic', 'social', 'email')
+        fields = ('bio', 'pic', 'website', 'email', 'facebook', 'twitter', 'instagram', 'youtube', 'spotify')
         widgets = {
             "bio": SummernoteWidget(attrs={"rows":"3", "class":"flex-fill form-control me-3", "type":"text", "name":"bio"}),
             "pic": FileInput(attrs={"class":"flex-fill form-control me-3"}),
-            "social": URLInput(attrs={"class":"flex-fill form-control me-3"}),
+            "website": URLInput(attrs={"class":"flex-fill form-control me-3"}),
             "email": EmailInput(attrs={"class":"flex-fill form-control me-3"}),
+            "facebook": URLInput(attrs={"class":"flex-fill form-control me-3"}),
+            "twitter": URLInput(attrs={"class":"flex-fill form-control me-3"}),
+            "instagram": URLInput(attrs={"class":"flex-fill form-control me-3"}),
+            "youtube": URLInput(attrs={"class":"flex-fill form-control me-3"}),
+            "spotify": URLInput(attrs={"class":"flex-fill form-control me-3"}),
+            
         }
         
         labels = {
             'bio': _('About me'),
             'pic': _('Profile pic'),
-            'social': _('Social link'),
+            'website': _('Website'),
             'email': _('Email address'),
+            'facebook': _('Facebook'),
+            'twitter': _('Twitter'),
+            'Instagram': _('Instagram'),
+            'youtube': _('Youtube'),
+            'spotify': _('Spotify'),
+            
         }
         
     def __init__(self, *args, **kwargs):
@@ -61,3 +75,21 @@ class ProfileForm(forms.ModelForm):
             instance.save()
 
         return instance
+    
+    def clean_pic(self):
+        file = self.cleaned_data.get('pic', False)
+        print(type(file))
+        if file and 'cloudinary' not in str(type(file)):
+            print('checking stuff')
+            # if not file.content_type in ["audio/mpeg"]:
+            #     print('checking type')                
+            #     raise ValidationError("Content type is not mpeg")
+            if file.size > 1*1024*1024:
+                print('checking size')
+                raise ValidationError("Image file too large ( > 1MB )")
+
+            return file
+        elif 'cloudinary' in str(type(file)):
+            return file
+        else:
+            raise ValidationError("Couldn't read uploaded file")

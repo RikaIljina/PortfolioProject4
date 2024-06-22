@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
 from django.db.models.functions import Lower
 from django.contrib.auth.models import User
 from taggit.models import Tag
@@ -18,8 +18,13 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
         instance.profile.save()
-        get_username_list()
-        
+        #get_username_list()
+
+# Delete profile pic when deleting users in bulk on the admin page
+@receiver(post_delete, sender=Profile)
+def delete_profile_pic(sender, instance, **kwargs):
+    print(cloudinary.uploader.destroy(instance.pic.public_id, invalidate=True))
+
 
     
 # @receiver(post_save, sender=User)

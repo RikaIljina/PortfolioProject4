@@ -16,7 +16,12 @@ class Profile(models.Model):
     # TODO: limit image size
     pic = CloudinaryField('image', default='placeholder')
     joined = models.DateTimeField(auto_now_add=True)
-    social = models.URLField(blank=True, null=True)
+    facebook = models.URLField(blank=True, null=True)
+    twitter = models.URLField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    youtube = models.URLField(blank=True, null=True)
+    spotify = models.URLField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
     def __str__(self) -> str:

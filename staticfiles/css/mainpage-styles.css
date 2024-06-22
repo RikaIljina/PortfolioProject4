@@ -16,6 +16,10 @@ h3 {
   flex-grow: 0;
 }
 
+.card-full-page {
+  min-width: 80%;
+}
+
 .inner-card {
   border: 1px solid black;
   border-radius: 0;

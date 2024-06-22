@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
-from dotenv import load_dotenv
 from pathlib import Path
 import cloudinary
+from dotenv import load_dotenv
+import dj_database_url
 
 if os.path.isfile('env.py'):
     import env
@@ -32,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '.localhost', '127.0.0.1',
+    '.localhost', '127.0.0.1', '.herokuapp.com',
 ]
 
 
@@ -72,6 +73,7 @@ ACCOUNT_ADAPTER = 'musiclab.adapter.UsernameMaxAdapter'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,18 +82,23 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-   # 'mainpage.middleware.InitializeUsernamesMiddleware',
+    # 'mainpage.middleware.InitializeUsernamesMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = {
+    "https://*.herokuapp.com",
+}
+
 # TODO: Check if this line is necessary
-#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 load_dotenv()
 config = cloudinary.config(secure=True)
-print("****1. Set up and configure the SDK:****\nCredentials: ", config.cloud_name, config.api_key, "\n")
+print("****1. Set up and configure the SDK:****\nCredentials: ",
+      config.cloud_name, config.api_key, "\n")
 
 TAGGIT_CASE_INSENSITIVE = True
 
-#SUMMERNOTE_THEME = 'lite'
+# SUMMERNOTE_THEME = 'lite'
 SUMMERNOTE_CONFIG = {
     'iframe': True,
     'summernote': {
@@ -100,7 +107,8 @@ SUMMERNOTE_CONFIG = {
         # https://summernote.org/deep-dive/#custom-toolbar-popover
         'toolbar': [
             ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear', 'strikethrough', 'superscript', 'subscript']],
+            ['font', ['bold', 'underline', 'clear',
+                      'strikethrough', 'superscript', 'subscript']],
             ['fontname', ['fontname']],
             ['fontsize', ['fontsize']],
             ['forecolor', ['forecolor']],
@@ -142,13 +150,16 @@ WSGI_APPLICATION = 'musiclab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -193,8 +204,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-#MEDIA_URL = 'media/'
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

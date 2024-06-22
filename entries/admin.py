@@ -181,7 +181,7 @@ class EntryAdmin(SummernoteModelAdmin):
             for id, file in obj.old_files.items():
                 result_old = cloudinary.uploader.destroy(
                     id, resource_type = "video", invalidate=True)
-                messages.info(result_old)
-            messages.info(result)
+                messages.info(request, result_old)
+            messages.info(request, result)
 
         super().delete_model(request, queryset)

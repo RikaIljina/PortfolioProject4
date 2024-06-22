@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django_summernote.admin import SummernoteModelAdmin
 import cloudinary
 
@@ -8,10 +8,9 @@ from .models import Profile
 @admin.register(Profile)
 class ProfileAdmin(SummernoteModelAdmin):
 
-    list_display = ('user', 'bio', 'pic', 'joined', 'social', 'email',)
+    list_display = ('user', 'bio', 'pic', 'website', 'email', 'facebook', 'twitter', 'instagram', 'youtube', 'spotify')
     search_fields = ['user__username', 'bio',]
     list_filter = ('user', 'joined')
-   # prepopulated_fields = {'slug': ('title', 'author')}
     summernote_fields = ('bio',)
 
     def save_model(self, request, obj, form, change):
@@ -23,7 +22,9 @@ class ProfileAdmin(SummernoteModelAdmin):
             old_pic = old_pic.public_id
             if old_pic != form.cleaned_data['pic']:
                 print('pic has changed')
-                print(cloudinary.uploader.destroy(old_pic, invalidate=True))
+                result = cloudinary.uploader.destroy(old_pic, invalidate=True)
+                messages.info(request, result)
+                
         super().save_model(request, obj, form, change)
 
     # def delete_model(self, request, obj):
@@ -32,7 +33,6 @@ class ProfileAdmin(SummernoteModelAdmin):
         
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            print(obj)
-            print(obj.pic)
-            print(cloudinary.uploader.destroy(obj.pic.public_id, invalidate=True))
+            result = cloudinary.uploader.destroy(obj.pic.public_id, invalidate=True)
+            messages.info(request, result)
         super().delete_model(request, queryset)
