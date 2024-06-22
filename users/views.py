@@ -186,7 +186,7 @@ def edit_profile(request, username):
         return HttpResponseRedirect(reverse('dashboard', args=[username]))
 
     profile_form = ProfileForm(instance=profile, initial={
-                               'bio': profile.bio, 'pic': profile.pic, 'social': profile.social, 'email': profile.email})
+                               'bio': profile.bio, 'pic': profile.pic, 'website': profile.website, 'email': profile.email})
 
     context = {'profile': profile,
                'profile_form': profile_form,
