@@ -1,79 +1,76 @@
 {% load static %}
+{% load humanize %}
 
-<!-- https://mdbootstrap.com/docs/standard/extended/profiles/ -->
+<!-- Adapted from https://mdbootstrap.com/docs/standard/extended/profiles/ -->
 
-{% comment %} <div class="container py-5"> {% endcomment %}
-    <div class="row d-flex justify-content-center w-100">
-        <div class="col col-lg-6 mb-4 mb-lg-0 w-100">
-            <div class="card mb-3" style="border-radius: .5rem;">
-                <div class="row g-0">
-                    <div class="col-md-4 gradient-custom text-center text-white"
-                        style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                        {% if "placeholder" in profile.pic.url %}
-                        <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar"
-                            class="img-fluid my-5 rounded-circle" style="width: 120px;">
-                        {% else %}
-                        <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid my-5 rounded-circle"
-                            style="width: 120px;" >
-                        {% endif %}
-                        <h3>{{ profile.user.username }}</h3>
-                        <p>Joined {{ profile.joined|date:'Y, M d' }}</p>
-                        {% if user.is_authenticated and profile == user.profile %}
-                        <a href="{% url 'edit_profile' user.username %}"><i class="far fa-edit mb-5"></i></a>
-                        {% endif %}
+<div class="row d-flex justify-content-center w-100 profile-bg">
+    <div class="col col-md-10 mb-4 mt-2 mb-lg-0">
+        <div class="card profile-card mb-3">
+            <div class="row g-0 justify-content-center pt-md-2">
+                <div class="col-lg-3 text-center">
+
+                    {% if "placeholder" in profile.pic.url %}
+                    <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar"
+                        class="img-fluid my-2 rounded-circle avatar-lg">
+                    {% else %}
+                    <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid my-2 rounded-circle avatar-lg">
+                    {% endif %}
+
+                    <h3>{{ profile.user.username }}</h3>
+                    <p>Joined {{ profile.joined|naturalday }}</p>
+
+                    {% if user.is_authenticated and profile == user.profile %}
+                    <a href="{% url 'edit_profile' user.username %}"><i class="far fa-edit mb-1"></i></a>
+                    {% endif %}
+                </div>
+                <div class="col-lg-5 col-xl-6">
+                    <div class="pt-1 px-4">
+                        <h6>About me</h6>
+                        <hr class="mt-0 mb-2">
+                        <div class="row pt-1">
+                            <div class="col-12 mb-3">
+                                {% if profile.bio %}
+                                <p class="text-muted">{{ profile.bio|safe }}</p>
+                                {% else %}
+                                <p class="text-muted"> --- </p>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-8">
-                        <div class="card-body p-4">
-                            <h6>Contact Me</h6>
-                            <hr class="mt-0 mb-4">
-                            <div class="row pt-1">
-                                <div class="col-6 mb-3">
-                                    <h6>Email</h6>
-                                    <a href="mailto:{{ profile.email }}"><i class="fa fa-envelope fa-lg"></i></a>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <h6>My Website</h6>
-                                    <div class="d-flex justify-content-start">
-                                        <a href="{{ profile.website }}" target="_blank"><i
-                                                class="fab fa-facebook-f fa-lg me-3"></i></a>
-                                        <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>
-                                        <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <h6>My Entries</h6>
-                            <hr class="mt-0 mb-4">
-                            <div class="row pt-1">
-                                <div class="col-6 mb-3">
-                                    <h6>Recent</h6>
-                                    {% if most_recent %}
-                                    <a href="{% url 'entry_details' most_recent.slug %}">
-                                        <p class="text-muted">{{ most_recent.title }}</p>
-                                        {% else %}
-                                        <p class="text-muted"> --- </p>
-                                        {% endif %}
-                                    </a>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <h6>Most Liked</h6>
-                                    {% if most_liked %}
-                                    <a href="{% url 'entry_details' most_liked.slug %}">
-                                        <p class="text-muted">{{ most_liked.title }}</p>
-                                        {% else %}
-                                        <p class="text-muted"> --- </p>
-                                        {% endif %}
+                </div>
+                <div class="col-lg-4 col-xl-3">
+                    <div class="pt-1 px-4">
+                        <h6>Contact Me</h6>
+                        <hr class="mt-0 mb-2">
+                        <div class="row pt-1">
+
+                            <div class="col-3 col-md-4 col-lg-6 mb-2">
+                                <h6 class="text-center text-lg-start">Email</h6>
+                                <div class="d-flex justify-content-center justify-content-lg-start">
+                                    <a href="mailto:{{ profile.email }}">
+                                        <i class="fa fa-envelope fa-lg"></i>
                                     </a>
                                 </div>
                             </div>
-                            <h6>My Bio</h6>
-                            <hr class="mt-0 mb-4">
-                            <div class="row pt-1">
-                                <div class="col-12 mb-3">
-                                    {% if profile.bio %}
-                                    <p class="text-muted">{{ profile.bio|safe }}</p>
-                                    {% else %}
-                                    <p class="text-muted"> --- </p>
-                                    {% endif %}
+                            <div class="col-3 col-md-4 col-lg-6 mb-2">
+                                <h6 class="text-center text-lg-start">Website</h6>
+                                <div class="d-flex justify-content-center justify-content-lg-start">
+                                    <a href="{{ profile.website }}"><i class="fa-solid fa-globe"></i></a>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                            <div class="col-6 col-md-4 col-lg-12 mb-2">
+                                <h6 class="text-center text-lg-start">Social links</h6>
+                                <div class="d-flex justify-content-center justify-content-lg-start">
+                                    <a href="{{ profile.facebook }}" target="_blank"><i
+                                            class="fab fa-facebook-f fa-lg me-3"></i></a>
+                                    <a href="{{ profile.twitter }}"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                                    <a href="{{ profile.instagram }}"><i class="fab fa-instagram fa-lg me-3"></i></a>
+                                    <a href="{{ profile.youtube }}"><i class="fab fa-youtube fa-lg me-3"></i></a>
+                                    <a href="{{ profile.spotify }}"><i class="fab fa-spotify fa-lg me-3"></i></a>
+
                                 </div>
                             </div>
 
@@ -83,4 +80,4 @@
             </div>
         </div>
     </div>
-{% comment %} </div> {% endcomment %}
+</div>

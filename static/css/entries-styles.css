@@ -64,6 +64,8 @@ h3 {
   color: rgb(39, 36, 36);
 }
 
+
+
 .card-header,
 .card-footer {
   background-color: rgb(243, 243, 228);
@@ -88,6 +90,10 @@ h3 {
 .tag {
   padding: 1px;
   border: 1px solid black;
+}
+
+.publicity-icon {
+  font-size: 0.9rem;
 }
 
 /* ---------- Comment section styles ----------- */
@@ -117,22 +123,36 @@ h3 {
 
 .btn-edit,
 .btn-delete {
-    font-size: 0.8rem;
-    border-radius: 0;
-    min-width: 3rem;
+  font-size: 0.8rem;
+  border-radius: 0;
+  min-width: 3rem;
+}
+
+.btn-general {
+  border: 1px solid #000000;
+  border-radius: 0;
 }
 
 .btn-edit {
-    border: 1px solid #75ed6f;
+  border: 1px solid #75ed6f;
 }
 
 .btn-delete {
-    border: 1px solid #e6646e;
+  border: 1px solid #e6646e;
 }
 
 .form-control {
-    border: 1px solid gray;
-    border-radius: 0;
+  border: 1px solid gray;
+  border-radius: 0;
+}
+
+.entry-button-container {
+  margin: 1rem 0 2rem 0;
+  padding: 0;
+}
+
+.entry-button-container .btn {
+  font-size: 1.5rem;
 }
 
 /* ---------- Media queries ----------- */

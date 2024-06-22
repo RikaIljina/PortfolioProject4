@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-
+<div class="row sidebar-margin">
 <div class="col-md-8 col-sm-12 mx-auto card-container">
     <h3 class="m-3">Your comments</h3>
 
@@ -20,10 +20,10 @@
         <div class="ms-1">
             {% if "placeholder" in entry.author.profile.pic.url %}
             <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
-                class="rounded-circle me-1">
+                class="rounded-circle me-1 avatar-sm">
             {% else %}
             <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30" height="30"
-                class="rounded-circle me-1">
+                class="rounded-circle me-1 avatar-sm">
             {% endif %}
             <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}:</a>
         </div>
@@ -136,6 +136,7 @@
         <p>You have no favorites yet.</p>
     </div>
     {% endfor %}
+</div>
 </div>
 
 

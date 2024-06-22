@@ -36,9 +36,9 @@ def user_profile(request, username):
         entries = get_published_entries(
             request, user.all_entries, get_comments=False)
     # print(entries[0].likes_received)
-        most_liked = Entry.objects.filter(publish=1).annotate(
+        most_liked = entries.filter(publish=1).annotate(
             likes_received=Count('all_likes')).order_by('-likes_received').first()
-        most_recent = Entry.objects.filter(
+        most_recent = entries.filter(
             publish=1).order_by('-created_on').first()
         entries, sorted_param = sort_by(request, entries)
 
@@ -48,8 +48,8 @@ def user_profile(request, username):
         
         #users = get_users_from_file()
         
-        #tags = get_all_tags()
-        tags = get_tags_from_file()
+        tags = get_all_tags()
+        #tags = get_tags_from_file()
 
         context = {'profile': profile,
                    # 'entries': entries,

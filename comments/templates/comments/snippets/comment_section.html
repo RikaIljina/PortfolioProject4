@@ -19,10 +19,10 @@
                     <div class="d-flex flex-row add-comment-section justify-content-center mt-4 mb-4">
                         <div class="d-flex flex-column">
                             {% if "placeholder" in user.profile.pic.url %}
-                            <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
+                            <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4 avatar-md"
                                 src="{% static 'images/default_profile.jpg' %}" width="38">
                             {% else %}
-                            <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4"
+                            <img class="img-fluid img-responsive rounded-circle me-2 mt-4 mb-4 avatar-md"
                                 src="{{ user.profile.pic.url }}" width="38">
                             {% endif %}
                         </div>
@@ -47,10 +47,10 @@
                         <hr>
                         <div class="d-flex flex-row align-items-center commented-user">
                             {% if "placeholder" in comment.author.profile.pic.url %}
-                            <img class="img-fluid img-responsive rounded-circle me-2"
+                            <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
                                 src="{% static 'images/default_profile.jpg' %}" width="30">
                             {% else %}
-                            <img class="img-fluid img-responsive rounded-circle me-2"
+                            <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
                                 src="{{ comment.author.profile.pic.url }}" width="30">
                             {% endif %}
                             <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1">
@@ -83,7 +83,7 @@
                         <div>
                             <button type="button" class="btn btn-edit hover-highlight" data-comment_id="{{ comment.id }}"><i class="fa-solid fa-pen"></i></button>
                             <button type="button" class="btn btn-delete hover-highlight" data-comment_id="{{ comment.id }}"
-                                data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fa-solid fa-trash"></i></button>
+                                data-bs-toggle="modal" data-bs-target="#modalDeleteComment"><i class="fa-solid fa-trash"></i></button>
                             <!--  -->
 
                         </div>
@@ -100,7 +100,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+<div class="modal fade" id="modalDeleteComment" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

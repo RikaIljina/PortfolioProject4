@@ -91,10 +91,10 @@
                     data-bs-toggle="dropdown" aria-expanded="false">
                     {% if "placeholder" in user.profile.pic.url %}
                     <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
-                        height="30" class="rounded-circle">
+                        height="30" class="rounded-circle avatar-sm">
                     {% else %}
                     <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
-                        class="rounded-circle">
+                        class="rounded-circle avatar-sm">
                     {% endif %}
                     <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
                 </a>
@@ -141,14 +141,22 @@
                             <ul class="navbar-nav mb-sm-auto mb-0 align-content-start align-content-md-start" id="menu">
 
                                 {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
-
                                 <li class="nav-item hover-highlight">
-                                    <a href="{% url 'dashboard' user.username %}" class="nav-link mx-md-2 px-3 align-middle">
+                                    <a href="{% url 'home' %}"
+                                        class="nav-link mx-md-2 px-3 align-middle">
+                                        <i class="fa-solid fa-house"></i>
+                                        <span class="ms-1 d-none d-md-inline filter-title">Back Home</span></a>
+                                </li>
+                                <hr>
+                                <li class="nav-item hover-highlight">
+                                    <a href="{% url 'dashboard' user.username %}"
+                                        class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-folder-open"></i>
                                         <span class="ms-1 d-none d-md-inline filter-title">Dashboard</span></a>
                                 </li>
                                 <li class="nav-item hover-highlight">
-                                    <a href="{% url 'new_entry' user.username %}" class="nav-link mx-md-2 px-3 align-middle">
+                                    <a href="{% url 'new_entry' user.username %}"
+                                        class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-square-plus"></i>
                                         <span class="ms-1 d-none d-md-inline filter-title">New Entry</span></a>
                                 </li>
@@ -170,9 +178,10 @@
 
                                 {% if request.user.is_authenticated %}
                                 <li class="nav-item hover-highlight">
-                                    <a href="{% url 'dashboard' user.username %}" class="nav-link mx-md-2 px-3 align-middle">
+                                    <a href="{% url 'dashboard' user.username %}"
+                                        class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Dashboard</span></a>
+                                        <span class="ms-1 d-none d-md-inline filter-title">To Dashboard</span></a>
                                 </li>
                                 <hr>
                                 {% endif %}
@@ -186,7 +195,8 @@
 
                                 <hr>
 
-                                <li class="nav-item hover-highlight {% if request.path|slice:':5' == '/song' %}disabled{% endif %}">
+                                <li
+                                    class="nav-item hover-highlight {% if request.path|slice:':5' == '/song' %}disabled{% endif %}">
                                     <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if request.path|slice:':5' == '/song' %}disabled{% endif %}"
                                         {% if not request.path|slice:':5' == '/song' %}
                                         href="{{ request.path }}?sorted=by_likes" {% endif%}>
@@ -195,7 +205,8 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-item hover-highlight {% if request.path|slice:':5' == '/song' %}disabled{% endif %}">
+                                <li
+                                    class="nav-item hover-highlight {% if request.path|slice:':5' == '/song' %}disabled{% endif %}">
                                     <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if request.path|slice:':5' == '/song' %}disabled{% endif %}"
                                         {% if not request.path|slice:':5' == '/song' %}
                                         href="{{ request.path }}?sorted=by_date" {% endif%}>
@@ -221,10 +232,10 @@
                                                 {% if "placeholder" in pic %}
                                                 <img src="{% static 'images/default_profile.jpg' %}"
                                                     alt="user profile picture" width="30" height="30"
-                                                    class="rounded-circle">
+                                                    class="rounded-circle avatar-sm">
                                                 {% else %}
                                                 <img src="{{ pic }}" alt="user profile picture" width="30" height="30"
-                                                    class="rounded-circle">
+                                                    class="rounded-circle avatar-sm">
                                                 {% endif %}
                                                 <span class="ms-1 d-inline">{{ user }}</span>
 

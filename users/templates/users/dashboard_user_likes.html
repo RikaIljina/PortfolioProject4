@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-
+<div class="row sidebar-margin">
 {% for like in page_obj %}
 {% with like.entry as entry %}
 <div class="card">
@@ -44,6 +44,7 @@
     <p>You have no favorites yet.</p>
 </div>
 {% endfor %}
+</div>
 
 {% include 'pagination.html' %}
 

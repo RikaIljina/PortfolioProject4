@@ -1,11 +1,31 @@
-.gradient-custom {
-    /* fallback for old browsers */
+/* .gradient-custom {
     background: #f6d365;
     
-    /* Chrome 10-25, Safari 5.1-6 */
     background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
     
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
     }
+ */
 
+ .profile-bg {
+    background-color: rgb(46, 46, 46);
+ }
+
+ .profile-card {
+    background-color: transparent;
+    /* border: 1px solid black; */
+    border: none;
+    border-radius: 0;
+    color:antiquewhite;
+ }
+
+ .profile-card a {
+text-decoration: none;
+color: antiquewhite;
+}
+
+ .avatar-lg {
+    object-fit: cover;
+    width: 120px;
+    height: 120px;
+ }

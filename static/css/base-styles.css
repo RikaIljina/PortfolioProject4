@@ -150,7 +150,6 @@ a:focus-visible {
   border: none;
   border-radius: 0;
   box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 5px !important;
-
 }
 
 .dropdown-divider {
@@ -167,7 +166,6 @@ a:focus-visible {
   box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
   min-width: 4rem;
   z-index: 99;
-
 }
 
 .sidebar-toggle-div {
@@ -223,7 +221,6 @@ a:focus-visible {
   transition: all 0.3s;
 }
 
-
 .disabled:hover,
 .disabled:focus,
 .disabled:active {
@@ -237,7 +234,6 @@ a:focus-visible {
   text-align: center;
   margin: -8px;
   transition: all 0.3s;
-
 }
 
 .filter-name:hover .tag-amount {
@@ -255,13 +251,11 @@ a:focus-visible {
   transition: all 0.3s;
 }
 
-
 .tag-name {
   border: 1px solid black;
   padding: 0.5rem;
   margin-bottom: auto;
 }
-
 
 /* ----------- Input field styles ------------ */
 
@@ -270,10 +264,33 @@ input[type] {
   width: 100%;
 }
 
+/* ----------- General styles ------------ */
+
+.clickable {
+  cursor: pointer;
+}
+
+audio {
+  border: 1px solid black;
+  border-radius: 25px;
+}
+
+.avatar-sm {
+  object-fit: cover;
+  width: 30px;
+  height: 30px;
+}
+
+.avatar-md {
+  object-fit: cover;
+  width: 38px;
+  height: 38px;
+}
+
 /* ----------- Like button styles ------------ */
 
-.like-btn:focus,
-.like-btn:active {
+.btn-like:focus,
+.btn-like:active {
   outline: none !important;
   box-shadow: none;
 }
@@ -282,6 +299,24 @@ input[type] {
   cursor: pointer;
   text-decoration: none;
   color: black;
+}
+.fa-heart,
+.fa-comment {
+  transition: all 0.3s;
+  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+}
+
+.hover-scale:hover,
+.hover-scale:focus {
+  transform: scale(1.3);
+  transition: all 0.3s;
 }
 
 .like-red {
