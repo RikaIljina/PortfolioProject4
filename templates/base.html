@@ -50,7 +50,7 @@
 
             <div class="flex-fill"></div>
 
-            <button class="d-inline d-md-none btn-lg nav-btn hvr-grow-rotate order-2" id="toggler-btn" type="button"
+            <button class="d-inline d-md-none nav-btn order-2" id="toggler-btn" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon navbar-icon ">
@@ -62,22 +62,22 @@
             <div class="collapse navbar-collapse flex-grow-0 mt-2 mt-md-0 me-md-3 order-3" id="navbarContent">
                 <!-- d-none to make sure the wrong styles aren't shown while the uncollapse action 
                  triggers the css with the correct link styles -->
-                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate ">
+                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == home_url %}active" aria-current="page{% endif %}"
                         href="{% url 'home' %}">Home</a>
                 </div>
-                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate">
+                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == about_url %} active" aria-current="page{% endif %}"
                         href="{% url 'home' %}">About</a>
                 </div>
 
                 {% if not user.is_authenticated %}
 
-                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0 hvr-grow-rotate">
+                <div class="nav-link-box d-none d-md-inline mx-auto me-md-2 mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == login_url %} active" aria-current="page{% endif %}"
                         href="{% url 'account_login' %}">Sign in</a>
                 </div>
-                <div class="nav-link-box d-none d-md-inline mx-auto mb-2 mb-md-0 hvr-grow-rotate">
+                <div class="nav-link-box d-none d-md-inline mx-auto mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == signup_url %} active"
                         aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
                 </div>
@@ -123,15 +123,15 @@
                 <!-- Sidebar adapted from https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb -->
                 <!-- Sidebar column -->
                 <div class="col-auto sidebar ms-0 me-2 px-sm-0 px-0 
-                    {% if request.path == login_url or request.path == signup_url %}visually-hidden{% endif %}"
+                    {% if request.path == login_url or request.path == signup_url %}visually-hidden" aria-hidden="true{% endif %}"
                     id="sidebar" role="navigation">
 
                     <!-- Toggle button to expand/collapse sidebar -->
                     <div class="row g-0 sidebar-toggle-div pos-relative">
                         <button class="btn sidebar-toggle-btn" id="sidebar-toggle-btn" href="#">
-                            <span class="toggle-icon-collapse d-none d-md-inline" id="toggle-icon-collapse"><i
+                            <span class="toggle-icon-collapse d-none" id="toggle-icon-collapse"><i
                                     class="fa-solid fa-angles-left"></i></span>
-                            <span class="toggle-icon-expand d-inline d-md-none" id="toggle-icon-expand"><i
+                            <span class="toggle-icon-expand d-inline" id="toggle-icon-expand"><i
                                     class="fa-solid fa-angles-right"></i></span>
                         </button>
                     </div>
@@ -145,33 +145,33 @@
                                     <a href="{% url 'home' %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-house"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Back Home</span></a>
+                                        <span class="ms-1 d-none filter-title">Back Home</span></a>
                                 </li>
                                 <hr>
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'dashboard' user.username %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Dashboard</span></a>
+                                        <span class="ms-1 d-none filter-title">Dashboard</span></a>
                                 </li>
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'new_entry' user.username %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-square-plus"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">New Entry</span></a>
+                                        <span class="ms-1 d-none filter-title">New Entry</span></a>
                                 </li>
                                 <hr>
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'user_favorites' user.username %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-heart"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">My Favorites</span></a>
+                                        <span class="ms-1 d-none filter-title">My Favorites</span></a>
                                 </li>
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'user_comments' user.username %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-comment"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">My Comments</span></a>
+                                        <span class="ms-1 d-none filter-title">My Comments</span></a>
                                 </li>
 
                                 {% else %}
@@ -181,7 +181,7 @@
                                     <a href="{% url 'dashboard' user.username %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-folder-open"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">To Dashboard</span></a>
+                                        <span class="ms-1 d-none filter-title">To Dashboard</span></a>
                                 </li>
                                 <hr>
                                 {% endif %}
@@ -189,7 +189,7 @@
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-xmark"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Reset all</span>
+                                        <span class="ms-1 d-none filter-title">Reset all</span>
                                     </a>
                                 </li>
 
@@ -201,7 +201,7 @@
                                         {% if not request.path|slice:':5' == '/song' %}
                                         href="{{ request.path }}?sorted=by_likes" {% endif%}>
                                         <i class="fa-solid fa-heart"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Sort by likes</span>
+                                        <span class="ms-1 d-none filter-title">Sort by likes</span>
                                     </a>
                                 </li>
 
@@ -211,7 +211,7 @@
                                         {% if not request.path|slice:':5' == '/song' %}
                                         href="{{ request.path }}?sorted=by_date" {% endif%}>
                                         <i class="fa-solid fa-clock"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Sort by recent</span>
+                                        <span class="ms-1 d-none filter-title">Sort by recent</span>
                                     </a>
                                 </li>
 
@@ -221,7 +221,7 @@
                                     <a href="#submenu2" data-bs-toggle="collapse"
                                         class="nav-link hover-highlight align-middle filter-link" aria-expanded="false">
                                         <i class="fa-solid fa-user ms-md-2 ps-3"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Filter by user</span>
+                                        <span class="ms-1 d-none filter-title">Filter by user</span>
                                     </a>
                                     <ul class="collapse navbar-nav ms-1 filter-cat {% if request.path|slice:':9' == '/filter/u' %}force-show{% endif %}"
                                         id="submenu2" data-bs-parent="#menu">
@@ -248,7 +248,7 @@
                                     <a href="#submenu3" data-bs-toggle="collapse"
                                         class="nav-link hover-highlight align-middle filter-link" aria-expanded="false">
                                         <i class="fa-solid fa-tag ms-md-2 ps-3"></i>
-                                        <span class="ms-1 d-none d-md-inline filter-title">Filter by tag</span>
+                                        <span class="ms-1 d-none filter-title">Filter by tag</span>
                                     </a>
                                     <ul class="collapse navbar-nav ms-1 filter-cat {% if request.path|slice:':9' == '/filter/t' %}force-show{% endif %}"
                                         id="submenu3" data-bs-parent="#menu">

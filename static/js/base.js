@@ -1,8 +1,3 @@
-
-var sidebarCollapsed = false;
-
-
-
 // Prevent filter items from collapsing once opened (on large screens)
 window.addEventListener("DOMContentLoaded", function () {
   var sideBar = document.getElementById("sidebar");
@@ -11,11 +6,19 @@ window.addEventListener("DOMContentLoaded", function () {
   var filterTitles = document.getElementsByClassName("filter-title");
   var filterCategories = document.getElementsByClassName("filter-cat");
 
+  if (sideBarState === "absolute") {
+    var sidebarCollapsed = true;
+  } else {
+    var sidebarCollapsed = false;
+  }
+
+
   //   alert(filterCategories);
   for (let filterCat of filterCategories) {
     if (
       sideBarState != "absolute" &&
-      filterCat.classList.contains("force-show") && !sidebarCollapsed
+      filterCat.classList.contains("force-show") &&
+      !sidebarCollapsed
     ) {
       filterCat.classList.add("show");
     } else if (sidebarCollapsed) {
@@ -52,24 +55,19 @@ window.addEventListener("DOMContentLoaded", function () {
         //   title.classList.toggle("d-md-inline");
         // }
       } else {
-        if (sidebarCollapsed && filterTitles[0].classList.contains("d-none")) {
+        if (!sidebarCollapsed && filterTitles[0].classList.contains("d-none")) {
           for (title of filterTitles) {
             title.classList.remove("d-none");
             title.classList.add("d-inline");
-            title.classList.remove("d-md-none");
-            title.classList.add("d-md-inline");
           }
-        } else if (sidebarCollapsed) {
+        } else if (!sidebarCollapsed) {
           for (title of filterTitles) {
             title.classList.add("d-none");
             title.classList.remove("d-inline");
-            title.classList.add("d-md-none");
-            title.classList.remove("d-md-inline");
             for (cat of filterCategories) {
               cat.classList.remove("show");
             }
           }
-
         }
       }
     });
@@ -92,22 +90,20 @@ document
     // Toggle the expand/collapse button icon
     for (let element of this.children) {
       element.classList.toggle("d-none");
-      element.classList.toggle("d-md-none");
       element.classList.toggle("d-inline");
-      element.classList.toggle("d-md-inline");
     }
 
     if (
       document.querySelector("#toggle-icon-expand").classList.contains("d-none") // || d-md-inline
     ) {
-      sidebarCollapsed = true;
-    } else {
       sidebarCollapsed = false;
+    } else {
+      sidebarCollapsed = true;
     }
 
     var filterCategories = document.getElementsByClassName("filter-cat");
     for (cat of filterCategories) {
-       cat.classList.remove("show");
+      cat.classList.remove("show");
     }
 
     var filterTitles = document.getElementsByClassName("filter-title");
@@ -115,13 +111,9 @@ document
       if (!sidebarCollapsed) {
         title.classList.remove("d-none");
         title.classList.add("d-inline");
-        title.classList.remove("d-md-none");
-        title.classList.add("d-md-inline");
       } else {
         title.classList.add("d-none");
         title.classList.remove("d-inline");
-        title.classList.add("d-md-none");
-        title.classList.remove("d-md-inline");
       }
     }
 
@@ -130,6 +122,16 @@ document
       this.blur();
     }, 100);
   });
+
+
+  // window.addEventListener("resize", () => {
+  //   if (sidebarCollapsed === true) {
+  //     document.querySelector("#toggle-icon-expand").classList.remove("d-none");
+  //     document.querySelector("#toggle-icon-expand").classList.add("d-md-inline");
+  //     document.querySelector("#toggle-icon-collapse").classList.add("d-none");
+  //     document.querySelector("#toggle-icon-collapse").classList.remove("d-md-inline");
+  //   }
+  // });
 
 
 // Hide filter on small devices when sidebar is overlaying content
@@ -158,4 +160,3 @@ for (var activeTooltip of activeTooltips) {
   var tooltip = new bootstrap.Tooltip(activeTooltip, (placement = "top"));
   tooltip.show();
 }
-

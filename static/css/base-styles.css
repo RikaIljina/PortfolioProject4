@@ -82,12 +82,11 @@ a {
   transition-property: transform;
 }
 
-.toggler-btn {
+#toggler-btn {
   padding: 0.25rem;
   margin-right: 0.5rem;
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: 0.25rem;
   width: 60px !important;
   height: 55px !important;
 
@@ -336,7 +335,7 @@ audio {
   .logo-image {
     margin: 0;
     padding: 0 !important;
-    max-width: 230px;
+    max-width: 200px;
   }
 
   .sidebar {
@@ -355,7 +354,7 @@ audio {
   .logo-image {
     margin: 0;
     padding: 0 !important;
-    max-width: 200px;
+    max-width: 150px;
   }
 
   .sidebar {
