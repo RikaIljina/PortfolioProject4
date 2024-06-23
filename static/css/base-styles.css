@@ -83,12 +83,12 @@ a {
 }
 
 #toggler-btn {
-  padding: 0.25rem;
-  margin-right: 0.5rem;
+  padding: 0.1rem;
+  margin-right: 0.2rem;
   background-color: transparent;
   border: 1px solid transparent;
-  width: 60px !important;
-  height: 55px !important;
+  width: 50px !important;
+  height: 45px !important;
 
   /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
   outline: 1px solid transparent;
@@ -99,6 +99,7 @@ a {
   perspective: 1000;
   -webkit-perspective: 1000;
 }
+
 
 .navbar-icon {
   width: 50px !important;
@@ -129,7 +130,7 @@ a:focus-visible {
 }
 
 .logo-image {
-  max-width: 330px;
+  max-width: 250px;
 }
 
 /* Navbar collapsed content styles */
@@ -211,6 +212,10 @@ a:focus-visible {
   background-clip: text;
 }
 
+#menu {
+  width: 100%;
+}
+
 /* ------ Sidebar item styles ------------- */
 
 .hover-highlight:hover,
@@ -233,6 +238,10 @@ a:focus-visible {
   text-align: center;
   margin: -8px;
   transition: all 0.3s;
+}
+
+.filter-name {
+  width: max-content;
 }
 
 .filter-name:hover .tag-amount {
@@ -272,6 +281,7 @@ input[type] {
 audio {
   border: 1px solid black;
   border-radius: 25px;
+  max-width: 100%;
 }
 
 .avatar-sm {
@@ -348,7 +358,14 @@ audio {
   .sidebar-margin {
     margin-left: 5rem !important;
   }
+
+  .dropdown-menu[data-bs-popper] {
+    left: -3rem !important;
+  }
+
+  
 }
+
 
 @media screen and (max-width: 576px) {
   .logo-image {

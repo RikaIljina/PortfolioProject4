@@ -32,7 +32,7 @@ h3 {
 }
 
 .card-full-page {
-  min-width: 90%;
+  flex-grow: 1;
 }
 
 .inner-card,
@@ -40,6 +40,13 @@ h3 {
   border: 1px solid black;
   border-radius: 0;
   min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.card-comments {
+  border: 1px solid black;
+  border-radius: 0;
   font-weight: 400;
   word-break: break-word;
 }
