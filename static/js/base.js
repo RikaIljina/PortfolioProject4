@@ -1,12 +1,13 @@
 var sidebarCollapsed = true;
 var sidebarAutoCollapse = false;
-var sideBar = document.getElementById("sidebar");
+const sideBar = document.getElementById("sidebar");
 var sideBarState = getComputedStyle(sideBar).position;
 
 // Prevent filter items from collapsing once opened (on large screens)
 window.addEventListener("DOMContentLoaded", function () {
   var filterLinks = document.getElementsByClassName("filter-link");
   var filterCategories = document.getElementsByClassName("filter-cat");
+  const sideBar = document.getElementById("sidebar");
   var sideBarState = getComputedStyle(sideBar).position;
 
   // Check whether the user is on a mobile device

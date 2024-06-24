@@ -87,7 +87,7 @@
                             Your browser does not support the audio tag.
                         </audio>
                         <button type="button" class="btn btn-danger btn-delete" data-file_id="{{ key }}"
-                            data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button>
+                            data-bs-toggle="modal" data-bs-target="#modalDeleteOldFile">Delete</button>
                         {% empty %}
                         <p>No files yet</p>
                         {% endfor %}
@@ -122,6 +122,14 @@
                         <p></p>
                     </div>
                     <div class="col-8">
+                        <p>Please do <b>not</b> close the page after clicking the "Save" button. Wait for the file upload to finish. </button>
+                    </div>
+                </div>
+                <div class="d-flex flex-row my-3">
+                    <div class="col-4">
+                        <p></p>
+                    </div>
+                    <div class="col-8">
                         <button id="submitButton" name="submit" type="submit" class="btn btn-success"
                             id="btn-save-entry">Save</button>
                     </div>
@@ -134,8 +142,10 @@
 
 
 
+   
     <!-- Modal -->
-    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+    {% with "Are you sure you want to delete your old file? This action cannot be undone!" as modal_text %}
+    <div class="modal fade" id="modalDeleteOldFile" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -146,19 +156,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="container-fluid">Are you sure you want to delete your comment? This action cannot be
-                        undone!
+                    <div class="container-fluid">{{ modal_text }}
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         No, cancel
                     </button>
-                    <a id="deleteConfirm" href="{{ request.path }}" class="btn btn-danger" role="button">Yes, delete</a>
+                    <a id="deleteFileConfirm" href="{{ request.path }}" class="btn btn-danger" role="button">Yes, delete</a>
                 </div>
             </div>
         </div>
     </div>
+    {% endwith %}
 
 
     {% if not entry_form.errors %}

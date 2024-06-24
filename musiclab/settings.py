@@ -120,7 +120,7 @@ SUMMERNOTE_CONFIG = {
         ],
         'lang': 'en-US',
         'fontNames': ["Arial", "Arial Black", "Comic Sans MS", "Courier New"],
-        'width': '500px',
+        'width': '100%',
         'disable_attachment': True,
         'disableDragAndDrop': True,
     }

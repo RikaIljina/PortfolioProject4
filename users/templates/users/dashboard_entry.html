@@ -9,21 +9,23 @@
 {% block content %}
 <div class="row g-0 h-100 sidebar-margin">
     <div class="m-auto col-12 col-md-10">
-   
+
         <!-- <div class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start "> -->
         <div class="row g-0 justify-content-center">
-            <div class="card-outer card-full-page mt-1 mt-md-2 mb-md-2 p-1">
+            <div class="card-full-page mt-1 mt-md-2 mb-md-2 p-1">
 
                 <div class="entry-button-container">
-                    <a href="{% url 'edit_entry' user.username entry.slug %}" class="btn btn-edit btn-large hover-highlight"
-                        role="button"><i class="fa-solid fa-pen"></i><span class="ms-2">Edit Entry</span></a>
-    
+                    <a href="{% url 'edit_entry' user.username entry.slug %}"
+                        class="btn btn-edit btn-large hover-highlight" role="button"><i
+                            class="fa-solid fa-pen"></i><span class="ms-2">Edit Entry</span></a>
+
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-delete btn-large hover-highlight" data-bs-toggle="modal"
-                        data-bs-target="#modalDeleteEntry"><i class="fa-solid fa-trash"></i><span class="ms-2">Delete Entry</span></button>
+                        data-bs-target="#modalDeleteEntry"><i class="fa-solid fa-trash"></i><span class="ms-2">Delete
+                            Entry</span></button>
                 </div>
 
-                <div class="card inner-card no-shadow ">
+                <div class="card no-shadow ">
                     <div class="card-header p-2 p-md-3">
                         <p>
                         <h3 class="larger-title">
@@ -104,12 +106,13 @@
                     <button type="button" class="btn btn-general" data-bs-dismiss="modal">
                         No, abort
                     </button>
-                    <a id="deleteConfirm" href="{% url 'delete_entry' user.username entry.slug %}"
+                    <a id="deleteEntryConfirm" href="{% url 'delete_entry' user.username entry.slug %}"
                         class="btn btn-delete" role="button">Yes, delete</a>
                 </div>
             </div>
         </div>
     </div>
+
 
 </div>
 
