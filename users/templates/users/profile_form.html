@@ -2,54 +2,151 @@
 {% load static %}
 
 {% block styles %}
- <!-- include summernote css/js
- <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet" />
- <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script> -->
 <link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
+
 {% endblock %}
 
 
 {% block content %}
 
-<section style="background-color: #f4f5f7;" class="sidebar-margin">
-    <div class="d-flex flex-column justify-content-center">
-        <h1 class="align-self-center">{{ profile.user.username }}</h1>
+<div class="row g-0 sidebar-margin m-auto h-100">
 
-        <div class="d-flex justify-content-center">
+    <h2 class="mt-2 mt-md-4 text-center">
+        Profile of <b>{{ profile.user.username }}</b>
+    </h2>
 
-            <div class="col-8 d-flex flex-column p-4">
-                <form method="POST" action="" id="profileForm" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <!-- {{ profile_form.media }} -->
-                    {% for form in profile_form %}
-                    <div class="d-flex flex-row my-3">
-                        <div class="col-4">{{ form.label_tag }}</div>
-                        <div class="col-8 d-flex flex-row">
-                            {% if form.field.widget.input_type == 'file' %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-xl-6 d-flex flex-column p-4">
+
+            <form method="POST" action="" id="profileForm" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.bio.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.bio.errors %}{{ profile_form.bio.errors.0|escape}}{% endif %}">
+                                {{ profile_form.bio }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.pic.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9 d-flex flex-row active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.bio.errors %}{{ profile_form.pic.errors.0|escape}}{% endif %}">
                                 {% if "placeholder" in profile.pic.url %}
-                                <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar"
-                                     class="img-fluid me-2 rounded-circle" style="width: 38px;">
+                                <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar" width="38" height="38"
+                                    class="me-2 rounded-circle avatar-md">
                                 {% else %}
-                                <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid me-2 rounded-circle"
-                                    style="width: 38px;">
+                                <img src="{{ profile.pic.url }}" alt="Avatar" width="38" height="38"
+                                    class="me-2 rounded-circle avatar-md">
                                 {% endif %}
-                            {% endif %}
-                            {{ form }}
+                                <div class="align-self-start w-100">{{ profile_form.pic }}</div>
                         </div>
                     </div>
-                    {% endfor %}
-                    <div class="d-flex flex-row my-3">
-                        <div class="col-4"></div>
-                        <div class="col-8 d-flex flex-row">
-                            <button id="submitButton" name="submit" type="submit" class="btn btn-success">Save</button>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.website.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.website.errors %}{{ profile_form.website.errors.0|escape}}{% endif %}">
+                                {{ profile_form.website }}
+                            </div>
                         </div>
                     </div>
-                </form>
-            </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.email.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.email.errors %}{{ profile_form.email.errors.0|escape}}{% endif %}">
+                                {{ profile_form.email }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.facebook.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.facebook.errors %}{{ profile_form.facebook.errors.0|escape}}{% endif %}">
+                                {{ profile_form.facebook }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.twitter.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.twitter.errors %}{{ profile_form.twitter.errors.0|escape}}{% endif %}">
+                                {{ profile_form.twitter }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.instagram.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.instagram.errors %}{{ profile_form.instagram.errors.0|escape}}{% endif %}">
+                                {{ profile_form.instagram }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.youtube.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.youtube.errors %}{{ profile_form.youtube.errors.0|escape}}{% endif %}">
+                                {{ profile_form.youtube }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3">
+                            <p>{{ profile_form.spotify.label }}</p>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="{% if profile_form.spotify.errors %}{{ profile_form.spotify.errors.0|escape}}{% endif %}">
+                                {{ profile_form.spotify }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 col-md-3"></div>
+                        <div class="col-12 col-md-9 d-flex flex-row">
+                            <button id="submitButton" name="submit" type="submit" class="btn-save hover-highlight">Save</button>
+                        </div>
+                    </div>
+
+            </form>
         </div>
     </div>
 
-</section>
+</div>
 
 {% endblock %}
 
@@ -57,3 +154,21 @@
 
 
 {% endblock %}
+<!-- 
+{% for form in profile_form %}
+                    <div class="d-flex flex-row my-3">
+                        <div class="col-4">{{ form.label_tag }}</div>
+                        <div class="col-8 d-flex flex-row">
+                            {% if form.field.widget.input_type == 'file' %}
+                            {% if "placeholder" in profile.pic.url %}
+                            <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar" width="38" height="38"
+                                class="me-2 rounded-circle avatar-md">
+                            {% else %}
+                            <img src="{{ profile.pic.url }}" alt="Avatar" width="38" height="38"
+                                class="me-2 rounded-circle avatar-md">
+                            {% endif %}
+                            {% endif %}
+                            {{ form }}
+                        </div>
+                    </div>
+                    {% endfor %} -->

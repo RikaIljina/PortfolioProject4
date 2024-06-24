@@ -7,23 +7,27 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="row g-0 sidebar-margin m-auto h-100">
 
-    <h1>{{ entry.title }}</h1>
+    <h2 class="mt-2 mt-md-4 text-center">
+        {% if entry.title %}
+           Editing <b>{{ entry.title }}</b>
+        {% endif %}
+        </h2>
 
-    <div class="d-flex flex-row justify-content-center">
-        <div class="col-8 d-flex flex-column p-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-xl-6 d-flex flex-column p-4">
+
             <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.title.label }}</p>
                     </div>
-                    <div class="col-8">
-                        {% if entry_form.title.errors %}
+                    <div class="col-12 col-md-9">
                         <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.title.errors.0|escape}}">
-                            {% endif %}
+                            title="{% if entry_form.title.errors %}{{ entry_form.title.errors.0|escape}}{% endif %}">
                             {{ entry_form.title }}
                         </p>
                     </div>
@@ -35,7 +39,7 @@
                     <div class="col-8">
                         {% if entry_form.description.errors %}
                         <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.description.errors.0|escape}}">
+                            title="{{ entry_form.description.errors.0|escape}}"></p>
                             {% endif %}
                             {{ entry_form.description }}
                     </div>
