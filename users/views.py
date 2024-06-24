@@ -136,7 +136,9 @@ def dashboard_entry(request, username, slug):
     sorted_files = dict(
         sorted(old_files.items(), key=lambda item: item[1][1], reverse=True))
     print(sorted_files)
-
+    modal_text = f'Are you sure you want to delete "{entry.title}"? This action cannot be undone!'
+    modal_title = f'Delete "{entry.title}"?'
+    
     comments = entry.all_comments.select_related('author', 'author__profile')
 
     # if request.GET.get('edit'):
@@ -152,6 +154,8 @@ def dashboard_entry(request, username, slug):
                'old_files': sorted_files,
                'comments': comments,
                'comment_form': comment_form,
+               'modal_text': modal_text,
+               'modal_title': modal_title,
                }
 
     return render(

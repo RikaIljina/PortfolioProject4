@@ -1,0 +1,24 @@
+
+
+<div class="modal fade" id="{{ modal_id}}" tabindex="-1" role="dialog" aria-labelledby="{{ modal_title_id }}"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{ modal_title_id }}">
+                    {{ modal_title_text }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">{{ modal_text }}</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    No, cancel
+                </button>
+                <a id="{{ delete_button_id }}" href="{{ new_url|default:'#' }}" class="btn btn-danger" role="button">Yes, delete</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -40,10 +40,10 @@
                             <div class="card-header">
                                 <p class="user-line">
                                     {% if "placeholder" in entry.author.profile.pic.url %}
-                                    <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture"
+                                    <img loading="lazy" src="{% static 'images/default_profile.jpg' %}" alt="user profile picture"
                                         width="30" height="30" class="rounded-circle avatar-sm">
                                     {% else %}
-                                    <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30"
+                                    <img loading="lazy" src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30"
                                         height="30" class="rounded-circle avatar-sm">
                                     {% endif %}
                                     <a href="{% url 'user_profile' entry.author.username %}" class="user-link">{{ entry.author }}</a>

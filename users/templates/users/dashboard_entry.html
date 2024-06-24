@@ -87,32 +87,11 @@
 
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalDeleteEntry" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">
-                        Delete {{ entry.title }}?
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">Are you sure you want to delete {{ entry.title }}? This action
-                        cannot be undone!</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-general" data-bs-dismiss="modal">
-                        No, abort
-                    </button>
-                    <a id="deleteEntryConfirm" href="{% url 'delete_entry' user.username entry.slug %}"
-                        class="btn btn-delete" role="button">Yes, delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+        <!-- Modal for entry deletion -->
+        {% url 'delete_entry' user.username entry.slug as delete_url %}
+        {% with modal_text=modal_text modal_id="modalDeleteEntry" modal_title_id="modalTitleIdDeleteEntry"  modal_title_text=modal_title delete_button_id="deleteEntryConfirm" new_url=delete_url %}
+        {% include 'mainpage/snippets/modal.html' %}
+        {% endwith %}
 
 </div>
 

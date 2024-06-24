@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models.functions import Lower
 from taggit.models import Tag
 from django.conf import settings as django_settings
+import cloudinary
 import os
 
 from entries.models import Entry
@@ -20,6 +21,7 @@ def get_username_list():
 # order list after db query!
     # current_usernames = list(User.objects.values_list(
     #             'username', flat=True).order_by(Lower('username')))
+  
     current_users = dict({value.username: value.profile.pic.url for value in all_users})
     print(current_users)
     users = dict(sorted(current_users.items()))

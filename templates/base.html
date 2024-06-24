@@ -233,11 +233,11 @@
                                             <a href="{% url 'filter_user' user %}"
                                                 class="nav-link mx-md-4 px-3 filter-name">
                                                 {% if "placeholder" in pic %}
-                                                <img src="{% static 'images/default_profile.jpg' %}"
+                                                <img loading="lazy" src="{% static 'images/default_profile.jpg' %}"
                                                     alt="user profile picture" width="30" height="30"
                                                     class="rounded-circle avatar-sm">
                                                 {% else %}
-                                                <img src="{{ pic }}" alt="user profile picture" width="30" height="30"
+                                                <img loading="lazy" src="{{ pic }}" alt="user profile picture" width="30" height="30"
                                                     class="rounded-circle avatar-sm">
                                                 {% endif %}
                                                 <span class="ms-1 d-inline">{{ user }}</span>

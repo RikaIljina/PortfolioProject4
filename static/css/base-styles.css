@@ -239,7 +239,7 @@ a:focus-visible {
   border: 1px solid #555555;
   width: 2rem;
   text-align: center;
-  margin: -8px;
+  margin: -0.2rem;
   transition: all 0.3s;
 }
 
