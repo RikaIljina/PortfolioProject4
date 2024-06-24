@@ -225,6 +225,7 @@ def user_favorites(request, username):
     is_favorite = 1
 
     page_obj = get_page_obj(request, likes)
+    print(page_obj[0].entry.author.username)
 
     context = {  # 'likes': likes,
         'page_obj': page_obj,

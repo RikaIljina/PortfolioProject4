@@ -33,8 +33,10 @@
       <div class="m-auto col">
 
         <div class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start ">
-
+          
+          {% for entry in page_obj %}
           {% include 'entries/snippets/entry_cards.html' %}
+          {% endfor %}
 
         </div>
       </div>

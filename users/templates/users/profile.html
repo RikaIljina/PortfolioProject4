@@ -39,6 +39,10 @@
                     class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start ">
 
                     {% for entry in page_obj %}
+          {% include 'entries/snippets/entry_cards.html' %}
+          {% endfor %}
+{% comment %} 
+                    {% for entry in page_obj %}
                     <div class="card-outer mb-md-2 p-1">
 
                         <div class="card inner-card h-100 clickable"
@@ -81,7 +85,7 @@
                     <div>
                         <p>No one has uploaded any songs yet.</p>
                     </div>
-                    {% endfor %}
+                    {% endfor %} {% endcomment %}
                 </div>
             </div>
         </div>

@@ -270,7 +270,6 @@ a:focus-visible {
 
 /* ----------- Input field styles ------------ */
 
-textarea,
 input[type] {
   width: 100%;
 }

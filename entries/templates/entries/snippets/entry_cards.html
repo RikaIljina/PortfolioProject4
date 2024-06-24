@@ -1,7 +1,7 @@
 {% load static %}
 {% load humanize %}
 
-{% for entry in page_obj %}
+
 <div class="card-outer mb-md-2 p-1">
 
     <div class="card inner-card h-100 clickable" onclick="this.querySelector('#{{ entry.slug }}').click()">
@@ -27,7 +27,8 @@
 
         {% else %}
         <div class="card-header pt-3">
-            <a href="{% url 'dashboard_entry' user.username entry.slug %}" class="ms-1 d-inline-block" id="{{ entry.slug }}">
+            <a href="{% url 'dashboard_entry' user.username entry.slug %}" class="ms-1 d-inline-block"
+                id="{{ entry.slug }}">
                 <h3>
                     {% if entry.publish == 0 %}
                     <i class="fa-solid fa-lock publicity-icon align-middle"></i>
@@ -56,13 +57,21 @@
             </div>
 
         </div>
+        
         <div class="card-footer d-flex flex-wrap align-content-center">
+            {% if liked %}
+        {% with entry=liked %}
             {% include 'likes/snippets/like_comment_summary.html' %}
+            {% endwith %}
+            {% else %}
+            {% include 'likes/snippets/like_comment_summary.html' %}
+            {% endif %}
+        
         </div>
     </div>
 </div>
 
-
+{% comment %} <!-- 
 {% empty %}
 <div>
     {% if dashboard_view %}
@@ -71,4 +80,4 @@
     <p>No one has uploaded any songs yet.</p>
     {% endif %}
 </div>
-{% endfor %}
+{% endfor %} --> {% endcomment %}
