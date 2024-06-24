@@ -36,12 +36,15 @@ def index(request):
     # users = get_users_from_file()
     # #tags = get_all_tags()
     # tags = get_tags_from_file()
+    enable_sorting = True
+    
     
     context = {'entries': entries,
                'sorted_param': sorted_param,
                'page_obj': page_obj,
                'users': users,
                'tags': tags,
+               'enable_sorting': enable_sorting,
                }
     print(request)
 
@@ -67,7 +70,8 @@ def filter_user(request, username):
     # #users = get_username_list()
     # users = get_users_from_file()
     # tags = get_tags_from_file()
-
+    filter_user = True
+    enable_sorting = True
     
     context = {'entries': entries,
                'users': users,
@@ -75,7 +79,9 @@ def filter_user(request, username):
                'tags': tags,
                'page_obj': page_obj,
                'sorted_param': sorted_param,
-               }
+               'filter_user': filter_user,
+               'enable_sorting': enable_sorting,
+            }
 
     return render(
         request,
@@ -95,7 +101,8 @@ def filter_tag(request, tag):
     # users = get_users_from_file()
     # # tags = get_all_tags()
     # tags = get_tags_from_file()
-    
+    filter_tag = True
+    enable_sorting = True
     
     context = {'entries': entries,
                'tag_filter': tag,
@@ -103,6 +110,8 @@ def filter_tag(request, tag):
                'tags': tags,
                'page_obj': page_obj,
                'sorted_param': sorted_param,
+               'filter_tag': filter_tag,
+               'enable_sorting': enable_sorting,
                }
 
     return render(

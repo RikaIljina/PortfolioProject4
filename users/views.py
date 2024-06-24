@@ -31,15 +31,17 @@ def user_profile(request, username):
 
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
+    enable_sorting = True
+    profile_view = True
    # entries = user.entries.filter(publish=1)
     if hasattr(user, 'all_entries'):
         entries = get_published_entries(
             request, user.all_entries, get_comments=False)
     # print(entries[0].likes_received)
-        most_liked = entries.filter(publish=1).annotate(
-            likes_received=Count('all_likes')).order_by('-likes_received').first()
-        most_recent = entries.filter(
-            publish=1).order_by('-created_on').first()
+        # most_liked = entries.filter(publish=1).annotate(
+        #     likes_received=Count('all_likes')).order_by('-likes_received').first()
+        # most_recent = entries.filter(
+        #     publish=1).order_by('-created_on').first()
         entries, sorted_param = sort_by(request, entries)
 
         page_obj = get_page_obj(request, entries)
@@ -52,19 +54,18 @@ def user_profile(request, username):
         #tags = get_tags_from_file()
 
         context = {'profile': profile,
-                   # 'entries': entries,
-                   'most_liked': most_liked,
-                   'most_recent': most_recent,
                    'users': users,
                    'tags': tags,
                    'page_obj': page_obj,
                    'sorted_param': sorted_param,
+                   'enable_sorting': enable_sorting,
+                   'profile_view': profile_view,
                    }
     else:
         context = {'profile': profile,
                    'users': users,
                    'tags': tags,
-
+                   'profile_view': profile_view,
                    }
 
     return render(
@@ -83,6 +84,9 @@ def dashboard(request, username):
 
     user = request.user
     profile = user.profile
+    dashboard_view = True
+    enable_sorting = True
+    
     # fields = user._meta.get_fields()
     # for field in fields:
     #     print(field)
@@ -113,9 +117,13 @@ def dashboard(request, username):
                    'most_recent': most_recent,
                    'page_obj': page_obj,
                    'sorted_param': sorted_param,
+                   'dashboard_view': dashboard_view,
+                   'enable_sorting': enable_sorting,
                    }
     else:
         context = {'profile': profile,
+                   'dashboard_view': dashboard_view,
+                   'enable_sorting': enable_sorting,
                    }
 
     return render(
@@ -138,6 +146,7 @@ def dashboard_entry(request, username, slug):
     print(sorted_files)
     modal_text = f'Are you sure you want to delete "{entry.title}"? This action cannot be undone!'
     modal_title = f'Delete "{entry.title}"?'
+    dashboard_view = True
     
     comments = entry.all_comments.select_related('author', 'author__profile')
 
@@ -156,6 +165,7 @@ def dashboard_entry(request, username, slug):
                'comment_form': comment_form,
                'modal_text': modal_text,
                'modal_title': modal_title,
+               'dashboard_view': dashboard_view,
                }
 
     return render(

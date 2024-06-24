@@ -15,196 +15,84 @@
     <div class="col-12">
         {% include 'users/snippets/profile_card.html' %}
     </div>
-    <div class="col">
-        <div class="row">
-            <div class="col-12 col-md-10 m-auto">
 
-                <div class="row pt-3">
-                    <!-- <h6>My Entries</h6>
-            <hr class="mt-0 mb-2"> -->
-                    <div class="col12 border-1">
-                        <div class="row">
-                            <h2>Featured:</h2>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-2">
-                                <h4>Recent</h4>
-                                {% if most_recent %}
-                                <a href="{% url 'entry_details' most_recent.slug %}">
+    <div class="col-12 col-md-10 m-auto">
 
-                                    <p class="text-muted">{{ most_recent.title }}</p>
-                                </a>
-
-
-                                {% with most_recent as entry %}
-                                <div class="card-outer mb-md-2 p-1">
-
-                                    <div class="card inner-card h-100 clickable"
-                                        onclick="this.querySelector('#{{ entry.slug }}').click()">
-                                        <div class="card-header pt-3">
-
-                                            <h3>
-                                                <a href="{% url 'entry_details' entry.slug %}" class="title-link"
-                                                    id="{{ entry.slug }}">
-                                                    {{ entry.title }}
-                                                </a>
-                                            </h3>
-
-                                        </div>
-                                        <div class="card-body d-flex flex-column">
-                                            <audio controls class="w-100 my-3">
-                                                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                                                Your browser does not support the audio tag.
-                                            </audio>
-                                            <p class="text-muted flex-fill">Created {{ entry.created_on|naturalday }}
-                                            </p>
-
-                                            <div class="tag-container">
-                                                <p class="m-0">
-                                                    {% for tag in entry.tags.all %}
-                                                    <a href="{% url 'filter_tag' tag %}">
-                                                        <span class="tag hover-highlight">{{ tag }}</span></a>
-                                                    {% endfor %}
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                        <div class="card-footer d-flex flex-wrap align-content-center">
-                                            {% include 'likes/snippets/like_comment_summary.html' %}
-                                        </div>
-                                    </div>
-
-                                </div>
-                                {% endwith %}
-
-                                {% else %}
-                                <p class="text-muted"> --- </p>
-                                {% endif %}
-                            </div>
-                            <div class="col-12 col-md-6 mb-2">
-                                <h4>Most Liked</h4>
-                                {% if most_liked %}
-                                <a href="{% url 'entry_details' most_liked.slug %}">
-                                    <p class="text-muted">{{ most_liked.title }}</p>
-                                </a>
-
-                                {% with most_liked as entry %}
-                                <div class="card-outer mb-md-2 p-1">
-
-                                    <div class="card inner-card h-100 clickable"
-                                        onclick="this.querySelector('#{{ entry.slug }}').click()">
-                                        <div class="card-header pt-3">
-
-                                            <h3>
-                                                <a href="{% url 'entry_details' entry.slug %}" class="title-link"
-                                                    id="{{ entry.slug }}">
-                                                    {{ entry.title }}
-                                                </a>
-                                            </h3>
-
-                                        </div>
-                                        <div class="card-body d-flex flex-column">
-                                            <audio controls class="w-100 my-3">
-                                                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                                                Your browser does not support the audio tag.
-                                            </audio>
-                                            <p class="text-muted flex-fill">Created {{ entry.created_on|naturalday }}
-                                            </p>
-
-                                            <div class="tag-container">
-                                                <p class="m-0">
-                                                    {% for tag in entry.tags.all %}
-                                                    <a href="{% url 'filter_tag' tag %}">
-                                                        <span class="tag hover-highlight">{{ tag }}</span></a>
-                                                    {% endfor %}
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                        <div class="card-footer d-flex flex-wrap align-content-center">
-                                            {% include 'likes/snippets/like_comment_summary.html' %}
-                                        </div>
-                                    </div>
-
-                                </div>
-                                {% endwith %}
-
-                                {% else %}
-                                <p class="text-muted"> --- </p>
-                                {% endif %}
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <h3>All Entries</h3>
-                </div>
-                <div class="row g-0">
-                    <div class="m-auto col">
-
-                        <div
-                            class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start ">
-
-                            {% for entry in page_obj %}
-                            <div class="card-outer mb-md-2 p-1">
-
-                                <div class="card inner-card h-100 clickable"
-                                    onclick="this.querySelector('#{{ entry.slug }}').click()">
-                                    <div class="card-header pt-3">
-
-                                        <h3>
-                                            <a href="{% url 'entry_details' entry.slug %}" class="title-link"
-                                                id="{{ entry.slug }}">
-                                                {{ entry.title }}
-                                            </a>
-                                        </h3>
-
-                                    </div>
-                                    <div class="card-body d-flex flex-column">
-                                        <audio controls class="w-100 my-3">
-                                            <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                                            Your browser does not support the audio tag.
-                                        </audio>
-                                        <p class="text-muted flex-fill">Created {{ entry.created_on|naturalday }}</p>
-
-                                        <div class="tag-container">
-                                            <p class="m-0">
-                                                {% for tag in entry.tags.all %}
-                                                <a href="{% url 'filter_tag' tag %}">
-                                                    <span class="tag hover-highlight">{{ tag }}</span></a>
-                                                {% endfor %}
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-footer d-flex flex-wrap align-content-center">
-                                        {% include 'likes/snippets/like_comment_summary.html' %}
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            {% empty %}
-                            <div>
-                                <p>No one has uploaded any songs yet.</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-
+        <hr>
+        <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center filter-results">
+            <div class="col-12 py-auto">
+                {% if sorted_param == '?sorted=by_date' %}
+                <h3 class="">Most <b>recent</b> entries</h3>
+                {% elif sorted_param == '?sorted=by_likes' %}
+                <h3 class="">Most <b>liked</b> entries</h3>
+                {% else %}
+                <h3 class="">All entries</h3>
+                {% endif %}
             </div>
         </div>
+        <hr>
+
+        <div class="row g-0">
+            <div class="m-auto col">
+
+                <div
+                    class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start ">
+
+                    {% for entry in page_obj %}
+                    <div class="card-outer mb-md-2 p-1">
+
+                        <div class="card inner-card h-100 clickable"
+                            onclick="this.querySelector('#{{ entry.slug }}').click()">
+                            <div class="card-header pt-3">
+
+                                <h3>
+                                    <a href="{% url 'entry_details' entry.slug %}" class="title-link"
+                                        id="{{ entry.slug }}">
+                                        {{ entry.title }}
+                                    </a>
+                                </h3>
+
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <audio controls class="w-100 my-3">
+                                    <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
+                                    Your browser does not support the audio tag.
+                                </audio>
+                                <p class="text-muted flex-fill">Created {{ entry.created_on|naturalday }}</p>
+
+                                <div class="tag-container">
+                                    <p class="m-0">
+                                        {% for tag in entry.tags.all %}
+                                        <a href="{% url 'filter_tag' tag %}">
+                                            <span class="tag hover-highlight">{{ tag }}</span></a>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="card-footer d-flex flex-wrap align-content-center">
+                                {% include 'likes/snippets/like_comment_summary.html' %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+                    <div>
+                        <p>No one has uploaded any songs yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {% include 'pagination.html' %}
 
 </div>
 <div class="mb-4"></div>
-</div>
+
 
 {% endblock %}
 

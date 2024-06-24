@@ -1,0 +1,74 @@
+{% load static %}
+{% load humanize %}
+
+{% for entry in page_obj %}
+<div class="card-outer mb-md-2 p-1">
+
+    <div class="card inner-card h-100 clickable" onclick="this.querySelector('#{{ entry.slug }}').click()">
+        {% if not dashboard_view %}
+        <div class="card-header">
+            <p class="user-line">
+                {% if "placeholder" in entry.author.profile.pic.url %}
+                <img loading="lazy" src="{% static 'images/default_profile.jpg' %}" alt="user profile picture"
+                    width="30" height="30" class="rounded-circle avatar-sm">
+                {% else %}
+                <img loading="lazy" src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30"
+                    height="30" class="rounded-circle avatar-sm">
+                {% endif %}
+                <a href="{% url 'user_profile' entry.author.username %}" class="user-link">{{ entry.author }}</a>
+            </p>
+
+            <h3>
+                <a href="{% url 'entry_details' entry.slug %}" class="title-link" id="{{ entry.slug }}">
+                    {{ entry.title }}
+                </a>
+            </h3>
+        </div>
+
+        {% else %}
+        <div class="card-header pt-3">
+            <a href="{% url 'dashboard_entry' user.username entry.slug %}" class="ms-1 d-inline-block" id="{{ entry.slug }}">
+                <h3>
+                    {% if entry.publish == 0 %}
+                    <i class="fa-solid fa-lock publicity-icon align-middle"></i>
+                    {% else %}
+                    <i class="fa-solid fa-globe publicity-icon"></i>
+                    {% endif %} {{ entry.title }}
+                </h3>
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="card-body d-flex flex-column">
+            <audio controls class="w-100 my-3">
+                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
+            <p class="text-muted flex-fill">Created {{ entry.created_on|naturalday }}</p>
+
+            <div class="tag-container">
+                <p class="m-0">
+                    {% for tag in entry.tags.all %}
+                    <a href="{% url 'filter_tag' tag %}">
+                        <span class="tag hover-highlight">{{ tag }}</span></a>
+                    {% endfor %}
+                </p>
+            </div>
+
+        </div>
+        <div class="card-footer d-flex flex-wrap align-content-center">
+            {% include 'likes/snippets/like_comment_summary.html' %}
+        </div>
+    </div>
+</div>
+
+
+{% empty %}
+<div>
+    {% if dashboard_view %}
+    <p>You haven't uploaded any songs yet.</p>
+    {% else %}
+    <p>No one has uploaded any songs yet.</p>
+    {% endif %}
+</div>
+{% endfor %}

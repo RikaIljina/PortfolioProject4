@@ -1,0 +1,29 @@
+
+
+.modal-content {
+    font-weight: 400;
+    font-size: 1rem;
+    border: 1px solid black;
+    border-radius: 0;
+    background-color: rgb(243, 243, 228);
+}
+
+.btn-modal {
+    border: 1px solid black;
+    border-radius: 0;
+    padding: 0.6rem 0.8rem;
+    background-color: transparent;
+}
+
+.modal-body {
+    padding: 1.3rem;
+    background-color: white;
+}
+
+.btn-close {
+    border-radius: 0;
+}
+
+.btn-modal-delete {
+    border: 1px solid red;
+}

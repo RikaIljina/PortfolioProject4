@@ -1,6 +1,12 @@
 
+{% load static %}
 
-<div class="modal fade" id="{{ modal_id}}" tabindex="-1" role="dialog" aria-labelledby="{{ modal_title_id }}"
+{% block styles %}
+<!-- Modal CSS -->
+<link rel="stylesheet" href="{% static 'css/modal-styles.css' %}">
+{% endblock %}
+
+<div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="{{ modal_title_id }}"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -8,16 +14,16 @@
                 <h5 class="modal-title" id="{{ modal_title_id }}">
                     {{ modal_title_text }}
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close hover-highlight" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">{{ modal_text }}</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn-modal hover-highlight" data-bs-dismiss="modal">
                     No, cancel
                 </button>
-                <a id="{{ delete_button_id }}" href="{{ new_url|default:'#' }}" class="btn btn-danger" role="button">Yes, delete</a>
+                <a id="{{ delete_button_id }}" href="{{ new_url|default:'#' }}" class="btn-modal btn-modal-delete hover-highlight" role="button">Yes, delete</a>
             </div>
         </div>
     </div>
