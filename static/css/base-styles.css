@@ -270,7 +270,7 @@ a:focus-visible {
 
 /* ----------- Input field styles ------------ */
 
-input[type] {
+.form-control {
   width: 100%;
 }
 
@@ -284,6 +284,7 @@ audio {
   border: 1px solid black;
   border-radius: 25px;
   max-width: 100%;
+  min-width: 200px;
 }
 
 .avatar-sm {
@@ -382,5 +383,11 @@ audio {
 
   .sidebar-margin {
     margin-left: 4rem !important;
+  }
+
+  .old-audio {
+
+    max-width: 150px;
+    min-width: 100px;
   }
 }

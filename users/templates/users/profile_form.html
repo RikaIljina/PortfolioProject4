@@ -41,10 +41,10 @@
                         <div class="col-12 col-md-9 d-flex flex-row active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="{% if profile_form.bio.errors %}{{ profile_form.pic.errors.0|escape}}{% endif %}">
                                 {% if "placeholder" in profile.pic.url %}
-                                <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar" width="38" height="38"
+                                <img src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar" width="38" height="38"
                                     class="me-2 rounded-circle avatar-md">
                                 {% else %}
-                                <img src="{{ profile.pic.url }}" alt="Avatar" width="38" height="38"
+                                <img src="{{ profile.pic.url }}" alt="User profile picture" width="38" height="38"
                                     class="me-2 rounded-circle avatar-md">
                                 {% endif %}
                                 <div class="align-self-start w-100">{{ profile_form.pic }}</div>

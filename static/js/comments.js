@@ -12,6 +12,7 @@ window.addEventListener("DOMContentLoaded", function () {
   for (let button of editButtons) {
     button.addEventListener("click", (e) => {
       let commentId = e.target.getAttribute("data-comment_id");
+      this.alert(commentId)
       let commentParagraph = document.getElementById(`comment${commentId}`);
       let commentContent = commentParagraph.innerText;
       let hiddenFormDiv = document.getElementById(`commentform${commentId}`);
@@ -21,7 +22,8 @@ window.addEventListener("DOMContentLoaded", function () {
       let inplaceCommentText = document.getElementById(
         `updatedComment${commentId}`
       );
-      hiddenFormDiv.removeAttribute("class", "visually-hidden");
+      hiddenFormDiv.removeAttribute("class", "d-none");
+      //hiddenFormDiv.setAttribute("aria-hidden", "false");
       commentParagraph.setAttribute("class", "visually-hidden");
       // commentText.value = commentContent;
       inplaceCommentText.value = commentContent;

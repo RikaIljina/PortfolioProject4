@@ -6,6 +6,11 @@
   font-size: 1.2rem;
 }
 
+#entryForm {
+  font-weight: 400;
+}
+
+
 /* ---- Entry cards ----- */
 
 h3 {

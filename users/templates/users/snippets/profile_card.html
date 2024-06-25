@@ -10,17 +10,17 @@
                 <div class="col-lg-3 text-center">
 
                     {% if "placeholder" in profile.pic.url %}
-                    <img src="{% static 'images/default_profile.jpg' %}" alt="Avatar"
+                    <img src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar"
                         class="img-fluid my-2 rounded-circle avatar-lg">
                     {% else %}
-                    <img src="{{ profile.pic.url }}" alt="Avatar" class="img-fluid my-2 rounded-circle avatar-lg">
+                    <img src="{{ profile.pic.url }}" alt="User profile picture" class="img-fluid my-2 rounded-circle avatar-lg">
                     {% endif %}
 
                     <h3>{{ profile.user.username }}</h3>
                     <p>Joined {{ profile.joined|naturalday }}</p>
 
                     {% if user.is_authenticated and profile == user.profile %}
-                    <a href="{% url 'edit_profile' user.username %}"><i class="far fa-edit mb-1"></i></a>
+                    <a href="{% url 'edit_profile' user.username %}" aria-label="Opens the user profile for editing"><i class="far fa-edit mb-1"></i></a>
                     {% endif %}
                 </div>
                 <div class="col-lg-5 col-xl-6">
@@ -42,39 +42,32 @@
                     <div class="pt-1 px-4">
                         <h6>Contact Me</h6>
                         <hr class="mt-0 mb-2">
-                        <div class="row pt-1">
+                        <div class="pt-1">
 
-                            <div class="col-3 col-md-4 col-lg-6 mb-2">
-                                <h6 class="text-center text-lg-start">Email</h6>
-                                <div class="d-flex justify-content-center justify-content-lg-start">
-                                    <a href="mailto:{{ profile.email }}">
-                                        <i class="fa fa-envelope fa-lg"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-3 col-md-4 col-lg-6 mb-2">
-                                <h6 class="text-center text-lg-start">Website</h6>
-                                <div class="d-flex justify-content-center justify-content-lg-start">
-                                    <a href="{{ profile.website }}"><i class="fa-solid fa-globe"></i></a>
-                                    </a>
-                                </div>
-
-                            </div>
-
-                            <div class="col-6 col-md-4 col-lg-12 mb-2">
-                                <h6 class="text-center text-lg-start">Social links</h6>
-                                <div class="d-flex justify-content-center justify-content-lg-start">
-                                    <a href="{{ profile.facebook }}" target="_blank"><i
-                                            class="fab fa-facebook-f fa-lg me-3"></i></a>
-                                    <a href="{{ profile.twitter }}"><i class="fab fa-twitter fa-lg me-3"></i></a>
-                                    <a href="{{ profile.instagram }}"><i class="fab fa-instagram fa-lg me-3"></i></a>
-                                    <a href="{{ profile.youtube }}"><i class="fab fa-youtube fa-lg me-3"></i></a>
-                                    <a href="{{ profile.spotify }}"><i class="fab fa-spotify fa-lg me-3"></i></a>
-
-                                </div>
-                            </div>
+                            {% if profile.email %}
+                            <a href="mailto:{{ profile.email }}" aria-label="Opens email app to send email"><i class="fa fa-envelope fa-lg"></i></a>
+                            {% endif %}
+                            {% if profile.website %}
+                            <a href="{{ profile.website }}" aria-label="Opens website link in a new tab" target="_blank"><i class="fa-solid fa-globe"></i></a>
+                            {% endif %}
+                            {% if profile.facebook %}
+                            <a href="{{ profile.facebook }}" aria-label="Opens facebook link in a new tab" target="_blank"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.twitter %}
+                            <a href="{{ profile.twitter }}" aria-label="Opens twitter (X) link in a new tab" target="_blank"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.instagram %}
+                            <a href="{{ profile.instagram }}" aria-label="Opens instagram link in a new tab" target="_blank"><i class="fab fa-instagram fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.youtube %}
+                            <a href="{{ profile.youtube }}" aria-label="Opens youtube link in a new tab" target="_blank"><i class="fab fa-youtube fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.spotify %}
+                            <a href="{{ profile.spotify }}" aria-label="Opens spotify link in a new tab" target="_blank"><i class="fab fa-spotify fa-lg me-3"></i></a>
+                            {% endif %}
 
                         </div>
+
                     </div>
                 </div>
             </div>

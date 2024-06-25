@@ -31,7 +31,7 @@ def entry_details(request, slug):
     entry = get_object_or_404(
         get_published_entries(request, Entry.objects), slug=slug)
     # Sort old audio files by timestamp. The json object in entry.old_files
-    # has the structure {'cloudinary_id': ['cloudinary_url', 'timestamp'}
+    # has the structure {'cloudinary_id': ['cloudinary_url', 'timestamp']}
     old_files = dict(sorted(
         entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
 
@@ -146,9 +146,11 @@ def edit_entry(request, username, slug):
 
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
     # Sort old audio files by timestamp. The json object in entry.old_files
-    # has the structure {'cloudinary_id': ['cloudinary_url', 'timestamp'}
+    # has the structure {'cloudinary_id': ['cloudinary_url', 'timestamp']}
     old_files = dict(sorted(
         entry.old_files.items(), key=lambda item: item[1][1], reverse=True))
+    # Remove quotation marks and seconds from timestamp
+    old_files = {key: [value[0], value[1][1:-4]] for key, value in old_files.items()}
 
     if request.method == 'POST':
         entry_form = EntryForm(request.POST,

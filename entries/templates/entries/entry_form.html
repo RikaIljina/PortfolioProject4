@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block styles %}
 <!-- Custom CSS -->
@@ -11,13 +12,13 @@
 <div class="row g-0 sidebar-margin m-auto h-100">
 
     <h2 class="mt-2 mt-md-4 text-center">
-        {% if entry.title %}
+        {% if entry %}
            Editing <b>{{ entry.title }}</b>
         {% endif %}
         </h2>
 
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-xl-6 d-flex flex-column p-4">
+    <div class="row justify-content-center p-0 p-md-1">
+        <div class="col-12 col-md-10 col-xl-6 d-flex flex-column ps-1 pe-0 p-md-4">
 
             <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -32,110 +33,107 @@
                         </p>
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.description.label }}</p>
                     </div>
-                    <div class="col-8">
-                        {% if entry_form.description.errors %}
-                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.description.errors.0|escape}}"></p>
-                            {% endif %}
+                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{% if entry_form.description.errors %}{{ entry_form.description.errors.0|escape}}{% endif %}">
                             {{ entry_form.description }}
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+
+                {% if entry %}
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>Your current audio file:</p>
                     </div>
-                    <div class="col-8">
-                        <audio controls class="w-100">
+                    <div class="col-12 col-md-9">
+                        <audio controls preload="none" class="w-100">
                             <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                             Your browser does not support the audio tag.
                         </audio>
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                {% endif %}
+
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.audio_file.label }}</p>
                     </div>
-                    <div class="col-8">
-                        {% if entry_form.audio_file.errors %}
-                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.audio_file.errors.0|escape}}">
-                            {% endif %}
+                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{% if entry_form.audio_file.errors %}{{ entry_form.audio_file.errors.0|escape}}{% endif %}">
                             {{ entry_form.audio_file }}
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+
+                {% if entry %}
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.keep_file.label }}</p>
                     </div>
-                    <div class="col-8">
-                        {% if entry_form.keep_file.errors %}
-                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.keep_file.errors.0|escape}}">
-                            {% endif %}
+                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{% if entry_form.keep_file.errors %}{{ entry_form.keep_file.errors.0|escape}}{% endif %}">
                             {{ entry_form.keep_file }}
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.old_files.label }}</p>
                     </div>
-                    <div class="col-8">
+                    <div class="col-12 col-md-9">
                         {% for key, value in old_files.items %}
-                        <p>added {{ value.1 }}</p>
-                        <audio controls preload="none">
+                        <p class="text-muted">added {{ value.1 }}</p>
+                        <div class="d-flex flex-row flex-wrap">
+                        <audio controls preload="none" class="old-audio">
                             <source src="{{ value.0 }}" type="audio/mpeg">
                             Your browser does not support the audio tag.
                         </audio>
-                        <button type="button" class="btn btn-danger btn-delete" data-file_id="{{ key }}"
-                            data-bs-toggle="modal" data-bs-target="#modalDeleteOldFile">Delete</button>
+                        <button type="button" class="btn btn-delete hover-highlight ms-1" data-file_id="{{ key }}"
+                            data-bs-toggle="modal" data-bs-target="#modalDeleteOldFile"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                         {% empty %}
                         <p>No files yet</p>
                         {% endfor %}
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                {% endif %}
+
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.tags.label }}</p>
                     </div>
-                    <div class="col-8">
-                        {% if entry_form.tags.errors %}
-                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.tags.errors.0|escape}}">
-                            {% endif %}
+                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{% if entry_form.tags.errors %}{{ entry_form.tags.errors.0|escape}}{% endif %}">
                             {{ entry_form.tags }}
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p>{{ entry_form.publish.label }}</p>
                     </div>
-                    <div class="col-8">
-                        {% if entry_form.publish.errors %}
-                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{{ entry_form.publish.errors.0|escape}}">
-                            {% endif %}
+                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{% if entry_form.publish.errors %}{{ entry_form.publish.errors.0|escape}}{% endif %}">
                             {{ entry_form.publish }}
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p></p>
                     </div>
-                    <div class="col-8">
+                    <div class="col-12 col-md-9">
                         <p>Please do <b>not</b> close the page after clicking the "Save" button. Wait for the file upload to finish. </button>
                     </div>
                 </div>
-                <div class="d-flex flex-row my-3">
-                    <div class="col-4">
+                <div class="row my-3">
+                    <div class="col-12 col-md-3">
                         <p></p>
                     </div>
-                    <div class="col-8">
-                        <button id="submitButton" name="submit" type="submit" class="btn btn-success"
-                            id="btn-save-entry">Save</button>
+                    <div class="col-12 col-md-9">
+                        <button id="submitButton" name="submit" type="submit" class="btn btn-general hover-highlight">
+                            Save
+                        </button>
                     </div>
                 </div>
 

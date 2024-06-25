@@ -180,7 +180,7 @@ class EntryForm(forms.ModelForm):
             # Add old file to the json object 'old_files' together with
             # a timestamp for ordering purposes
             instance.old_files[old_id] = [
-                self.initial['audio_file'].url, json_date ]
+                self.initial['audio_file'].url, json_date]
         elif self.new_file:
             old_id = self.initial['audio_file'].public_id
             print(cloudinary.uploader.destroy(

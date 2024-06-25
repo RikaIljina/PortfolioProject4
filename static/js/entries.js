@@ -4,8 +4,6 @@
 // const editButtons = document.getElementsByClassName("btn-edit");
 // const commentText = document.getElementById("id_content");
 window.addEventListener("DOMContentLoaded", function () {
-  const commentForm = document.getElementById("commentForm");
-  const saveBtn = document.getElementById("btn-save-entry");
 
   // const deleteModal = new Modal(document.getElementById("deleteModal"));
   const deleteButtons = document.getElementsByClassName("btn-delete");

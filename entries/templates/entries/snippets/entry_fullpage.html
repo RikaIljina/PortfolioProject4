@@ -8,13 +8,13 @@
             {% if not dashboard_view %}
             <p>
                 {% if "placeholder" in entry.author.profile.pic.url %}
-                <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
+                <img src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar" width="30" height="30"
                     class="rounded-circle avatar-sm">
                 {% else %}
-                <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30" height="30"
+                <img src="{{ entry.author.profile.pic.url }}" alt="User profile picture" width="30" height="30"
                     class="rounded-circle avatar-sm">
                 {% endif %}
-                <a href="{% url 'user_profile' entry.author.username %}" class="user-link">
+                <a href="{% url 'user_profile' entry.author.username %}" class="user-link" aria-label="Opens the user profile page">
                     {{ entry.author }}
                 </a>
             </p>
@@ -35,7 +35,7 @@
 
 
         <div class="card-body d-flex flex-column p-2 p-md-3">
-            <audio controls class="w-100 my-3">
+            <audio controls preload="none" class="w-100 my-3">
                 <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                 Your browser does not support the audio tag.
             </audio>
