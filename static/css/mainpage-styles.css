@@ -76,6 +76,13 @@ h3 {
   /* transform: scale(1.02); */
   transition: all 0.3s;
 }
+.title-link:focus,
+.user-link:focus {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+  }
 
 /* .title-link:hover,
 .user-link:hover {
@@ -85,6 +92,13 @@ h3 {
   padding: 1px;
   border: 1px solid black;
 }
+
+.tag-container a:focus {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+  }
 
 @media screen and (max-width: 768px) {
   h3 {

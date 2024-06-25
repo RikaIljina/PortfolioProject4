@@ -14,7 +14,8 @@
                 <img src="{{ entry.author.profile.pic.url }}" alt="User profile picture" width="30" height="30"
                     class="rounded-circle avatar-sm">
                 {% endif %}
-                <a href="{% url 'user_profile' entry.author.username %}" class="user-link" aria-label="Opens the user profile page">
+                <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
+                    aria-label="Opens the user profile page">
                     {{ entry.author }}
                 </a>
             </p>
@@ -68,12 +69,31 @@
             {% include 'likes/snippets/like_comment_summary.html' %}
         </div>
     </div>
-    <div class="card card-desc no-shadow d-flex flex-column">
-        <div class="p-2 p-md-3">
-            <p class="text-muted">About this entry</p>
-            <p>
-                {{ entry.description | safe}}
-            </p>
+    <div class="accordion accordion-preview card card-desc no-shadow d-flex flex-column" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    About this entry
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="p-2 p-md-3">
+                        {{ entry.description | safe}}
+                    </div>
+                    <p class="accordion-footer text-center" id="footerOne">
+                        <button class="accordion-button text-muted mt-3 collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
+                            aria-controls="collapseOne">
+                            <i class="fa-solid fa-angles-up"></i>
+                        </button>
+                    </p>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>
