@@ -69,6 +69,8 @@ function collapseSidebar() {
   }
 
   sideBar.style.minWidth = "initial";
+  document.querySelector('#about-link-container').style.width = "initial";
+
 }
 
 function expandSidebar() {
@@ -92,6 +94,9 @@ function expandSidebar() {
   } else {
     sideBar.style.minWidth = "17%";
   }
+
+  document.querySelector('#about-link-container').style.width = getComputedStyle(sideBar).width;
+
 }
 
 // The menu toggle button in the navbar has a hover effect that stops working

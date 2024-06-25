@@ -1,29 +1,28 @@
 {% extends "base.html" %}
-
 {% load i18n %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/form-styles.css' %}" />
+{% endblock %}
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <h3>{% trans "Sign Out" %}</h3>
+<div class="row g-0 justify-content-center m-auto">
+    <div class="col-10 col-md-10 mt-2 mt-sm-3 sidebar-margin">
 
-            <p>{% trans 'Are you sure you want to sign out?' %}</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
+        <h3>{% trans "Sign Out" %}</h3>
 
-            <form method="post" action="{% url 'account_logout' %}">
-                {% csrf_token %}
-                {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <button class="btn btn-signup right" type="submit">{% trans 'Sign Out' %}</button>
-            </form>
-        </div>
+        <p>{% trans 'Are you sure you want to sign out?' %}</p>
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <button class="btn btn-general hover-highlight" type="submit">{% trans 'Yes, sign out' %}</button>
+        </form>
     </div>
 </div>
+
 {% endblock %}

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-
 {% load i18n %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/form-styles.css' %}" />
+{% endblock %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock head_title %}
 
@@ -13,7 +17,7 @@
       <div class="col-12 col-md-4 pe-sm-3 align-self-center">
         <h1 class="m-auto">Sign Up</h1>
 
-        <p class="mt-3">Already have an account? Then please <a href="{{ login_url }}">sign in</a>.
+        <p class="mt-3">Already have an account? Then please <a href="{{ login_url }}">login</a>.
         </p>
       </div>
       <div class="col-12 col-md-8 col-lg-6 col-xxl-4">
@@ -25,61 +29,44 @@
             <div class="col-12 col-sm-6">
               <p>{{ form.username.label }}</p>
             </div>
-            <div class="col-12 col-sm-6">
-              {% if form.username.errors %}
-              <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="{{ form.username.errors.0|escape}}">
-                {% endif %}
+            <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{% if form.username.errors %}{{ form.username.errors.0|escape}}{% endif %}">
                 {{ form.username }}
-              </p>
             </div>
           </div>
           <div class="row my-3">
             <div class="col-12 col-sm-6">
               <p>{{ form.email.label }}</p>
             </div>
-            <div class="col-12 col-sm-6">
-              {% if form.email.errors %}
-              <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="{{ form.email.errors.0|escape}}">
-                {% endif %}
+            <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{% if form.email.errors %}{{ form.email.errors.0|escape}}{% endif %}">
                 {{ form.email }}
-              </p>
             </div>
           </div>
           <div class="row my-3">
             <div class="col-12 col-sm-6">
               <p>{{ form.password1.label }}</p>
             </div>
-            <div class="col-12 col-sm-6">
-              {% if form.password1.errors %}
-              <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="{{ form.password1.errors.0|escape}}">
-                {% endif %}
+            <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{% if form.password1.errors %}{{ form.password1.errors.0|escape}}{% endif %}">
                 {{ form.password1 }}
-              </p>
             </div>
           </div>
           <div class="row my-3">
             <div class="col-12 col-sm-6">
               <p>{{ form.password2.label }}</p>
             </div>
-            <div class="col-12 col-sm-6">
-              {% if form.password2.errors %}
-              <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="{{ form.password2.errors.0|escape}}">
-                {% endif %}
+            <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="{% if form.password2.errors %}{{ form.password2.errors.0|escape}}{% endif %}">
                 {{ form.password2 }}
-              </p>
             </div>
           </div>
-
 
           <!-- {{ form.as_p }} -->
           {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
           {% endif %}
-          <button class="btn btn-success" type="submit">{% trans "Sign Up" %} &raquo;</button>
+          <button class="btn btn-general hover-highlight" type="submit">{% trans "Sign Up" %} &raquo;</button>
         </form>
       </div>
     </div>

@@ -1,33 +1,66 @@
 {% extends "base.html" %}
-
 {% load i18n %}
+{% load static %}
+
 {% load account socialaccount %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/form-styles.css' %}" />
+{% endblock %}
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <h3>{% trans "Sign In" %}</h3>
+<div class="row g-0 justify-content-center m-auto h-100">
 
-            <p>{% blocktrans %}Welcome back to MusicLab. Please log in to upload your work. If
-                you have not created an account yet, then <a class="link" href="{{ signup_url }}">sign up</a>
-                first.{% endblocktrans %}</p>
+    <div class="col-10 col-md-10 mx-3 my-auto m-sm-auto">
+      <div class="row g-0 mx-sm-5">
+        <div class="col-0 col-xxl-2 col-lg-1"></div>
+        <div class="col-12 col-md-4 pe-sm-3 align-self-center">
+          <h1 class="m-auto">Login</h1>
+  
+          <p class="mt-3">Don't have an account yet? Then please <a href="{{ signup_url }}">sign up</a>.
+          </p>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
+        <div class="col-12 col-md-8 col-lg-6 col-xxl-4">
             <form class="login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="row my-3">
+                    <div class="col-12 col-sm-6">
+                      <p>{{ form.login.label }}</p>
+                    </div>
+                    <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="{% if form.login.errors %}{{ form.login.errors.0|escape}}{% endif %}">
+                        {{ form.login }}
+                    </div>
+                  </div>
+                  <div class="row my-3">
+                    <div class="col-12 col-sm-6">
+                      <p>{{ form.password.label }}</p>
+                    </div>
+                    <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="{% if form.password.errors %}{{ form.password.errors.0|escape}}{% endif %}">
+                        {{ form.password }}
+                    </div>
+                  </div>
+                  <div class="row my-3">
+                    <div class="col-12 col-sm-6">
+                      <p>{{ form.remember.label }}</p>
+                    </div>
+                    <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="{% if form.remember.errors %}{{ form.remember.errors.0|escape}}{% endif %}">
+                        {{ form.remember }}
+                    </div>
+                  </div>
+
                 {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
-                <button class="btn btn-signup right" type="submit">{% trans "Sign In" %}</button>
+                <button class="btn btn-general hover-highlight" type="submit">{% trans "Login" %}</button>
             </form>
         </div>
     </div>
+  </div>
 </div>
 {% endblock %}

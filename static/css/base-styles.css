@@ -10,7 +10,7 @@
 
 body {
   font-family: "Raleway", "Courier New", Courier, monospace; /*"Ubuntu Mono", */
-  font-weight: 700;
+  font-weight: 400;
   color: rgb(39, 36, 36);
   background-color: rgb(243, 243, 237);
   width: 100vw;
@@ -21,6 +21,12 @@ a {
   cursor: pointer;
   color: rgb(39, 36, 36);
   text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
 }
 
 .text-color {
@@ -36,7 +42,6 @@ a {
 
 .nav-upper {
   background-color: rgb(246, 246, 203);
-  /* background: url('../images/stacked-steps-haikei.png') border-box center/cover no-repeat fixed; */
   font-family: "Sono", "Courier New", Courier, monospace;
   font-weight: 400;
   border-bottom: 5px solid rgb(56, 55, 55);
@@ -165,11 +170,31 @@ a:focus-visible {
 /* ------------- Sidebar styles ---------------- */
 
 .sidebar {
+  position: relative;
+  height: 100%;
   background-color: rgb(243, 243, 228);
   box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
   min-width: 4rem;
   z-index: 99;
 }
+
+.sidebar-main-nav {
+  position: relative;
+}
+
+.about-link-container {
+  position: fixed;
+  /* top: 90vh; */
+  bottom: 0;
+  background-color: rgb(243, 243, 228);
+  opacity: 1 !important;
+  /* top: 5rem; */
+  /* width: 100%; */
+  /* padding: 10px; */
+  /* text-align: center; */
+  font-weight: 400;
+}
+
 
 .sidebar-toggle-div {
   display: flex;
@@ -357,6 +382,9 @@ audio {
     height: 100%;
     z-index: 99;
   }
+
+
+
 
   .sidebar-margin {
     margin-left: 5rem !important;

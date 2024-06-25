@@ -75,11 +75,11 @@
 
                 <div class="nav-link-box d-none d-md-inline mx-auto me-md-3 mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == login_url %} active" aria-current="page{% endif %}"
-                        href="{% url 'account_login' %}">Sign in</a>
+                        href="{% url 'account_login' %}">Login</a>
                 </div>
                 <div class="nav-link-box d-none d-md-inline mx-auto mb-3 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == signup_url %} active"
-                        aria-current="page{% endif %}" href="{% url 'account_signup' %}">Register</a>
+                        aria-current="page{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
                 </div>
             </div>
             {% else %}
@@ -120,11 +120,11 @@
     <main class="flex-grow-1 flex-shrink-0 main-bg">
         <div class="container-fluid h-100 m-0 p-0 ">
             <div class="row g-0 ms-0 ps-0 flex-nowrap h-100 pos-relative">
+                {% if request.path == login_url or request.path == signup_url %}
+                {% else %}
                 <!-- Sidebar adapted from https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb -->
                 <!-- Sidebar column -->
-                <div class="col-auto sidebar ms-0 me-2 px-0 h-100
-                    {% if request.path == login_url or request.path == signup_url %}visually-hidden"
-                    aria-hidden="true{% endif %}" id="sidebar" role="navigation">
+                <div class="col-auto sidebar flex-column ms-0 me-2 px-0" id="sidebar" role="navigation">
 
                     <!-- Toggle button to expand/collapse sidebar -->
                     <div class="row g-0 sidebar-toggle-div pos-relative">
@@ -136,17 +136,18 @@
                         </button>
                     </div>
 
-                    <div class="row g-0">
-                        <div class="d-flex flex-column align-items-center align-items-md-start pt-2">
-                            <ul class="navbar-nav mb-sm-auto mb-0 align-content-start align-content-md-start" id="menu">
+                    <div class="row mb-5 g-0">
+                        <div class="pt-2 h-100">
+                            <ul class="navbar-nav" id="menu">
 
-                                {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-house"></i>
                                         <span class="ms-1 d-none filter-title">Back Home</span></a>
                                 </li>
                                 <hr class="mx-2">
+
+                                {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
 
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'dashboard' user.username %}"
@@ -169,7 +170,7 @@
 
                                 </li>
                                 <hr class="mx-2 mt-1">
-                                
+
                                 <li class="nav-item hover-highlight">
                                     <a href="{{ request.path }}" class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-xmark"></i>
@@ -237,7 +238,8 @@
                                 {% endif %}
 
                                 <li class="nav-item hover-highlight">
-                                    <a href="{% if profile_view %}{{ request.path }}{% else %}{% url 'home' %}{% endif %}" class="nav-link mx-md-2 px-3 align-middle">
+                                    <a href="{% if profile_view %}{{ request.path }}{% else %}{% url 'home' %}{% endif %}"
+                                        class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-xmark"></i>
                                         <span class="ms-1 d-none filter-title">Reset all</span>
                                     </a>
@@ -330,11 +332,23 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="nav-item about-link-container" id="about-link-container">
+                        <hr class="mx-2 mb-1">
+                        <div class="hover-highlight">
+                            <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 d-block">
+                                <i class="fa-solid fa-circle-question"></i>
+                                <span class="ms-1 d-none filter-title">About</span></a>
+                        </div>
+                    </div>
+
                 </div>
+
+                {% endif %}
 
                 <!-- Content column -->
                 <div class="col w-100 main-content">
-                    <div class="row g-0 msg-container w-100">
+                    <div class="row g-0 msg-container sidebar-margin w-100">
                         <div class="col-md-12">
                             {% for message in messages %}
                             <div class="row g-0 alert {{ message.tags }} alert-dismissible fade show" id="msg"

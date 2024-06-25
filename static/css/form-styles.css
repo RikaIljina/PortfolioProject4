@@ -1,0 +1,9 @@
+.btn-general {
+    border: 1px solid #000000;
+    border-radius: 0;
+    padding: 0.5rem 0.8rem;
+}
+
+.active-tooltip input:not([type=checkbox]) {
+    width: 100% !important;
+}
