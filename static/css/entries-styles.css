@@ -84,6 +84,11 @@ looks better especially when displaying song lyrics */
   background-color: rgb(246, 246, 154);
 }
 
+.accordion-button:focus-visible {
+  box-shadow: none !important;
+  border-color: transparent;
+}
+
 .accordion-button,
 .accordion-button:not(.collapsed) {
   background-color: rgb(246, 246, 154);
@@ -123,12 +128,12 @@ looks better especially when displaying song lyrics */
 /* ------------------------------ */
 
 .inner-card:hover,
-.inner-card:focus {
+.inner-card:focus-visible {
   box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
 }
 
 .no-shadow:hover,
-.no-shadow.focus {
+.no-shadow.focus-visible {
   box-shadow: none;
 }
 
@@ -159,7 +164,7 @@ looks better especially when displaying song lyrics */
   border: 1px solid black;
 }
 
-.tag-container a:focus {
+.tag-container a:focus-visible {
   border-radius: 0;
   border: none;
   box-shadow: 0 0 0 white;
@@ -186,9 +191,9 @@ looks better especially when displaying song lyrics */
 }
 
 /* .btn-comment:hover,
-.btn-comment:focus,
+.btn-comment:focus-visible,
 .btn-update:hover,
-.btn-update:focus,
+.btn-update:focus-visible,
 .btn-edit,
 .btn-delete {
   background-color: rgb(238, 238, 84);

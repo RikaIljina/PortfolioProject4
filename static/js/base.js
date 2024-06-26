@@ -21,10 +21,7 @@ window.addEventListener("DOMContentLoaded", function () {
   // mobile device and if they already clicked on a filter and the view
   // shows a filtered selection of entries
   for (let filterCat of filterCategories) {
-    if (
-      !sidebarAutoCollapse &&
-      filterCat.classList.contains("force-show")
-    ) {
+    if (!sidebarAutoCollapse && filterCat.classList.contains("force-show")) {
       expandSidebar();
       filterCat.classList.add("show");
     } else if (
@@ -44,6 +41,18 @@ window.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  document.querySelector("#about-link-container").style.width =
+    getComputedStyle(sideBar).width;
+
+    if (sideBarState === "absolute") {
+      let newHeight = getComputedStyle(sideBar).height;
+      alert(newHeight);
+      document.querySelector(".main-content").style.minHeight = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+    alert(document.querySelector(".main-content").style.minHeight)
+    alert(getComputedStyle(document.querySelector(".main-content")).height)
+
+    }
 });
 
 function collapseSidebar() {
@@ -69,8 +78,7 @@ function collapseSidebar() {
   }
 
   sideBar.style.minWidth = "initial";
-  document.querySelector('#about-link-container').style.width = "initial";
-
+  document.querySelector("#about-link-container").style.width = "initial";
 }
 
 function expandSidebar() {
@@ -95,8 +103,8 @@ function expandSidebar() {
     sideBar.style.minWidth = "17%";
   }
 
-  document.querySelector('#about-link-container').style.width = getComputedStyle(sideBar).width;
-
+  document.querySelector("#about-link-container").style.width =
+    getComputedStyle(sideBar).width;
 }
 
 // The menu toggle button in the navbar has a hover effect that stops working
@@ -131,8 +139,24 @@ window.addEventListener("resize", () => {
   } else {
     sidebarAutoCollapse = false;
   }
+  document.querySelector("#about-link-container").style.width =
+    getComputedStyle(sideBar).width;
+
+  
 });
 
+window.addEventListener("scroll", function () {
+  const aboutLink = document.querySelector("#about-link-container");
+  const menu = document.querySelector("#menu");
+  const menuBottom = menu.getBoundingClientRect().bottom;
+  const aboutLinkTop = aboutLink.getBoundingClientRect().top;
+
+  if (aboutLinkTop < menuBottom) {
+    aboutLink.classList.add("overlay-shadow");
+  } else {
+    aboutLink.classList.remove("overlay-shadow");
+  }
+});
 
 const msgAlerts = document.querySelectorAll(".alert");
 
