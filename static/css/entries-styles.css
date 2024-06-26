@@ -252,4 +252,8 @@ looks better especially when displaying song lyrics */
   h3 {
     font-size: 1rem;
   }
+  .card-outer {
+    width: 100%;
+    min-width: 150px;
+  }
 }

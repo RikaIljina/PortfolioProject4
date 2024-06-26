@@ -1,6 +1,8 @@
 // import 'bootstrap';
 // window.Modal = bootstrap.Modal;
 window.addEventListener("DOMContentLoaded", function () {
+  alert('loaded')
+  alert(document.getElementById(`comment${15}`))
   const editButtons = document.getElementsByClassName("btn-edit");
   // const commentText = document.getElementById("id_content");
   const commentForm = document.getElementById("commentForm");
@@ -11,18 +13,20 @@ window.addEventListener("DOMContentLoaded", function () {
 
   for (let button of editButtons) {
     button.addEventListener("click", (e) => {
-      let commentId = e.target.getAttribute("data-comment_id");
-      this.alert(commentId)
+      e.preventDefault();
+      let commentId = e.currentTarget.getAttribute("data-comment_id");
+      alert(commentId)
       let commentParagraph = document.getElementById(`comment${commentId}`);
       let commentContent = commentParagraph.innerText;
       let hiddenFormDiv = document.getElementById(`commentform${commentId}`);
+      hiddenFormDiv.removeAttribute("class", "d-none");
+
       let editCommentForm = document.getElementById(
         `editCommentForm${commentId}`
       );
       let inplaceCommentText = document.getElementById(
         `updatedComment${commentId}`
       );
-      hiddenFormDiv.removeAttribute("class", "d-none");
       //hiddenFormDiv.setAttribute("aria-hidden", "false");
       commentParagraph.setAttribute("class", "visually-hidden");
       // commentText.value = commentContent;
@@ -39,7 +43,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
   for (let button of deleteButtons) {
     button.addEventListener("click", (e) => {
-      let commentId = e.target.getAttribute("data-comment_id");
+      e.preventDefault();
+      alert(e.currentTarget)
+      let commentId = e.currentTarget.getAttribute("data-comment_id");
       let oldPath = window.location.href.split("?")[0].slice(0, -1);
       //let (deleteConfirm.href);
       alert(commentId);

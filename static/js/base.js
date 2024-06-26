@@ -46,11 +46,9 @@ window.addEventListener("DOMContentLoaded", function () {
     getComputedStyle(sideBar).width;
 
     if (sideBarState === "absolute") {
-      let newHeight = getComputedStyle(sideBar).height;
-      alert(newHeight);
-      document.querySelector(".main-content").style.minHeight = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
-    alert(document.querySelector(".main-content").style.minHeight)
-    alert(getComputedStyle(document.querySelector(".main-content")).height)
+      // let newHeight = getComputedStyle(sideBar).height;
+      let newHeight = getComputedStyle(document.querySelector(".main-content")).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+      document.querySelector("#sidebar").style.height = newHeight;
 
     }
 });
@@ -139,7 +137,15 @@ window.addEventListener("resize", () => {
   } else {
     sidebarAutoCollapse = false;
   }
-  document.querySelector("#about-link-container").style.width =
+ 
+
+    if (sideBarState === "absolute") {
+      // let newHeight = getComputedStyle(sideBar).height;
+      let newHeight = getComputedStyle(document.querySelector(".main-content")).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+      document.querySelector("#sidebar").style.height = newHeight;
+
+    }
+    document.querySelector("#about-link-container").style.width =
     getComputedStyle(sideBar).width;
 
   

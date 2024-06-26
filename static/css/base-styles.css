@@ -435,19 +435,19 @@ audio {
   .sidebar {
     min-width: 4rem;
     position: absolute;
-    height: 100vh;
+    /* height: 100vh; */
     min-height: max-content;
     z-index: 99;
   }
 
   .sidebar-margin {
-    margin-left: 5rem !important;
+    margin-left: 4rem !important;
   }
 
-  /* .main-content {
-    min-height: max-content;
-    height: 100vh;
-  } */
+  .main-content {
+    /* height: max-content; */
+    min-height: 100vh;
+  }
 
   .dropdown-menu[data-bs-popper] {
     left: -3rem !important;
@@ -458,6 +458,13 @@ audio {
   /* .sidebar-b-sm {
     height: calc(100vh + 5rem) !important;
   } */
+  #commentForm {
+    flex-wrap: wrap;
+  }
+
+  #submitButton {
+    margin-left: 42px;
+  }
 
   .logo-image {
     margin: 0;
@@ -472,7 +479,7 @@ audio {
   }
 
   .sidebar-margin {
-    margin-left: 4rem !important;
+    margin-left: 3rem !important;
   }
 
   .old-audio {
