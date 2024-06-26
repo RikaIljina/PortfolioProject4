@@ -11,7 +11,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
   for (let button of deleteButtons) {
     button.addEventListener("click", (e) => {
-      let fileId = e.target.getAttribute("data-file_id");
+      e.preventDefault();
+      let fileId = e.currentTarget.getAttribute("data-file_id");
+      alert(fileId)
       let oldPath = window.location.href.split("?")[0].slice(0, -1);
       //let (deleteConfirm.href);
       deleteConfirm.href = `${oldPath}/delete-file/${fileId}/`;

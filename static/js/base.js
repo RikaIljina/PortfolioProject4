@@ -24,6 +24,7 @@ window.addEventListener("DOMContentLoaded", function () {
     if (!sidebarAutoCollapse && filterCat.classList.contains("force-show")) {
       expandSidebar();
       filterCat.classList.add("show");
+      break;
     } else if (
       !sidebarAutoCollapse &&
       filterCat.classList.contains("force-show")
@@ -39,18 +40,24 @@ window.addEventListener("DOMContentLoaded", function () {
       if (link.getAttribute("aria-expanded") === "true" && sidebarCollapsed) {
         expandSidebar();
       }
+      setTimeout(() => { 
+        document.querySelector("#about-link-container").style.width =
+        getComputedStyle(sideBar).width;
+      }, 200);
+      
     });
   }
 
   document.querySelector("#about-link-container").style.width =
     getComputedStyle(sideBar).width;
 
-    if (sideBarState === "absolute") {
-      // let newHeight = getComputedStyle(sideBar).height;
-      let newHeight = getComputedStyle(document.querySelector(".main-content")).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
-      document.querySelector("#sidebar").style.height = newHeight;
-
-    }
+  if (sideBarState === "absolute") {
+    // let newHeight = getComputedStyle(sideBar).height;
+    let newHeight = getComputedStyle(
+      document.querySelector(".main-content")
+    ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+    document.querySelector("#sidebar").style.height = newHeight;
+  }
 });
 
 function collapseSidebar() {
@@ -100,7 +107,7 @@ function expandSidebar() {
   } else {
     sideBar.style.minWidth = "17%";
   }
-
+alert('adjusting width')
   document.querySelector("#about-link-container").style.width =
     getComputedStyle(sideBar).width;
 }
@@ -137,19 +144,19 @@ window.addEventListener("resize", () => {
   } else {
     sidebarAutoCollapse = false;
   }
- 
 
-    if (sideBarState === "absolute") {
-      // let newHeight = getComputedStyle(sideBar).height;
-      let newHeight = getComputedStyle(document.querySelector(".main-content")).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
-      document.querySelector("#sidebar").style.height = newHeight;
-
-    }
-    document.querySelector("#about-link-container").style.width =
+  if (sideBarState === "absolute") {
+    // let newHeight = getComputedStyle(sideBar).height;
+    let newHeight = getComputedStyle(
+      document.querySelector(".main-content")
+    ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+    document.querySelector("#sidebar").style.height = newHeight;
+  }
+  document.querySelector("#about-link-container").style.width =
     getComputedStyle(sideBar).width;
-
-  
 });
+
+
 
 window.addEventListener("scroll", function () {
   const aboutLink = document.querySelector("#about-link-container");

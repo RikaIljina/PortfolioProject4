@@ -186,9 +186,10 @@ a:focus-visible {
 .sidebar {
   position: relative;
   min-height: max-content;
+  min-width: 4rem;
+  /* max-width: 17%; */
   background-color: rgb(243, 243, 228);
   box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
-  min-width: 4rem;
   z-index: 99;
 }
 
@@ -433,8 +434,8 @@ audio {
   }
 
   .sidebar {
-    min-width: 4rem;
     position: absolute;
+    min-width: 4rem;
     /* height: 100vh; */
     min-height: max-content;
     z-index: 99;

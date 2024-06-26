@@ -216,7 +216,8 @@ looks better especially when displaying song lyrics */
   border: 1px solid #75ed6f;
 } */
 
-.btn-delete {
+.btn-delete,
+.btn-delete-entry {
   color: #e6646e;
 }
 
