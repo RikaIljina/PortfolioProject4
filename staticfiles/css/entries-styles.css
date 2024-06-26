@@ -6,6 +6,10 @@
   font-size: 1.2rem;
 }
 
+#entryForm {
+  font-weight: 400;
+}
+
 /* ---- Entry cards ----- */
 
 h3 {
@@ -32,14 +36,27 @@ h3 {
 }
 
 .card-full-page {
-  min-width: 90%;
+  flex-grow: 1;
 }
 
-.inner-card,
-.card-desc {
+.inner-card {
   border: 1px solid black;
   border-radius: 0;
   min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+.card-desc {
+  /* border: 1px solid black; */
+  border-radius: 0;
+  min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.card-comments {
+  /* border: 1px solid black; */
+  border-radius: 0;
   font-weight: 400;
   word-break: break-word;
 }
@@ -49,13 +66,74 @@ h3 {
   border-top: none;
 }
 
+/* Remove margin bottom from p elements to reduce line height in the HTML description area;
+looks better especially when displaying song lyrics */
+.card-desc p {
+  margin-bottom: 0;
+}
+
+.accordion-header {
+  box-shadow: 0px 0.5px 1.5px black;
+  border-radius: 0;
+  background-color: rgb(246, 246, 154);
+}
+
+.accordion-footer {
+  box-shadow: 0px -0.5px 1.5px black;
+  border-radius: 0;
+  background-color: rgb(246, 246, 154);
+}
+
+.accordion-button:focus-visible {
+  box-shadow: none !important;
+  border-color: transparent;
+}
+
+.accordion-button,
+.accordion-button:not(.collapsed) {
+  background-color: rgb(246, 246, 154);
+  border-radius: 0 !important;
+  box-shadow: 0px 0.1px 0.5px black;
+}
+
+.accordion-body {
+  padding: 0;
+}
+
+/* Accordion preview styles from https://stackoverflow.com/a/72364245 */
+.accordion-preview .collapse:not(.show) {
+  display: block;
+}
+
+.accordion-preview .collapse:not(.show) .accordion-body {
+  max-height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.accordion-preview .collapse:not(.show) .accordion-body:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 1) 5%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  pointer-events: none; /* so the text is still selectable */
+}
+/* ------------------------------ */
+
 .inner-card:hover,
-.inner-card:focus {
+.inner-card:focus-visible {
   box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
 }
 
 .no-shadow:hover,
-.no-shadow.focus {
+.no-shadow.focus-visible {
   box-shadow: none;
 }
 
@@ -66,7 +144,7 @@ h3 {
 
 .card-header,
 .card-footer {
-  background-color: rgb(243, 243, 228);
+  background-color: rgb(248, 248, 235);
 }
 
 .card-body {
@@ -81,13 +159,20 @@ h3 {
   display: block;
 }
 
-/* .title-link:hover,
-  .user-link:hover {
-  } */
-
 .tag {
   padding: 1px;
   border: 1px solid black;
+}
+
+.tag-container a:focus-visible {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+}
+
+.publicity-icon {
+  font-size: 0.9rem;
 }
 
 /* ---------- Comment section styles ----------- */
@@ -106,9 +191,9 @@ h3 {
 }
 
 /* .btn-comment:hover,
-.btn-comment:focus,
+.btn-comment:focus-visible,
 .btn-update:hover,
-.btn-update:focus,
+.btn-update:focus-visible,
 .btn-edit,
 .btn-delete {
   background-color: rgb(238, 238, 84);
@@ -117,22 +202,38 @@ h3 {
 
 .btn-edit,
 .btn-delete {
-    font-size: 0.8rem;
-    border-radius: 0;
-    min-width: 3rem;
+  font-size: 0.8rem;
+  border-radius: 0;
+  min-width: 3rem;
 }
 
-.btn-edit {
-    border: 1px solid #75ed6f;
+.btn-general {
+  border: 1px solid #000000;
+  border-radius: 0;
 }
 
-.btn-delete {
-    border: 1px solid #e6646e;
+/* .btn-edit {
+  border: 1px solid #75ed6f;
+} */
+
+.btn-delete,
+.btn-delete-entry {
+  color: #e6646e;
 }
 
 .form-control {
-    border: 1px solid gray;
-    border-radius: 0;
+  border: 1px solid gray;
+  border-radius: 0;
+  width: 100% !important;
+}
+
+.entry-button-container {
+  margin: 1rem 0 2rem 0;
+  padding: 0;
+}
+
+.entry-button-container .btn {
+  font-size: 1.5rem;
 }
 
 /* ---------- Media queries ----------- */
@@ -151,5 +252,9 @@ h3 {
 @media screen and (max-width: 576px) {
   h3 {
     font-size: 1rem;
+  }
+  .card-outer {
+    width: 100%;
+    min-width: 150px;
   }
 }

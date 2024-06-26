@@ -1,5 +1,5 @@
 h3 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 
 .filter-results {
@@ -29,8 +29,8 @@ h3 {
 }
 
 .inner-card:hover,
-.inner-card:focus {
-    box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
+.inner-card:focus-visible {
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
 }
 
 .inner-card a {
@@ -38,33 +38,67 @@ h3 {
   color: rgb(39, 36, 36);
 }
 
-
 .card-header,
 .card-footer {
-    background-color: rgb(243, 243, 228);
+  background-color: rgb(243, 243, 228);
 }
 
 .card-body {
-    padding: 0.5rem;
-    /* word-break: break-word; */
+  padding: 0.5rem;
+  /* word-break: break-word; */
 }
 .card-footer {
-    padding: 0.5rem 0.3rem;
+  padding: 0.5rem 0.3rem;
 }
 
 .title-link {
-    display: block;
+  display: block;
 }
+
+/* --------- Card styles --------------- */
+
+.title-link,
+.user-line {
+  transition: all 0.3s;
+  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  perspective: 1000;
+  -webkit-perspective: 1000;
+}
+
+.title-link:hover,
+.user-line:hover {
+  opacity: 0.6;
+  /* transform: scale(1.02); */
+  transition: all 0.3s;
+}
+.title-link:focus-visible,
+.user-link:focus-visible {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+  }
 
 /* .title-link:hover,
 .user-link:hover {
 } */
 
 .tag {
-    padding: 1px;
-    border: 1px solid black;
+  padding: 1px;
+  border: 1px solid black;
 }
 
+.tag-container a:focus-visible {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+  }
 
 @media screen and (max-width: 768px) {
   h3 {
@@ -85,4 +119,10 @@ h3 {
   h3 {
     font-size: 1rem;
   }
+
+  .card-outer {
+    min-width: 200px;
+    flex-grow: 1;
+  }
+
 }
