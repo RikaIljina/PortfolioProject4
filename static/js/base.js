@@ -107,7 +107,6 @@ function expandSidebar() {
   } else {
     sideBar.style.minWidth = "17%";
   }
-alert('adjusting width')
   document.querySelector("#about-link-container").style.width =
     getComputedStyle(sideBar).width;
 }

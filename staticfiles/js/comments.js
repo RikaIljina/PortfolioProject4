@@ -13,7 +13,6 @@ window.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", (e) => {
       e.preventDefault();
       let commentId = e.currentTarget.getAttribute("data-comment_id");
-      alert(commentId)
       let commentParagraph = document.getElementById(`comment${commentId}`);
       let commentContent = commentParagraph.innerText;
       let hiddenFormDiv = document.getElementById(`commentform${commentId}`);
@@ -42,11 +41,9 @@ window.addEventListener("DOMContentLoaded", function () {
   for (let button of deleteButtons) {
     button.addEventListener("click", (e) => {
       e.preventDefault();
-      alert(e.currentTarget)
       let commentId = e.currentTarget.getAttribute("data-comment_id");
       let oldPath = window.location.href.split("?")[0].slice(0, -1);
       //let (deleteConfirm.href);
-      alert(commentId);
       deleteConfirm.href = `${oldPath}/delete-comment/${commentId}/`;
       //deleteModal.show();
     });
