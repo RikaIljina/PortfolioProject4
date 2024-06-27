@@ -3,7 +3,7 @@ h3 {
 }
 
 .filter-results h3 {
-  background-color: rgb(238, 238, 84);
+  background-color: #95d2b3;
 }
 
 /* .card-container {
@@ -12,7 +12,7 @@ h3 {
 
 .card-outer {
   min-width: 300px;
-  max-width: 300px;
+  width: 300px;
   flex-grow: 0;
 }
 
@@ -38,8 +38,7 @@ h3 {
   color: rgb(0, 0, 0);
 }
 
-.inner-card a.title-link,
-.inner-card a.user-link {
+.card-header a {
   text-decoration: underline;
 }
 
@@ -65,19 +64,20 @@ h3 {
 .title-link,
 .user-line {
   transition: all 0.3s;
-  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
+  display: inline-block;
+  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition
   outline: 1px solid transparent;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
   will-change: transform;
   perspective: 1000;
-  -webkit-perspective: 1000;
+  -webkit-perspective: 1000; */
 }
 
 .title-link:hover,
 .user-line:hover {
-  opacity: 0.6;
+  opacity: 0.7;
   /* transform: scale(1.02); */
   transition: all 0.3s;
 }

@@ -11,7 +11,7 @@
 body {
   font-family: "Raleway", "Courier New", Courier, monospace; /*"Ubuntu Mono", */
   font-weight: 400;
-  color: rgb(39, 36, 36);
+  color: rgb(0, 0, 0);
   background-color: #f1f8e8;
   width: 100vw;
   overflow-x: hidden;
@@ -19,13 +19,17 @@ body {
 
 a {
   cursor: pointer;
-  color: rgb(39, 36, 36);
+  color: rgb(0, 0, 0);
   text-decoration: none;
+}
+
+.link_underline {
+  text-decoration: underline;
 }
 
 a:hover,
 a:focus-visible {
-  text-decoration: none;
+  /* text-decoration: none; */
   color: rgb(0, 0, 0);
 }
 
@@ -54,7 +58,6 @@ a:focus-visible {
 }
 
 .nav-link {
-  
   /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
   /* outline: 1px solid transparent;
   backface-visibility: hidden;
@@ -66,7 +69,7 @@ a:focus-visible {
 }
 
 .nav-link-box.active {
-  background-color: rgb(194, 240, 128);
+  background-color: rgb(168, 230, 80);
 }
 
 .nav-link:hover,
@@ -127,11 +130,11 @@ a:focus-visible {
   transition: all 0.3s;
 }
 
-.nav-link-box:hover,
+/* .nav-link-box:hover,
 .nav-link-box:focus-visible {
-  background-color: rgb(238, 238, 84);
+  background-color: rgb(219, 192, 39);
   transition: all 0.3s;
-}
+} */
 
 a:focus-visible {
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
@@ -153,23 +156,28 @@ a:focus-visible {
 /* ------------- Dropdown menu styles ---------------- */
 
 .dropdown-menu {
-  background-color: rgb(205, 205, 193);
-  color: rgb(243, 243, 228);
-  border: none;
+  /* background-color: rgb(205, 205, 193); */
+  /* color: rgb(243, 243, 228); */
+  border: 1px solid black;
   border-radius: 0;
   box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 5px !important;
+  left: -1rem !important;
 }
 
 .dropdown-divider {
-  color: #333232;
+  color: #07220c;
 }
 
-.dropdown-item:hover {
-  background-color: rgba(238, 238, 84);
+/* .dropdown-item:hover {
+  background-color: rgb(219, 192, 39);
+  color: black;
+} */
+
+.dropdown-menu-light {
+  background-color: #95d2b3;
 }
 
 /* ------------- Main containers styles ---------------- */
-
 
 .main-bg {
   height: max-content;
@@ -182,7 +190,6 @@ a:focus-visible {
 }
 
 /* ------------- Sidebar styles ---------------- */
-
 
 .sidebar {
   position: relative;
@@ -205,7 +212,7 @@ a:focus-visible {
 .about-link-container {
   position: fixed;
   bottom: 0;
-  background-color: #95d2b3;
+  background-color: #d8efd3;
   padding-top: 0;
   margin-top: 0;
   opacity: 1 !important;
@@ -254,9 +261,9 @@ a:focus-visible {
   left: 0;
 }
 
-.sidebar-toggle-btn:hover {
-  background-color: rgb(238, 238, 84);
-}
+/* .sidebar-toggle-btn:hover {
+  background-color: #f0e130;
+} */
 
 .toggle-icon-expand,
 .toggle-icon-collapse {
@@ -277,9 +284,8 @@ a:focus-visible {
 /* ------ Sidebar item styles ------------- */
 
 .hover-highlight:hover,
-.hover-highlight:focus,
-.hover-highlight:active {
-  background-color: rgb(238, 238, 84);
+.hover-highlight:focus {
+  background-color: #ace32c;
   transition: all 0.3s;
 }
 
@@ -405,12 +411,12 @@ audio {
 
 /* --------- Footer styles --------------- */
 
-.footer {
+/* .footer {
   background-color: rgb(246, 246, 203);
   color: rgb(39, 36, 36);
   font-family: "Sono", "Courier New", Courier, monospace;
   font-weight: 400;
-}
+} */
 
 /* -------------------- Signup pages ------------- */
 .bg-1 {
@@ -449,7 +455,6 @@ audio {
 
   .nav-link-box {
     padding: 0.2rem 0.5rem;
-
   }
 
   .sidebar {
@@ -470,9 +475,26 @@ audio {
   }
 
   .dropdown-menu[data-bs-popper] {
-    left: -3rem !important;
+    left: -6rem !important;
   }
 }
+
+/* Dashboard */
+
+.card-comments .card {
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+.card-comments .card-header {
+  padding: 0;
+}
+
+.card-comments .card-header a {
+  text-decoration: underline;
+  display: inline-block;
+}
+
 
 @media screen and (max-width: 576px) {
   /* .sidebar-b-sm {
