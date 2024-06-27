@@ -11,22 +11,21 @@
 <div class="row g-0 sidebar-margin">
     <div class="m-auto col-12 col-md-10">
 
-        <div class="row g-0 px-md-4 px-2 mt-3 justify-content-center card-full-page card-comments">
+        <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center card-full-page card-comments">
 
             <hr>
-            <p>Your comments</p>
+            <p class="px-3 px-md-0">Your comments</p>
             <hr>
 
             {% for comment in page_obj %}
 
-            <div class="card d-flex flex-row gap-2">
+            <div class="card card-header d-flex flex-row gap-2">
                 {% with comment.entry as entry %}
                 <div class="d-flex flex-row px-2 py-1 gap-2">
                     <p class="mb-0">On entry
                         <a href="{% url 'entry_details' entry.slug %}">
                             <b>{{ entry.title }}</b>
-                        </a>
-                   by author
+                        </a> by author
                         {% if "placeholder" in entry.author.profile.pic.url %}
                         <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
                             height="30" class="rounded-circle me-1 avatar-sm">
@@ -40,21 +39,51 @@
 
                 {% endwith %}
             </div>
-            <div class="card mb-3 p-2">
+            <div class="card mb-3 ps-2">
                 <div class="commented-section mt-2">
-                    <div class="d-flex flex-row align-items-center commented-user">
+                    <div class="d-flex flex-column flex-sm-row">
 
                         <!-- <p class="flex-fill"></p> -->
 
-                        <div id="comment{{ comment.id }}" class="comment-text-sm my-2 flex-fill">
+                        <div id="comment{{ comment.id }}" class="comment-text-sm mt-0 my-2 mb-0 flex-fill order-2 order-sm-1">
                             <span>{{ comment.content|linebreaks }}</span>
                         </div>
-                        <p class="mt-1 ms-2 text-muted flex-shrink-1 align-self-start text-end">{{ comment.created_on|naturalday }}</p>
+                        <p class="mt-0 ms-md-2 me-1 mb-1 text-muted flex-shrink-1 flex-fill text-end order-1 order-sm-2">{{ comment.created_on|naturalday }}</p>
                     </div>
 
 
-                    <!--  Set aria hidden!!! Unhide in js -->
                     {% if user.is_authenticated and comment.author == user %}
+                    <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 d-none">
+                        <form method="POST" action="" id="editCommentForm{{ comment.id }}"
+                            class="d-flex flex-column flex-sm-row flex-fill gap-3 mt-4 mb-4">
+                            {% csrf_token %}
+
+                            <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your
+                                Comment:</label>
+                            <textarea type="text" class="form-control" name="content"
+                                id="updatedComment{{ comment.id }}"></textarea>
+                            <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
+                            <div class="d-flex flex-column flex-shrink-0 ms-2">
+                                <button class="btn btn-update align-self-start hover-highlight" name="updateOld"
+                                    type="submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-edit hover-highlight"
+                            data-comment_id="{{ comment.id }}" aria-label="Edit comment"><i
+                                class="fa-solid fa-pen"></i></button>
+                        <button type="button" class="btn btn-delete hover-highlight"
+                            data-comment_id="{{ comment.id }}" data-bs-toggle="modal"
+                            data-bs-target="#modalDeleteComment" aria-label="Delete comment"><i
+                                class="fa-solid fa-trash"></i></button>
+                        <!--  -->
+
+                    </div>
+                    {% endif %}
+
+                    <!--  Set aria hidden!!! Unhide in js -->
+                    {% comment %} {% if user.is_authenticated and comment.author == user %}
                     <div id="commentform{{ comment.id }}" class="comment-text-sm my-1 visually-hidden">
                         <form method="POST" action="" id="editCommentForm{{ comment.id }}"
                             class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
@@ -80,7 +109,7 @@
                         <!--  -->
 
                     </div>
-                    {% endif %}
+                    {% endif %} {% endcomment %}
 
                 </div>
             </div>

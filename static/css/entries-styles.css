@@ -22,7 +22,7 @@ h3 {
 }
 
 .filter-results {
-  background-color: rgb(238, 238, 84);
+  background-color: #95d2b3;
 }
 
 /* .card-container {
@@ -169,6 +169,10 @@ looks better especially when displaying song lyrics */
 .tag {
   padding: 1px;
   border: 1px solid black;
+}
+
+.tag-container a {
+  display: inline-block;
 }
 
 .tag-container a:focus-visible {

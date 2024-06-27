@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 import cloudinary
 
 from mainpage.utils import get_tags_from_file, get_all_tags
@@ -40,7 +40,7 @@ def entry_details(request, slug):
     users = get_username_list()
     tags = get_all_tags()
     
-    if request.method == 'POST':
+    if request.user.is_authenticated and request.method == 'POST':
         process_comment_form(request, entry)
         return redirect(f'{reverse('entry_details', args=[slug])}')
 
@@ -84,7 +84,7 @@ def new_entry(request, username):
     """
     
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
     
     if request.method == 'POST':
         entry_form = EntryForm(request.POST, request.FILES, user=request.user)
@@ -142,7 +142,7 @@ def edit_entry(request, username, slug):
     """
 
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+         raise PermissionDenied
 
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
     # Sort old audio files by timestamp. The json object in entry.old_files
@@ -200,7 +200,7 @@ def edit_entry(request, username, slug):
 
 def delete_entry(request, username, slug):
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
     
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
     entry.delete()
@@ -226,9 +226,10 @@ def delete_old_file(request, username, slug, file_id):
         _type_: _description_
     """
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     entry = get_object_or_404(request.user.all_entries.all(), slug=slug)
+    
     if entry.old_files.get(file_id):
         del entry.old_files[file_id]
         entry.save()

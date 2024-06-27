@@ -15,7 +15,7 @@
 
                     {% if user.is_authenticated %}
                     <form method="POST" action="" id="commentForm"
-                        class="d-flex flex-row add-comment-section align-items-start gap-sm-3 mt-4 mb-4">
+                        class="d-flex flex-row add-comment-section align-items-start gap-3 mt-2 mt-md-4 mb-2 mb-md-4">
                         <div class="d-flex flex-row flex-fill add-comment-section align-items-start gap-1">
                             {% if "placeholder" in user.profile.pic.url %}
                             <img class="img-responsive flex-shrink-0 rounded-circle mt-4 mb-4 avatar-md"
@@ -25,13 +25,12 @@
                                 src="{{ user.profile.pic.url }}" width="38" alt="User profile picture">
                             {% endif %}
 
-                            <div class="flex-fill align-self-center mt-4 mb-4">
+                            <div class="flex-fill align-self-center mt-2 mt-md-4 mb-2 mb-md-4">
                                 {% csrf_token %}
                                 <span class="visually-hidden">{{ comment_form.label }}</span>
                                 {{ comment_form.content }}
                             </div>
                         </div>
-
 
                         <div class="mt-sm-4 mb-sm-4">
                             <button class="btn btn-comment hover-highlight" id="submitButton" name="addNew"
@@ -49,7 +48,7 @@
                     {% for comment in comments %}
                     <div class="commented-section mt-2">
                         <hr>
-                        <div class="d-flex flex-row align-items-center commented-user">
+                        <div class="d-flex flex-row align-items-center">
                             {% if "placeholder" in comment.author.profile.pic.url %}
                             <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
                                 src="{% static 'images/default_profile.jpg' %}" width="30" alt="Placeholder avatar">
@@ -72,16 +71,16 @@
                         {% if user.is_authenticated and comment.author == user %}
                         <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 d-none">
                             <form method="POST" action="" id="editCommentForm{{ comment.id }}"
-                                class="d-flex flex-row flex-fill justify-content-center mt-4 mb-4">
+                                class="d-flex flex-column flex-sm-row flex-fill gap-3 mt-4 mb-4">
                                 {% csrf_token %}
 
                                 <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your
                                     Comment:</label>
-                                <textarea type="text" class="flex-fill form-control" name="content"
+                                <textarea type="text" class="form-control" name="content"
                                     id="updatedComment{{ comment.id }}"></textarea>
                                 <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
                                 <div class="d-flex flex-column flex-shrink-0 ms-2">
-                                    <button class="btn btn-update hover-highlight" name="updateOld"
+                                    <button class="btn btn-update align-self-start hover-highlight" name="updateOld"
                                         type="submit">Update</button>
                                 </div>
                             </form>

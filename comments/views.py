@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, reverse, redirect
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 from .forms import CommentForm
 
@@ -16,7 +17,7 @@ def edit_comment(request, current_path, comment_id):
     The function retrieves a comment by its ID, ensuring that the comment 
     belongs to the current authenticated user.
     
-    Since the editing of the comment is executed in place by un-hiding the
+    Since the editing of the comment is executed in-place by un-hiding the
     textarea for editing, the page can contain multiple POST forms. Therefore,
     the Update button contains the name attribute 'updateOld' to distinguish it
     from the original Comment button at the top of the comment section.
@@ -36,18 +37,20 @@ def edit_comment(request, current_path, comment_id):
     Returns:
         HttpResponseRedirect: A redirect response to the specified path.
     """
-    
+    if not request.user.is_authenticated:
+         raise PermissionDenied
+
     comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
 
     if request.method == 'POST' and comment.author == request.user:
         if 'updateOld' in request.POST:
-            print(request.POST)
+            #print(request.POST)
             comment_form = CommentForm(data=request.POST, instance=comment)
             if comment_form.is_valid():
                 comment_form.save()
                 messages.success(request, "Your comment has been saved.")
             else:
-                print(comment_form.errors.as_data())
+                #print(comment_form.errors.as_data())
                 messages.error(request, "Your comment was not saved.")
 
         return redirect(f'{reverse('home')}{current_path}')
@@ -74,6 +77,8 @@ def delete_comment(request, current_path, comment_id):
     Returns:
         HttpResponseRedirect: A redirect response to the specified path.
     """
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     
     comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
     comment.delete()

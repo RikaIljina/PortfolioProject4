@@ -10,6 +10,7 @@ from django.core.files.storage import FileSystemStorage
 from taggit.models import Tag
 import cloudinary
 from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied
 # import cloudinary.uploader
 from likes.models import Like
 from entries.models import Entry
@@ -80,7 +81,7 @@ def dashboard_new_user(request):
 
 def dashboard(request, username):
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     user = request.user
     profile = user.profile
@@ -134,7 +135,7 @@ def dashboard(request, username):
 
 def dashboard_entry(request, username, slug):
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     entry = get_object_or_404(get_all_entries(
         request, request.user.all_entries), slug=slug)
@@ -176,7 +177,7 @@ def dashboard_entry(request, username, slug):
 
 def edit_profile(request, username):
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     profile = request.user.profile
     # id = profile.pic.public_id
@@ -220,7 +221,7 @@ def edit_profile(request, username):
 
 def user_favorites(request, username):
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     # if request.GET.get('liked') and request.user.is_authenticated:
     #     return save_like(request)
@@ -247,7 +248,7 @@ def user_favorites(request, username):
 
 def user_comments(request, username):
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     # if request.GET.get('liked') and request.user.is_authenticated:
     #     return save_like(request)

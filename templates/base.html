@@ -73,11 +73,11 @@
                 {% if not user.is_authenticated %}
             <div class="d-flex flex-grow-0 mt-2 mt-md-0 me-md-3 order-3" id="navbarContent">
 
-                <div class="nav-link-box d-inline mx-auto me-md-3 mb-3 mb-md-0 {% if request.path == login_url %}active{% endif %}">
+                <div class="nav-link-box d-inline mx-auto me-md-3 mb-3 mb-md-0 hover-highlight {% if request.path == login_url %}active{% endif %}">
                     <a class="nav-link my-auto {% if request.path == login_url %}active" aria-current="page{% endif %}"
                         href="{% url 'account_login' %}">Login</a>
                 </div>
-                <div class="nav-link-box d-inline mx-auto mb-3 mb-md-0 {% if request.path == signup_url %}active{% endif %}">
+                <div class="nav-link-box d-inline mx-auto mb-3 mb-md-0 hover-highlight {% if request.path == signup_url %}active{% endif %}">
                     <a class="nav-link my-auto {% if request.path == signup_url %} active"
                         aria-current="page{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
                 </div>
@@ -99,14 +99,14 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                     <li>
-                        <a class="dropdown-item" href="{% url 'dashboard' user.username %}">Dashboard</a>
+                        <a class="dropdown-item hover-highlight" href="{% url 'dashboard' user.username %}">Dashboard</a>
                     </li>
-                    <li><a class="dropdown-item" href="{% url 'edit_profile' user.username %}">Profile</a></li>
+                    <li><a class="dropdown-item hover-highlight" href="{% url 'edit_profile' user.username %}">Update profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{% url 'account_logout' %}">Sign out</a>
+                        <a class="dropdown-item hover-highlight" href="{% url 'account_logout' %}">Sign out</a>
                     </li>
                 </ul>
             </div>
@@ -127,7 +127,7 @@
 
                     <!-- Toggle button to expand/collapse sidebar -->
                     <div class="row g-0 sidebar-toggle-div pos-relative">
-                        <button class="btn sidebar-toggle-btn" id="sidebar-toggle-btn" href="#">
+                        <button class="btn sidebar-toggle-btn hover-highlight" id="sidebar-toggle-btn" href="#">
                             <span class="toggle-icon-collapse d-none" id="toggle-icon-collapse"><i
                                     class="fa-solid fa-angles-left"></i></span>
                             <span class="toggle-icon-expand d-inline" id="toggle-icon-expand"><i
