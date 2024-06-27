@@ -35,7 +35,7 @@
                 {{ form.username }}
             </div>
           </div>
-          <div class="row my-3">
+          {% comment %} <div class="row my-3">
             <div class="col-12 col-sm-6">
               <p>{{ form.email.label }}</p>
             </div>
@@ -43,7 +43,7 @@
                 title="{% if form.email.errors %}{{ form.email.errors.0|escape}}{% endif %}">
                 {{ form.email }}
             </div>
-          </div>
+          </div> {% endcomment %}
           <div class="row my-3">
             <div class="col-12 col-sm-6">
               <p>{{ form.password1.label }}</p>

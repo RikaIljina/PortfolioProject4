@@ -25,6 +25,7 @@
           </p>
         {% comment %} </div>
         <div class="col-12 col-md-8 col-lg-6 col-xxl-4"> {% endcomment %}
+         
             <form class="login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
                 <div class="row my-3">
@@ -32,7 +33,7 @@
                       <p>{{ form.login.label }}</p>
                     </div>
                     <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="{% if form.login.errors %}{{ form.login.errors.0|escape}}{% endif %}">
+                        title="{% for key, value in form.errors.items %}{{ value.0|escape }}{% endfor %}">
                         {{ form.login }}
                     </div>
                   </div>
@@ -40,18 +41,15 @@
                     <div class="col-12 col-sm-6">
                       <p>{{ form.password.label }}</p>
                     </div>
-                    <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="{% if form.password.errors %}{{ form.password.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-sm-6">
                         {{ form.password }}
                     </div>
                   </div>
-                  {{ form.errors.items }}
                   <div class="row my-3">
                     <div class="col-12 col-sm-6">
                       <p>{{ form.remember.label }}</p>
                     </div>
-                    <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="{% if form.remember.errors %}{{ form.remember.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-sm-6">
                         {{ form.remember }}
                     </div>
                   </div>
