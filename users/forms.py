@@ -79,11 +79,12 @@ class ProfileForm(forms.ModelForm):
     def clean_pic(self):
         file = self.cleaned_data.get('pic', False)
         print(type(file))
+        print('check pic')
         if file and 'cloudinary' not in str(type(file)):
-            print('checking stuff')
-            # if not file.content_type in ["audio/mpeg"]:
-            #     print('checking type')                
-            #     raise ValidationError("Content type is not mpeg")
+            print('checking stuff', file)
+            if not file.content_type in ["image/jpeg", "image/png"]:
+                print('checking type', file.content_type)                
+                raise ValidationError("Content type is not image")
             if file.size > 1*1024*1024:
                 print('checking size')
                 raise ValidationError("Image file too large ( > 1MB )")

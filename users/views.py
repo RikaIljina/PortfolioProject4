@@ -185,22 +185,28 @@ def edit_profile(request, username):
         profile_form = ProfileForm(
             request.POST, request.FILES, instance=profile, new_file=request.FILES.get('pic'))
         if profile_form.is_valid():
+            profile = profile_form.save(commit=False)
+            
             # if request.FILES.get('pic'):
             #     print(cloudinary.uploader.destroy(id, invalidate=True))
-            profile_form.save()
+            profile.save()
             messages.success(request, "Your profile has been saved.")
 
         else:
             print('not valid')
-            print(profile_form.errors.as_data())
-            messages.warning(
+            #print(profile_form.errors.as_data())
+            messages.error(
                 request, "There was an error saving your profile.")
 
-        print(request.POST)
-        return HttpResponseRedirect(reverse('dashboard', args=[username]))
+        #print(request.POST)
+        #return HttpResponseRedirect(reverse('dashboard', args=[username]))
 
-    profile_form = ProfileForm(instance=profile, initial={
-                               'bio': profile.bio, 'pic': profile.pic, 'website': profile.website, 'email': profile.email})
+    else:
+        profile_form = ProfileForm(instance=profile, initial={
+                               'bio': profile.bio,
+                               'pic': profile.pic,
+                               'website': profile.website,
+                               'email': profile.email})
 
     context = {'profile': profile,
                'profile_form': profile_form,
