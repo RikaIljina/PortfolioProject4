@@ -1,7 +1,7 @@
 var sidebarCollapsed = true;
 var sidebarAutoCollapse = false;
 const sideBar = document.getElementById("sidebar");
-var sideBarState = getComputedStyle(sideBar).position;
+// var sideBarState = getComputedStyle(sideBar).position;
 
 // Prevent filter items from collapsing once opened (on large screens)
 window.addEventListener("DOMContentLoaded", function () {
@@ -114,12 +114,12 @@ function expandSidebar() {
 // The menu toggle button in the navbar has a hover effect that stops working
 // once the button is clicked and therefore focused. The following code removes
 // the focus from the button.
-document.getElementById("toggler-btn").addEventListener("click", function () {
-  // Use setTimeout to remove focus from the icon after clicking it
-  setTimeout(() => {
-    this.blur();
-  }, 500);
-});
+// document.getElementById("toggler-btn").addEventListener("click", function () {
+//   // Use setTimeout to remove focus from the icon after clicking it
+//   setTimeout(() => {
+//     this.blur();
+//   }, 500);
+// });
 
 document
   .getElementById("sidebar-toggle-btn")
@@ -137,7 +137,7 @@ document
   });
 
 window.addEventListener("resize", () => {
-  sideBarState = getComputedStyle(sideBar).position;
+  var sideBarState = getComputedStyle(sideBar).position;
   if (sideBarState === "absolute") {
     sidebarAutoCollapse = true;
   } else {
@@ -185,3 +185,9 @@ for (var activeTooltip of activeTooltips) {
   var tooltip = new bootstrap.Tooltip(activeTooltip, (placement = "top"));
   tooltip.show();
 }
+
+const hoverTooltips = document.querySelectorAll(".hover-tooltip");
+for (var hoverTooltip of hoverTooltips) {
+  var tooltip = new bootstrap.Tooltip(hoverTooltip, (placement = "top"));
+}
+

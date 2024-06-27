@@ -2,7 +2,7 @@ h3 {
   font-size: 1.2rem;
 }
 
-.filter-results {
+.filter-results h3 {
   background-color: rgb(238, 238, 84);
 }
 
@@ -35,12 +35,17 @@ h3 {
 
 .inner-card a {
   text-decoration: none;
-  color: rgb(39, 36, 36);
+  color: rgb(0, 0, 0);
+}
+
+.inner-card a.title-link,
+.inner-card a.user-link {
+  text-decoration: underline;
 }
 
 .card-header,
 .card-footer {
-  background-color: rgb(243, 243, 228);
+  background-color: #dfeddc;
 }
 
 .card-body {
@@ -84,8 +89,9 @@ h3 {
   outline: none;
   }
 
-/* .title-link:hover,
-.user-link:hover {
+/* .title-link,
+.user-link {
+  text-decoration: underline;
 } */
 
 .tag {

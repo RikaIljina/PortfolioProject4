@@ -12,7 +12,7 @@ body {
   font-family: "Raleway", "Courier New", Courier, monospace; /*"Ubuntu Mono", */
   font-weight: 400;
   color: rgb(39, 36, 36);
-  background-color: rgb(243, 243, 237);
+  background-color: #f1f8e8;
   width: 100vw;
   overflow-x: hidden;
 }
@@ -41,7 +41,7 @@ a:focus-visible {
 /* Navbar styles */
 
 .nav-upper {
-  background-color: rgb(246, 246, 203);
+  background-color: #55ad9b;
   font-family: "Sono", "Courier New", Courier, monospace;
   font-weight: 400;
   border-bottom: 5px solid rgb(56, 55, 55);
@@ -50,22 +50,22 @@ a:focus-visible {
 .navbar,
 .nav-link,
 .username {
-  color: rgb(39, 36, 36);
+  color: rgb(0, 0, 0);
 }
 
 .nav-link {
-  padding: 0.5rem 0.8rem;
+  
   /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
-  outline: 1px solid transparent;
+  /* outline: 1px solid transparent;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
   will-change: transform;
   perspective: 1000;
-  -webkit-perspective: 1000;
+  -webkit-perspective: 1000; */
 }
 
-.nav-link.active {
+.nav-link-box.active {
   background-color: rgb(194, 240, 128);
 }
 
@@ -121,7 +121,8 @@ a:focus-visible {
 } */
 
 .nav-link-box {
-  border: 1px solid rgb(27, 1, 49);
+  /* padding: 0.5rem 0.8rem; */
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 0px;
   transition: all 0.3s;
 }
@@ -188,7 +189,7 @@ a:focus-visible {
   min-height: max-content;
   min-width: 4rem;
   /* max-width: 17%; */
-  background-color: rgb(243, 243, 228);
+  background-color: #d8efd3;
   box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
   z-index: 99;
 }
@@ -204,7 +205,7 @@ a:focus-visible {
 .about-link-container {
   position: fixed;
   bottom: 0;
-  background-color: rgb(243, 243, 228);
+  background-color: #95d2b3;
   padding-top: 0;
   margin-top: 0;
   opacity: 1 !important;
@@ -243,7 +244,7 @@ a:focus-visible {
   /* border-bottom: 1px solid rgb(195, 195, 182);
   border-right: 1px solid rgb(195, 195, 182); */
   border-radius: 0px 0px 5px 0px;
-  background-color: rgb(205, 205, 193);
+  background-color: #95d2b3;
   box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 2.2px;
   color: rgb(243, 243, 228);
   /* Make toggle button stick out to the right */
@@ -285,7 +286,7 @@ a:focus-visible {
 .disabled:hover,
 .disabled:focus,
 .disabled:active {
-  background-color: rgb(243, 243, 228);
+  background-color: transparent;
   pointer-events: none;
 }
 
@@ -389,6 +390,19 @@ audio {
   color: red;
 }
 
+.tooltip-inner {
+  background-color: #55ad9b;
+  color: black;
+}
+
+.tooltip.show {
+  opacity: 1;
+}
+
+.tooltip .tooltip-arrow::before {
+  border-top-color: #55ad9b;
+}
+
 /* --------- Footer styles --------------- */
 
 .footer {
@@ -433,6 +447,11 @@ audio {
     max-width: 200px;
   }
 
+  .nav-link-box {
+    padding: 0.2rem 0.5rem;
+
+  }
+
   .sidebar {
     position: absolute;
     min-width: 4rem;
@@ -459,6 +478,13 @@ audio {
   /* .sidebar-b-sm {
     height: calc(100vh + 5rem) !important;
   } */
+
+  .nav-link-box {
+    padding: 0.1rem 0.5rem;
+    font-size: 0.7rem;
+    border: none;
+  }
+
   #commentForm {
     flex-wrap: wrap;
   }
@@ -470,7 +496,7 @@ audio {
   .logo-image {
     margin: 0;
     padding: 0 !important;
-    max-width: 150px;
+    max-width: 130px;
   }
 
   .sidebar {

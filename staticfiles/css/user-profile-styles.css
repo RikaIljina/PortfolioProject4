@@ -8,7 +8,7 @@
  */
 
  .profile-bg {
-    background-color: rgb(46, 46, 46);
+    background-color: #55ad9b;
  }
 
  .profile-card {
@@ -16,7 +16,7 @@
     /* border: 1px solid black; */
     border: none;
     border-radius: 0;
-    color:antiquewhite;
+    color: black;
  }
 
  .profile-card a {
