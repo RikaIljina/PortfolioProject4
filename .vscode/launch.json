@@ -19,6 +19,15 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\static\\js\\filters.js",
-        }
+        },
+        {
+            "name": "Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+              "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+          }
     ]
 }

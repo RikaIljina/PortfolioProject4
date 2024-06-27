@@ -50,40 +50,39 @@
 
             <div class="flex-fill"></div>
 
-            <button class="d-inline d-md-none nav-btn order-2" id="toggler-btn" type="button" data-bs-toggle="collapse"
+            <!-- <button class="d-inline d-md-none nav-btn order-2" id="toggler-btn" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon navbar-icon">
                     <img src="{% static 'images/menu-notes-blank.png' %}" class="img-fluid" width="60" height="60"
                         alt="Menu toggle button with three musical notes">
                 </span>
-            </button>
+            </button> -->
 
-            <div class="collapse navbar-collapse flex-grow-0 mt-2 mt-md-0 me-md-3 order-3" id="navbarContent">
                 <!-- d-none to make sure the wrong styles aren't shown while the uncollapse action 
                  triggers the css with the correct link styles -->
-                <div class="nav-link-box d-none d-md-inline mx-auto me-md-3 mb-2 mb-md-0">
+                <!-- <div class="nav-link-box d-none d-md-inline mx-auto me-md-3 mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == home_url %}active" aria-current="page{% endif %}"
                         href="{% url 'home' %}">Home</a>
                 </div>
                 <div class="nav-link-box d-none d-md-inline mx-auto me-md-3 mb-2 mb-md-0">
                     <a class="nav-link my-auto {% if request.path == about_url %} active" aria-current="page{% endif %}"
                         href="{% url 'home' %}">About</a>
-                </div>
+                </div> -->
 
                 {% if not user.is_authenticated %}
+            <div class="d-flex flex-grow-0 mt-2 mt-md-0 me-md-3 order-3" id="navbarContent">
 
-                <div class="nav-link-box d-none d-md-inline mx-auto me-md-3 mb-2 mb-md-0">
-                    <a class="nav-link my-auto {% if request.path == login_url %} active" aria-current="page{% endif %}"
+                <div class="nav-link-box d-inline mx-auto me-md-3 mb-3 mb-md-0 {% if request.path == login_url %}active{% endif %}">
+                    <a class="nav-link my-auto {% if request.path == login_url %}active" aria-current="page{% endif %}"
                         href="{% url 'account_login' %}">Login</a>
                 </div>
-                <div class="nav-link-box d-none d-md-inline mx-auto mb-3 mb-md-0">
+                <div class="nav-link-box d-inline mx-auto mb-3 mb-md-0 {% if request.path == signup_url %}active{% endif %}">
                     <a class="nav-link my-auto {% if request.path == signup_url %} active"
                         aria-current="page{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
                 </div>
             </div>
             {% else %}
-        </div>
 
         <div class="my-auto pe-1 pe-md-4 d-inline-flex flex-row order-1 order-md-last">
             <div class="dropdown flex-shrink-0 py-1 ps-3">
@@ -145,7 +144,7 @@
                                         <i class="fa-solid fa-house"></i>
                                         <span class="ms-1 d-none filter-title">Back Home</span></a>
                                 </li>
-                                <hr class="mx-2">
+                                <li><hr class="mx-2"></li>
 
                                 {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
 
@@ -162,7 +161,7 @@
                                         <span class="ms-1 d-none filter-title">New Entry</span></a>
                                 </li>
 
-                                <hr class="mx-2 mb-1">
+                                <li><hr class="mx-2 mb-1"></li>
                                 <li
                                     class="nav-item mx-md-2 px-3 py-0 align-middle {% if not enable_sorting %}disabled{% endif %}">
                                     <i class="fa-solid fa-arrow-down-short-wide text-muted"></i>
@@ -210,7 +209,7 @@
                                     </a>
                                 </li>
 
-                                <hr class="mx-2">
+                                <li><hr class="mx-2"></li>
 
                                 <li class="nav-item hover-highlight">
                                     <a href="{% url 'user_favorites' user.username %}"
@@ -234,7 +233,7 @@
                                         <i class="fa-solid fa-folder-open"></i>
                                         <span class="ms-1 d-none filter-title">To Dashboard</span></a>
                                 </li>
-                                <hr class="mx-2">
+                                <li><hr class="mx-2"></li>
                                 {% endif %}
 
                                 <li class="nav-item hover-highlight">
@@ -245,7 +244,7 @@
                                     </a>
                                 </li>
 
-                                <hr class="mx-2 mb-1">
+                                <li><hr class="mx-2 mb-1"></li>
                                 <li
                                     class="nav-item mx-md-2 px-3 align-middle {% if not enable_sorting %}disabled{% endif %}">
                                     <i class="fa-solid fa-arrow-down-short-wide text-muted"></i>
@@ -270,7 +269,7 @@
                                     </a>
                                 </li>
 
-                                <hr class="mx-2 mb-1">
+                                <li><hr class="mx-2 mb-1"></li>
                                 <li
                                     class="nav-item mx-md-2 px-3 align-middle {% if not enable_sorting %}disabled{% endif %}">
                                     <i class="fa-solid fa-filter text-muted"></i>

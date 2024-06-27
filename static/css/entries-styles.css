@@ -75,13 +75,13 @@ looks better especially when displaying song lyrics */
 .accordion-header {
   box-shadow: 0px 0.5px 1.5px black;
   border-radius: 0;
-  background-color: rgb(246, 246, 154);
+  background-color: #d8efd3;
 }
 
 .accordion-footer {
   box-shadow: 0px -0.5px 1.5px black;
   border-radius: 0;
-  background-color: rgb(246, 246, 154);
+  background-color: #d8efd3;
 }
 
 .accordion-button:focus-visible {
@@ -91,9 +91,10 @@ looks better especially when displaying song lyrics */
 
 .accordion-button,
 .accordion-button:not(.collapsed) {
-  background-color: rgb(246, 246, 154);
+  background-color: #d8efd3;
   border-radius: 0 !important;
   box-shadow: 0px 0.1px 0.5px black;
+  color: black;
 }
 
 .accordion-body {
@@ -142,9 +143,15 @@ looks better especially when displaying song lyrics */
   color: rgb(39, 36, 36);
 }
 
+.card-header a.user-link {
+  text-decoration: underline;
+  color: rgb(39, 36, 36);
+}
+
+
 .card-header,
 .card-footer {
-  background-color: rgb(248, 248, 235);
+  background-color: #dfeddc;
 }
 
 .card-body {
@@ -169,6 +176,11 @@ looks better especially when displaying song lyrics */
   border: none;
   box-shadow: 0 0 0 white;
   outline: none;
+}
+
+.tag-container a:focus-visible span {
+  /* outline: rgb(156, 221, 229); */
+  box-shadow: 0 2px 2px rgb(107, 103, 103);
 }
 
 .publicity-icon {
