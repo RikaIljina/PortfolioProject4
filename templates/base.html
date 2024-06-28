@@ -37,11 +37,10 @@
 
 <body class="d-flex flex-column">
     <!------------------------------ Navbar ------------------------------------->
-    <!-- The 'order' class is needed to make sure the profile dropdown in the navbar
-      is shown left to the menu toggle button in mobile view -->
-    <nav class="navbar navbar-expand-md nav nav-upper justify-content-center">
+
+    <nav class="navbar navbar-expand-md nav nav-upper p-0 p-md-1 justify-content-center">
         <div class="container-fluid">
-            <a class="navbar-brand order-0" href="{% url 'home' %}">
+            <a class="navbar-brand ps-0 ms-0" href="{% url 'home' %}">
                 <div class="logo-image my-auto ps-md-4 ps-sm-2">
                     <img class="img-fluid" src="{% static 'images/logo-inst-l.png' %}"
                         alt="Logo showing stylized musical instruments" height="80">
@@ -71,20 +70,21 @@
                 </div> -->
 
                 {% if not user.is_authenticated %}
-            <div class="d-flex flex-grow-0 mt-2 mt-md-0 me-md-3 order-3" id="navbarContent">
+            <div class="d-flex flex-grow-0 my-auto me-2 me-md-3" id="navbarContent">
 
-                <div class="nav-link-box d-inline mx-auto me-md-3 mb-3 mb-md-0 hover-highlight {% if request.path == login_url %}active{% endif %}">
+                <div class="nav-link-box d-inline mx-auto me-2 me-sm-3 my-auto hover-highlight {% if request.path == login_url %}active{% endif %}">
                     <a class="nav-link my-auto {% if request.path == login_url %}active" aria-current="page{% endif %}"
                         href="{% url 'account_login' %}">Login</a>
                 </div>
-                <div class="nav-link-box d-inline mx-auto mb-3 mb-md-0 hover-highlight {% if request.path == signup_url %}active{% endif %}">
+
+                <div class="nav-link-box d-inline mx-auto my-auto hover-highlight {% if request.path == signup_url %}active{% endif %}">
                     <a class="nav-link my-auto {% if request.path == signup_url %} active"
                         aria-current="page{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
                 </div>
             </div>
             {% else %}
 
-        <div class="my-auto pe-1 pe-md-4 d-inline-flex flex-row order-1 order-md-last">
+        <div class="my-auto pe-2 pe-md-4 d-inline-flex flex-row order-md-last">
             <div class="dropdown flex-shrink-0 py-1 ps-3">
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -147,7 +147,7 @@
                                 
                                 <li><hr class="mx-2"></li>
 
-                                <li class="nav-item hover-highlight">
+                                <li class="nav-item hover-highlight active">
                                     <a href="{% url 'dashboard' user.username %}"
                                         class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-folder-open"></i>
@@ -235,7 +235,7 @@
                                 <li><hr class="mx-2"></li>
                                 {% endif %}
 
-                                <li class="nav-item hover-highlight">
+                                <li class="nav-item hover-highlight active">
                                     <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
                                         <i class="fa-solid fa-house"></i>
                                         <span class="ms-1 d-none filter-title">Home</span></a>
@@ -295,7 +295,7 @@
                                         {% for user, pic in users.items %}
                                         <li class="nav-item hover-highlight">
                                             <a href="{% url 'filter_user' user %}"
-                                                class="nav-link mx-md-4 px-3 filter-name">
+                                                class="nav-link px-md-4 px-3 d-block filter-name">
                                                 {% if "placeholder" in pic %}
                                                 <img loading="lazy" src="{% static 'images/default_profile.jpg' %}"
                                                     alt="user profile picture" width="30" height="30"
@@ -304,7 +304,7 @@
                                                 <img loading="lazy" src="{{ pic }}" alt="user profile picture"
                                                     width="30" height="30" class="rounded-circle avatar-sm">
                                                 {% endif %}
-                                                <span class="ms-1 d-inline">{{ user }}</span>
+                                                <span class="ms-1">{{ user }}</span>
 
                                             </a>
                                         </li>

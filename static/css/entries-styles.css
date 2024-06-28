@@ -144,10 +144,13 @@ looks better especially when displaying song lyrics */
 }
 
 .card-header a.user-link {
-  text-decoration: underline;
+  text-decoration: none;
   color: rgb(39, 36, 36);
 }
 
+.card-header span {
+  text-decoration: underline;
+}
 
 .card-header,
 .card-footer {
@@ -265,6 +268,11 @@ looks better especially when displaying song lyrics */
     max-width: 400px;
     flex-grow: 1;
   }
+
+  .larger-title {
+    font-size: 1.5rem;
+  }
+  
 }
 
 @media screen and (max-width: 576px) {
@@ -274,5 +282,9 @@ looks better especially when displaying song lyrics */
   .card-outer {
     width: 100%;
     min-width: 150px;
+  }
+
+  .larger-title {
+    font-size: 1.3rem;
   }
 }

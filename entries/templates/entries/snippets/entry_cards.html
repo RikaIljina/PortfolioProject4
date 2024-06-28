@@ -8,6 +8,7 @@
         {% if not dashboard_view %}
         <div class="card-header">
             <p class="user-line">
+                <a href="{% url 'user_profile' entry.author.username %}" class="user-link" aria-label="Opens the user profile page">
                 {% if "placeholder" in entry.author.profile.pic.url %}
                 <img loading="lazy" src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar"
                     width="30" height="30" class="rounded-circle avatar-sm">
@@ -15,12 +16,13 @@
                 <img loading="lazy" src="{{ entry.author.profile.pic.url }}" alt="User profile picture" width="30"
                     height="30" class="rounded-circle avatar-sm">
                 {% endif %}
-                <a href="{% url 'user_profile' entry.author.username %}" class="user-link" aria-label="Opens the user profile page">{{ entry.author }}</a>
+                <span>{{ entry.author }}</span>
+            </a>
             </p>
 
             <h3>
                 <a href="{% url 'entry_details' entry.slug %}" class="title-link" id="{{ entry.slug }}" aria-label="Opens the entry page with description and comment section">
-                    {{ entry.title }}
+                    <span>{{ entry.title }}</span>
                 </a>
             </h3>
         </div>

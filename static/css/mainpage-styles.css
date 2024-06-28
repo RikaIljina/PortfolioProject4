@@ -38,9 +38,9 @@ h3 {
   color: rgb(0, 0, 0);
 }
 
-.card-header a {
+/* .card-header a {
   text-decoration: underline;
-}
+} */
 
 .card-header,
 .card-footer {

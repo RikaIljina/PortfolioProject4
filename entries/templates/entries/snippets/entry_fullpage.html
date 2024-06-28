@@ -7,6 +7,8 @@
         <div class="card-header p-2 p-md-3">
             {% if not dashboard_view %}
             <p>
+                <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
+                    aria-label="Opens the user profile page">
                 {% if "placeholder" in entry.author.profile.pic.url %}
                 <img src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar" width="30" height="30"
                     class="rounded-circle avatar-sm">
@@ -14,9 +16,8 @@
                 <img src="{{ entry.author.profile.pic.url }}" alt="User profile picture" width="30" height="30"
                     class="rounded-circle avatar-sm">
                 {% endif %}
-                <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
-                    aria-label="Opens the user profile page">
-                    {{ entry.author }}
+                
+                    <span>{{ entry.author }}</span>
                 </a>
             </p>
             <h3 class="larger-title">{{ entry.title }}</h3>
