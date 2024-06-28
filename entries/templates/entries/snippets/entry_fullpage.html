@@ -10,7 +10,7 @@
                 <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
                     aria-label="Opens the user profile page">
                 {% if "placeholder" in entry.author.profile.pic.url %}
-                <img src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar" width="30" height="30"
+                <img src="{% static 'images/default_profile.webp' %}" alt="Placeholder avatar" width="30" height="30"
                     class="rounded-circle avatar-sm">
                 {% else %}
                 <img src="{{ entry.author.profile.pic.url }}" alt="User profile picture" width="30" height="30"

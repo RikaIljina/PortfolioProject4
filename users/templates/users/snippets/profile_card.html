@@ -10,7 +10,7 @@
                 <div class="col-lg-3 text-center">
 
                     {% if "placeholder" in profile.pic.url %}
-                    <img src="{% static 'images/default_profile.jpg' %}" alt="Placeholder avatar"
+                    <img src="{% static 'images/default_profile.webp' %}" alt="Placeholder avatar"
                         class="img-fluid my-2 rounded-circle avatar-lg">
                     {% else %}
                     <img src="{{ profile.pic.url }}" alt="User profile picture" class="img-fluid my-2 rounded-circle avatar-lg">

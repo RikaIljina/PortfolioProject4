@@ -19,7 +19,7 @@
                         <div class="d-flex flex-row flex-fill add-comment-section align-items-start gap-1">
                             {% if "placeholder" in user.profile.pic.url %}
                             <img class="img-responsive flex-shrink-0 rounded-circle mt-4 mb-4 avatar-md"
-                                src="{% static 'images/default_profile.jpg' %}" width="38" alt="Placeholder avatar">
+                                src="{% static 'images/default_profile.webp' %}" width="38" alt="Placeholder avatar">
                             {% else %}
                             <img class="img-responsive flex-shrink-0 rounded-circle mt-4 mb-4 avatar-md"
                                 src="{{ user.profile.pic.url }}" width="38" alt="User profile picture">
@@ -51,7 +51,7 @@
                         <div class="d-flex flex-row align-items-center">
                             {% if "placeholder" in comment.author.profile.pic.url %}
                             <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
-                                src="{% static 'images/default_profile.jpg' %}" width="30" alt="Placeholder avatar">
+                                src="{% static 'images/default_profile.webp' %}" width="30" alt="Placeholder avatar">
                             {% else %}
                             <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
                                 src="{{ comment.author.profile.pic.url }}" width="30" alt="User profile picture">

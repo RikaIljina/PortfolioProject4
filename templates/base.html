@@ -42,7 +42,7 @@
         <div class="container-fluid">
             <a class="navbar-brand ps-0 ms-0" href="{% url 'home' %}">
                 <div class="logo-image my-auto ps-md-4 ps-sm-2">
-                    <img class="img-fluid" src="{% static 'images/logo-inst-l.png' %}"
+                    <img class="img-fluid" src="{% static 'images/logo-inst-l.webp' %}"
                         alt="Logo showing stylized musical instruments" height="80">
                 </div>
             </a>
@@ -53,7 +53,7 @@
                 data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon navbar-icon">
-                    <img src="{% static 'images/menu-notes-blank.png' %}" class="img-fluid" width="60" height="60"
+                    <img src="{% static 'images/menu-notes-blank.webp' %}" class="img-fluid" width="60" height="60"
                         alt="Menu toggle button with three musical notes">
                 </span>
             </button> -->
@@ -89,7 +89,7 @@
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     {% if "placeholder" in user.profile.pic.url %}
-                    <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
+                    <img src="{% static 'images/default_profile.webp' %}" alt="user profile picture" width="30"
                         height="30" class="rounded-circle avatar-sm">
                     {% else %}
                     <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
@@ -121,6 +121,7 @@
             <div class="row g-0 ms-0 ps-0 flex-nowrap h-100 pos-relative">
                 <!-- Sidebar adapted from https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb -->
                 <!-- Sidebar column -->
+                 {% if not request.path == signup_url and not request.path == login_url %}
                 <div class="col-auto sidebar flex-column mx-0 px-0" id="sidebar" role="navigation">
 
                     <!-- Toggle button to expand/collapse sidebar -->
@@ -297,7 +298,7 @@
                                             <a href="{% url 'filter_user' user %}"
                                                 class="nav-link px-md-4 px-3 d-block filter-name">
                                                 {% if "placeholder" in pic %}
-                                                <img loading="lazy" src="{% static 'images/default_profile.jpg' %}"
+                                                <img loading="lazy" src="{% static 'images/default_profile.webp' %}"
                                                     alt="user profile picture" width="30" height="30"
                                                     class="rounded-circle avatar-sm">
                                                 {% else %}
@@ -348,6 +349,7 @@
                     </div>
 
                 </div>
+                {% endif %}
 
                 <!-- Content column -->
 

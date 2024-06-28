@@ -27,7 +27,7 @@
                             <b>{{ entry.title }}</b>
                         </a> by author
                         {% if "placeholder" in entry.author.profile.pic.url %}
-                        <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30"
+                        <img src="{% static 'images/default_profile.webp' %}" alt="user profile picture" width="30"
                             height="30" class="rounded-circle me-1 avatar-sm">
                         {% else %}
                         <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30" height="30"

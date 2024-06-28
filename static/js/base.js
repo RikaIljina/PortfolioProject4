@@ -3,7 +3,6 @@ var sidebarAutoCollapse = false;
 const sideBar = document.getElementById("sidebar");
 // var sideBarState = getComputedStyle(sideBar).position;
 
-// Prevent filter items from collapsing once opened (on large screens)
 window.addEventListener("DOMContentLoaded", function () {
   setMsgColor();
   activateTooltips();
@@ -24,6 +23,7 @@ window.addEventListener("DOMContentLoaded", function () {
       sidebarAutoCollapse = false;
     }
 
+    // Prevent filter items from collapsing once opened (on large screens)
     // Keep the list of usernames or tags expanded if the user is not on a
     // mobile device and if they already clicked on a filter and the view
     // shows a filtered selection of entries
