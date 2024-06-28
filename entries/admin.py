@@ -67,6 +67,14 @@ class EntryAdmin(SummernoteModelAdmin):
                    'updated_on')
     summernote_fields = ('description',)
     
+
+
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.select_related('author').all()
+        return queryset
+
     
     def get_form(self, request, obj=None, **kwargs):
         """
