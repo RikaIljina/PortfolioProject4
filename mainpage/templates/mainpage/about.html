@@ -8,8 +8,8 @@
 
 <div class="row g-0 sidebar-margin">
     <div class="col-12">
-        <div class="row g-0 py-md-2 mt-0 mt-md-2 mb-2 justify-content-center">
-            <div class="col-12 col-md-8 py-auto about-page">
+        <div class="row g-0 py-md-2 px-2 mt-0 mt-md-2 mb-2 justify-content-center">
+            <div class="col-12 col-md-8 py-auto mb-5 about-page">
                 <hr>
                 <h1>About this Website</h1>
                 <hr>
@@ -65,17 +65,42 @@
                 <p>MusicLab does not allow users to ask for donations or offer commissions on its website. However, you
                     are welcome to post a link to your own website where such information may be found.</p>
                 {% if user.is_authenticated %}
-                <div class="my-3">
+                <hr>
+
+                <h3>User Feedback</h3>
+
+                <p>Do you want to report an issue with the site or a problem with another user? Do you have questions or
+                    suggestions?
+                    Send a message to the admins - we'll get back to you as soon as possible.</p>
+
+                <div class="mt-4 mb-5">
                     <form id="message-form" action="" method="POST">
                         {% csrf_token %}
-                        {{ message_form.as_p }}
-                        <button class="btn btn-general hover-highlight" type="submit">Send message</button>
+                        <div class="p-1">
+                            {{ message_form.subject.label }}
+                        </div>
+                        <div class="py-2">
+                            {{ message_form.subject }}
+                        </div>
+                        <div class="p-1">
+                            {{ message_form.message.label }}
+                        </div>
+                        <div class="py-2">
+                            {{ message_form.message }}
+                        </div>
+
+                        <button class="btn btn-general hover-highlight my-2" type="submit">Send message</button>
                     </form>
                 </div>
+
                 {% else %}
-                <div>
-                    <p>Log in to send a message to the admins.</p>
-                </div>
+                <hr>
+
+                <h3>User Feedback</h3>
+
+                <p>Do you want to report an issue with the site or a problem with another user? Do you have questions or
+                    suggestions?
+                    Log in to send a message to the admins - we'll get back to you as soon as possible.</p>
                 {% endif %}
             </div>
         </div>

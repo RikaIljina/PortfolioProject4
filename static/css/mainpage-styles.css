@@ -87,7 +87,7 @@ h3 {
   border: none;
   box-shadow: 0 0 0 white;
   outline: none;
-  }
+}
 
 /* .title-link,
 .user-link {
@@ -104,13 +104,26 @@ h3 {
   border: none;
   box-shadow: 0 0 0 white;
   outline: none;
-  }
+}
 
-  /* About page */
+/* About page */
 
-  .about-page h3 {
-    font-size: 1.5rem;
-  }
+.about-page h3 {
+  font-size: 1.5rem;
+}
+
+.about-page .btn-general {
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+input,
+.form-control {
+  /* width: 100% !important; */
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #f5f8f1;
+}
 
 @media screen and (max-width: 768px) {
   h3 {
@@ -136,5 +149,4 @@ h3 {
     min-width: 200px;
     flex-grow: 1;
   }
-
 }
