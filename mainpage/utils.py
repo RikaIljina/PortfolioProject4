@@ -47,17 +47,19 @@ def get_all_tags():
     tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
         entry__publish=1), distinct=True)).filter(amount__gt=0)
 
-    tag_list = {str(value['name']): str(value['amount']) for value in tags.values()}
-    tag_dict = json.dumps(tag_list)
+    tag_dict = {str(value['name']): str(value['amount']) for value in tags.values()}
+    # tag_dict = json.dumps(tag_list)
+    print(tag_dict)
+    sorted_tags = dict(sorted(tag_dict.items()))
+    print(sorted_tags)
     #print(tags) # tags.values_list('name', flat=True): })
     # with open(os.path.join(django_settings.STATIC_ROOT, 'tags.txt'), 'w') as file:
     #     #file.writelines(str(line) + '\n' for line in tag_list)
     #     file.write(tag_dict)
-        
    # tags.filter(amount=0).delete()
     #print(tag_dict)
     
-    return tag_list
+    return sorted_tags
 
 
 def delete_tags():

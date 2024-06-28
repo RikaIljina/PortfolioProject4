@@ -5,18 +5,18 @@
 
 <div class="row g-0 sidebar-margin">
     <div class="col-12">
-        <div class="row g-0 py-md-2 mt-0 mt-md-2 mb-2 justify-content-center filter-results">
+        <div class="row g-0 mt-0 mt-2 mb-2 justify-content-center filter-results">
             <div class="col-12 col-md-10 py-auto">
                 {% if user_filter %}
-                <h3 class="">Entries by <b>{{ user_filter }}</b></h3>
+                <h3 class="ps-3">Entries by <b>{{ user_filter }}</b></h3>
                 {% elif tag_filter %}
-                <h3 class="">Entries with the tag <b>{{ tag_filter }}</b></h3>
+                <h3 class="ps-3">Entries with the tag <b>{{ tag_filter }}</b></h3>
                 {% elif sorted_param == '?sorted=by_date' %}
-                <h3 class="">Most <b>recent</b> entries</h3>
+                <h3 class="ps-3">Most <b>recent</b> entries</h3>
                 {% elif sorted_param == '?sorted=by_likes' %}
-                <h3 class="">Most <b>liked</b> entries</h3>
+                <h3 class="ps-3">Most <b>liked</b> entries</h3>
                 {% else %}
-                {% comment %} <h3 class="">Browse all entries and find your favorites!</h3> {% endcomment %}
+                <h3 class="visually-hidden">Showing all entries unfiltered</h3>
                 {% endif %}
             </div>
         </div>
@@ -24,11 +24,11 @@
         <div class="row g-0">
             <div class="m-auto col-12 col-md-10">
                 <div
-                    class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start">
+                    class="d-flex flex-wrap w-100 m-auto mt-4 card-container justify-content-center justify-content-md-start">
 
                     {% for entry in page_obj %}
-          {% include 'entries/snippets/entry_cards.html' %}
-          {% endfor %}
+                    {% include 'entries/snippets/entry_cards.html' %}
+                    {% endfor %}
 
                 </div>
             </div>

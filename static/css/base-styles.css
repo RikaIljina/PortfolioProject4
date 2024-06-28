@@ -28,9 +28,10 @@ a {
 }
 
 a:hover,
+a:focus,
 a:focus-visible {
   /* text-decoration: none; */
-  color: rgb(0, 0, 0);
+  color: rgb(0, 0, 0) !important;
 }
 
 .text-color {
@@ -46,7 +47,7 @@ a:focus-visible {
 
 .nav-upper {
   background-color: #55ad9b;
-  font-family: "Sono", "Courier New", Courier, monospace;
+  /* font-family: "Sono", "Courier New", Courier, monospace; */
   font-weight: 400;
   border-bottom: 5px solid rgb(56, 55, 55);
 }
@@ -73,8 +74,9 @@ a:focus-visible {
 }
 
 .nav-link:hover,
+.nav-link:focus,
 .nav-link:focus-visible {
-  color: rgb(51, 48, 38);
+  color: rgb(36, 43, 33);
 }
 
 /* .hvr-grow-rotate:before {

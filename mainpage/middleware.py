@@ -6,19 +6,19 @@ from django.db.models import Count, Q
 #from mainpage.signals import current_usernames, current_tags
 
 
-class InitializeUsernamesMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-        self.initialized = False
+# class InitializeUsernamesMiddleware:
+#     def __init__(self, get_response):
+#         self.get_response = get_response
+#         self.initialized = False
 
-    def __call__(self, request):
-        if not self.initialized:
-          #  self.initialize_usernames_list()
-          #  self.initialize_tags()
-            self.initialized = True
+#     def __call__(self, request):
+#         if not self.initialized:
+#           #  self.initialize_usernames_list()
+#           #  self.initialize_tags()
+#             self.initialized = True
 
-        response = self.get_response(request)
-        return response
+#         response = self.get_response(request)
+#         return response
 
     # def initialize_usernames_list(self):
     #     global current_usernames
