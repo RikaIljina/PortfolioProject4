@@ -45,7 +45,7 @@
                         <div class="pt-1">
 
                             {% if profile.email %}
-                            <a href="mailto:{{ profile.email }}" aria-label="Opens email app to send email"><i class="fa fa-envelope fa-lg"></i></a>
+                            <a href="mailto:{{ profile.email }}" aria-label="Opens email app in a new tab to send email" target="_blank"><i class="fa fa-envelope fa-lg"></i></a>
                             {% endif %}
                             {% if profile.website %}
                             <a href="{{ profile.website }}" aria-label="Opens website link in a new tab" target="_blank"><i class="fa-solid fa-globe"></i></a>
