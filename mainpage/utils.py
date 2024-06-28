@@ -18,18 +18,16 @@ from users.utils import get_username_list
 
 
 def get_mainpage_context(request, entries):
+    if entries == None:
+        return get_username_list(), get_all_tags()
+    
     entries, sorted_param = sort_by(request, entries)
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
-    # users = get_users_from_file()
-    #tags = get_tags_from_file()
     tags = get_all_tags()
-    #tags = get_tags_from_file()
-    print(tags)
     
     return entries, sorted_param, page_obj, users, tags
-    
-    
+
 
 def get_page_obj(request, entries, amount=12):
     paginator = Paginator(entries, amount)

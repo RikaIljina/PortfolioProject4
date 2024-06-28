@@ -135,7 +135,7 @@ class EntryForm(forms.ModelForm):
         if file and 'cloudinary' not in str(type(file)):
             print('checking stuff')
             if not file.content_type in ["audio/mpeg"]:
-                print('checking type')                
+                print('checking type')
                 raise ValidationError("Content type is not mpeg")
             if file.size > 10*1024*1024:
                 print('checking size')
