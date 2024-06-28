@@ -48,7 +48,7 @@
                 Your browser does not support the audio tag.
             </audio>
             <p class="text-muted flex-fill">Created {{ entry.created_on|naturalday }}</p>
-            <p class="text-muted flex-fill">More...</p>
+            <p class="text-muted flex-fill">{{ entry.description|striptags|cut:'&nbsp;'|truncatewords:"10" }} ...</p>
 
             <div class="tag-container">
                 <p class="m-0">
