@@ -119,26 +119,23 @@ class EntryAdmin(SummernoteModelAdmin):
         
         instance = form.save(commit=False)
 
-       # new_slug = f'{form.cleaned_data['title']}-{form.cleaned_data['author'].username}'
-        # unidecode is needed to process non-latin titles
-       # new_slug = slugify(unidecode(new_slug))
+# TODO: check if this always works
+        new_slug = f'{form.cleaned_data['title']}-{form.cleaned_data['author'].username}'
+        #unidecode is needed to process non-latin titles
+        new_slug = slugify(unidecode(new_slug))
         
-        # if Entry.objects.filter(slug=new_slug).exclude(
-        #                                         id=instance.id).exists():
-        #     print(request.path)
-            
-        #     print('path Error!')
-        #     print(request.path)
-        #     redirect('admin')
-        #     messages.error('The title is not unique')
+        if Entry.objects.filter(slug=new_slug).exclude(
+                                                id=instance.id).exists():
+    
+            messages.error('The title is not unique')
         
             
-        #     raise ValidationError(
-        #         'Please choose a different title to make sure the entry '
-        #         'slug is unique.')
-        # else:
-       # instance.slug = new_slug
-       # print('Unique slug')
+            raise ValidationError(
+                'Please choose a different title to make sure the entry '
+                'slug is unique.')
+        else:
+            instance.slug = new_slug
+            print('Unique slug')
             
         # Get checkbox value
         keep_file = form.data.get('keep_file')
