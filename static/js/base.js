@@ -1,29 +1,29 @@
 var sidebarCollapsed = true;
 var sidebarAutoCollapse = false;
-const sideBar = document.getElementById("sidebar");
-// var sideBarState = getComputedStyle(sideBar).position;
+const sidebar = document.getElementById("sidebar");
 
 window.addEventListener("DOMContentLoaded", function () {
   setMsgColor();
   activateTooltips();
 
+  // Hide sidebar on pages with no sidebar (error pages)
   const noSidebar = document.querySelector(".no-sidebar");
   if (noSidebar) {
-    sideBar.classList.add("d-none");
+    sidebar.classList.add("d-none");
   } else {
     var filterLinks = document.getElementsByClassName("filter-link");
     var filterCategories = document.getElementsByClassName("filter-cat");
-    const sideBar = document.getElementById("sidebar");
-    var sideBarState = getComputedStyle(sideBar).position;
+    const sidebar = document.getElementById("sidebar");
+    var sidebarPos = getComputedStyle(sidebar).position;
 
     // Check whether the user is on a mobile device
-    if (sideBarState === "absolute") {
+    if (sidebarPos === "absolute") {
       sidebarAutoCollapse = true;
     } else {
       sidebarAutoCollapse = false;
     }
 
-    if (localStorage.getItem("sidebarState")) {
+    if (localStorage.getItem("sidebarCollapsed") === "false") {
       expandSidebar();
     }
 
@@ -53,19 +53,19 @@ window.addEventListener("DOMContentLoaded", function () {
         }
         setTimeout(() => {
           document.querySelector("#about-link-container").style.width =
-            getComputedStyle(sideBar).width;
+            getComputedStyle(sidebar).width;
         }, 200);
       });
     }
 
     document.querySelector("#about-link-container").style.width =
-      getComputedStyle(sideBar).width;
+      getComputedStyle(sidebar).width;
 
-    if (sideBarState === "absolute") {
-      // let newHeight = getComputedStyle(sideBar).height;
+    if (sidebarPos === "absolute") {
+      // let newHeight = getComputedStyle(sidebar).height;
       let newHeight = getComputedStyle(
         document.querySelector(".main-content")
-      ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+      ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sidebar).height} + 10rem);` //"calc(100vh + 10rem)";
       document.querySelector("#sidebar").style.height = newHeight;
     }
 
@@ -85,22 +85,22 @@ window.addEventListener("DOMContentLoaded", function () {
       });
 
     window.addEventListener("resize", () => {
-      var sideBarState = getComputedStyle(sideBar).position;
-      if (sideBarState === "absolute") {
+      var sidebarPos = getComputedStyle(sidebar).position;
+      if (sidebarPos === "absolute") {
         sidebarAutoCollapse = true;
       } else {
         sidebarAutoCollapse = false;
       }
 
-      if (sideBarState === "absolute") {
-        // let newHeight = getComputedStyle(sideBar).height;
+      if (sidebarPos === "absolute") {
+        // let newHeight = getComputedStyle(sidebar).height;
         let newHeight = getComputedStyle(
           document.querySelector(".main-content")
-        ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sideBar).height} + 10rem);` //"calc(100vh + 10rem)";
+        ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sidebar).height} + 10rem);` //"calc(100vh + 10rem)";
         document.querySelector("#sidebar").style.height = newHeight;
       }
       document.querySelector("#about-link-container").style.width =
-        getComputedStyle(sideBar).width;
+        getComputedStyle(sidebar).width;
     });
 
     window.addEventListener("scroll", function () {
@@ -126,7 +126,7 @@ function collapseSidebar() {
   document.querySelector("#toggle-icon-collapse").classList.remove("d-inline");
 
   sidebarCollapsed = true;
-  localStorage.setItem("sidebarState", sidebarCollapsed);
+  localStorage.setItem("sidebarCollapsed", sidebarCollapsed);
 
   // Hide the block with usernames or tags
   var filterCategories = document.getElementsByClassName("filter-cat");
@@ -141,7 +141,7 @@ function collapseSidebar() {
     title.classList.remove("d-inline");
   }
 
-  sideBar.style.minWidth = "initial";
+  sidebar.style.minWidth = "initial";
   document.querySelector("#about-link-container").style.width = "initial";
 }
 
@@ -153,7 +153,7 @@ function expandSidebar() {
   document.querySelector("#toggle-icon-collapse").classList.add("d-inline");
 
   sidebarCollapsed = false;
-  localStorage.setItem("sidebarState", sidebarCollapsed);
+  localStorage.setItem("sidebarCollapsed", sidebarCollapsed);
 
   // Show all sidebar nav item titles
   var filterTitles = document.getElementsByClassName("filter-title");
@@ -163,12 +163,12 @@ function expandSidebar() {
   }
 
   if (sidebarAutoCollapse) {
-    sideBar.style.minWidth = "95%";
+    sidebar.style.minWidth = "95%";
   } else {
-    sideBar.style.minWidth = "17%";
+    sidebar.style.minWidth = "17%";
   }
   document.querySelector("#about-link-container").style.width =
-    getComputedStyle(sideBar).width;
+    getComputedStyle(sidebar).width;
 }
 
 // The menu toggle button in the navbar has a hover effect that stops working
@@ -193,15 +193,25 @@ function setMsgColor() {
   }
 }
 
+/** Finds all elements that use bootstrap tooltips and initializes them.
+ * Always shows active tooltips which are used to display errors on login/signup
+ * form fields.
+ *  @type {NodeList object} activeTooltips - Elements that show tooltips once they receive a text value
+ *  @type {NodeList object} hoverTooltips  - Elements that show tooltips on hover
+ */
+
 function activateTooltips() {
-  // Needed for form field error messages
   const activeTooltips = document.querySelectorAll(".active-tooltip");
+  const hoverTooltips = document.querySelectorAll(".hover-tooltip");
+
   for (var activeTooltip of activeTooltips) {
     var tooltip = new bootstrap.Tooltip(activeTooltip, (placement = "top"));
     tooltip.show();
+    activeTooltip.addEventListener("hide.bs.tooltip", (e) => {
+      e.preventDefault();
+    });
   }
 
-  const hoverTooltips = document.querySelectorAll(".hover-tooltip");
   for (var hoverTooltip of hoverTooltips) {
     var tooltip = new bootstrap.Tooltip(hoverTooltip, (placement = "top"));
   }

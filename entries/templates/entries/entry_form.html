@@ -31,8 +31,8 @@
                         <p>{{ entry_form.title.label }}</p>
                     </div>
                     <div class="col-12 col-md-9">
-                        <p class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{% if entry_form.title.errors %}{{ entry_form.title.errors.0|escape}}{% endif %}">
+                        <p {% if entry_form.title.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.title.errors.0|escape}}"{% endif %}>
                             {{ entry_form.title }}
                         </p>
                     </div>
@@ -41,9 +41,11 @@
                     <div class="col-12 col-md-3">
                         <p>{{ entry_form.description.label }}</p>
                     </div>
-                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{% if entry_form.description.errors %}{{ entry_form.description.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-md-9">
+                        <p {% if entry_form.description.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.description.errors.0|escape}}"{% endif %}>
                             {{ entry_form.description }}
+                    </p>
                     </div>
                 </div>
 
@@ -65,8 +67,9 @@
                     <div class="col-12 col-md-3">
                         <p>{{ entry_form.audio_file.label }}</p>
                     </div>
-                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{% if entry_form.audio_file.errors %}{{ entry_form.audio_file.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-md-9">
+                        <p {% if entry_form.audio_file.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.audio_file.errors.0|escape}}"{% endif %}>
                             {{ entry_form.audio_file }}
                     </div>
                 </div>
@@ -76,8 +79,9 @@
                     <div class="col-12 col-md-3">
                         <p>{{ entry_form.keep_file.label }}</p>
                     </div>
-                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{% if entry_form.keep_file.errors %}{{ entry_form.keep_file.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-md-9">
+                        <p {% if entry_form.keep_file.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.keep_file.errors.0|escape}}"{% endif %}>
                             {{ entry_form.keep_file }}
                     </div>
                 </div>
@@ -108,8 +112,9 @@
                     <div class="col-12 col-md-3">
                         <p>{{ entry_form.tags.label }}</p>
                     </div>
-                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{% if entry_form.tags.errors %}{{ entry_form.tags.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-md-9">
+                        <p {% if entry_form.tags.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.tags.errors.0|escape}}"{% endif %}>
                             {{ entry_form.tags }}
                     </div>
                 </div>
@@ -117,8 +122,9 @@
                     <div class="col-12 col-md-3">
                         <p>{{ entry_form.publish.label }}</p>
                     </div>
-                    <div class="col-12 col-md-9 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="{% if entry_form.publish.errors %}{{ entry_form.publish.errors.0|escape}}{% endif %}">
+                    <div class="col-12 col-md-9">
+                        <p {% if entry_form.tags.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ entry_form.publish.errors.0|escape}}"{% endif %}>
                             {{ entry_form.publish }}
                     </div>
                 </div>
