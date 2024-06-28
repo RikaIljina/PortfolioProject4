@@ -9,15 +9,15 @@
         <div class="row g-0 mt-0 mt-2 mb-2 justify-content-center filter-results">
             <div class="col-12 col-md-10 py-auto">
                 {% if user_filter %}
-                <h3 class="ps-3">Entries by <b>{{ user_filter }}</b></h3>
+                <h1 class="ps-3">Entries by <b>{{ user_filter }}</b></h1>
                 {% elif tag_filter %}
-                <h3 class="ps-3">Entries with the tag <b>{{ tag_filter }}</b></h3>
+                <h1 class="ps-3">Entries with the tag <b>{{ tag_filter }}</b></h1>
                 {% elif sorted_param == '?sorted=by_date' %}
-                <h3 class="ps-3">Most <b>recent</b> entries</h3>
+                <h1 class="ps-3">Most <b>recent</b> entries</h1>
                 {% elif sorted_param == '?sorted=by_likes' %}
-                <h3 class="ps-3">Most <b>liked</b> entries</h3>
+                <h1 class="ps-3">Most <b>liked</b> entries</h1>
                 {% else %}
-                <h3 class="visually-hidden">Showing all entries unfiltered</h3>
+                <h1 class="visually-hidden">Showing all entries unfiltered</h1>
                 {% endif %}
             </div>
         </div>

@@ -21,9 +21,13 @@
         <div class="col-12 col-md-10 col-lg-6 px-4 pb-3 pe-sm-3 align-self-center opaque-bg">
           <h1 class="m-auto">500</h1>
   
-          <p class="mt-3">You're looking for a page that doesn't exist!</p>
+          <p class="mt-3">
+            The server has returned an error. If this error persists, please 
+            <a href="mailto:info@musiclab.com" class="link-underline" aria-label="Opens email app in a new tab to send email" target="_blank">
+              send us an email
+            </a> describing how the error was caused.
+          </p>
           <p class="mt-3"><a href="{% url 'home' %}" class="btn-general hover-highlight">Go back home</a></p>
-          <p>{{ request_path }} {{ exception }} {{ request }}</p>
           
         </div>
     </div>

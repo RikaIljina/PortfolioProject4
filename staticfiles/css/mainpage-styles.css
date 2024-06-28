@@ -2,8 +2,9 @@ h3 {
   font-size: 1.2rem;
 }
 
-.filter-results h3 {
+.filter-results h1 {
   background-color: #95d2b3;
+  font-size: 1.2rem;
 }
 
 /* .card-container {

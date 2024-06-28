@@ -23,6 +23,10 @@ window.addEventListener("DOMContentLoaded", function () {
       sidebarAutoCollapse = false;
     }
 
+    if (localStorage.getItem("sidebarState")) {
+      expandSidebar();
+    }
+
     // Prevent filter items from collapsing once opened (on large screens)
     // Keep the list of usernames or tags expanded if the user is not on a
     // mobile device and if they already clicked on a filter and the view
@@ -122,6 +126,7 @@ function collapseSidebar() {
   document.querySelector("#toggle-icon-collapse").classList.remove("d-inline");
 
   sidebarCollapsed = true;
+  localStorage.setItem("sidebarState", sidebarCollapsed);
 
   // Hide the block with usernames or tags
   var filterCategories = document.getElementsByClassName("filter-cat");
@@ -148,6 +153,7 @@ function expandSidebar() {
   document.querySelector("#toggle-icon-collapse").classList.add("d-inline");
 
   sidebarCollapsed = false;
+  localStorage.setItem("sidebarState", sidebarCollapsed);
 
   // Show all sidebar nav item titles
   var filterTitles = document.getElementsByClassName("filter-title");
