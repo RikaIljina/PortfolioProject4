@@ -11,7 +11,7 @@
                 <i class="fa-regular fa-heart hover-scale"></i>
                 {% endif %}
             </a>
-        {% else user.is_authenticated and entry.author == user %}
+        {% elif user.is_authenticated and entry.author == user %}
         <i class="fa-regular fa-heart text-muted"></i>
         {% else %}
         <i class="fa-regular fa-heart text-muted hover-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
