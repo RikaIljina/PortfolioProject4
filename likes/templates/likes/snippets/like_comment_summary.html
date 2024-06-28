@@ -11,9 +11,11 @@
                 <i class="fa-regular fa-heart hover-scale"></i>
                 {% endif %}
             </a>
+        {% else user.is_authenticated and entry.author == user %}
+        <i class="fa-regular fa-heart text-muted"></i>
         {% else %}
         <i class="fa-regular fa-heart text-muted hover-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Log in to like and comment"></i>
+        title="Log in to like and comment"></i>
         {% endif %}
         {{ entry.likes_received }} | <i class="fa-regular fa-comment hover-scale"></i> {{entry.comments_received }}
     </p>
