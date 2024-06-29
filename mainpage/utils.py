@@ -17,7 +17,7 @@ from users.utils import get_username_list
 # Helper functions
 
 
-def get_page_context(request, entries):
+def get_page_context(request, entries): 
     if entries == None:
         return get_username_list(), get_all_tags()
 

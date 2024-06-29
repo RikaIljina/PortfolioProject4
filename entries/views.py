@@ -26,6 +26,9 @@ def entry_details(request, slug):
     Args:
         request (HttpObject): Http object
         slug (string): Slug of the entry to be shown in detailed view
+
+    Raises:
+        Http404: If there is no public entry with the specified slug.
     """
 
     entry = get_object_or_404(
@@ -77,12 +80,15 @@ def new_entry(request, username):
             entry.
 
     Returns:
-        HttpResponse: Redirects to the home page if the user is not
-            authenticated or the username does not match the logged-in user.
         HttpResponse: Redirects to the dashboard page with the entry details if
             the form is successfully saved.
         HttpResponse: Renders the entry form page with the entry form context
-            if the request method is GET or the form submission fails.
+            if the request method is GET.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        ValidationError (see EntryForm methods)
     """
 
     if not request.user.is_authenticated or username != request.user.username:
@@ -133,12 +139,16 @@ def edit_entry(request, username, slug):
         slug (str): The slug of the entry being edited.
 
     Returns:
-        HttpResponse: Redirects to the home page if the user is not
-            authenticated or the username does not match the logged-in user.
         HttpResponse: Redirects to the dashboard page with entry details if the
             form is successfully saved.
         HttpResponse: Renders the entry form page with the entry form context
             if the request method is GET or the form submission fails.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        Http404: If the user has no entry with the specified slug.
+        ValidationError (see EntryForm methods)
     """
 
     if not request.user.is_authenticated or username != request.user.username:
@@ -208,6 +218,27 @@ def edit_entry(request, username, slug):
 
 
 def delete_entry(request, username, slug):
+    """
+    Handle the deletion of an existing entry
+
+    This view handles both the GET request for deleting an existing entry.
+    
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata
+            about the request.
+        username (str): The username of the user attempting to delete the entry.
+        slug (str): The slug of the entry being deleted.
+
+    Returns:
+        HttpResponse: Redirects to the user's dashboard page if the form is
+            successfully deleted.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        Http404: If the user has no entry with the specified slug.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
@@ -226,13 +257,20 @@ def delete_old_file(request, username, slug, file_id):
     button next to an audio file.
 
     Args:
-        request (_type_): _description_
-        username (_type_): _description_
-        slug (_type_): _description_
-        file_id (_type_): _description_
+        request (HttpRequest): The HTTP request object containing metadata
+            about the request.
+        username (str): The username of the user attempting to delete the entry.
+        slug (str): The slug of the entry being deleted.
+        file_id (str): The ID of the file being deleted.
 
     Returns:
-        _type_: _description_
+        HttpResponse: Redirects to the 'edit entry' page if the file is
+            successfully deleted.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        Http404: If the user has no entry with the specified slug.
     """
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
@@ -242,12 +280,14 @@ def delete_old_file(request, username, slug, file_id):
     if entry.old_files.get(file_id):
         del entry.old_files[file_id]
         entry.save()
-        print(f"{username}, {slug}, {file_id}")
         print(
             cloudinary.uploader.destroy(
                 file_id, resource_type="video", invalidate=True
             )
         )
         messages.success(request, "Your file has been deleted.")
+    else:
+        messages.error(request, f"The file could not be deleted or the file id"
+                                f" doesn't exist.")
 
     return redirect("edit_entry", username=username, slug=slug)

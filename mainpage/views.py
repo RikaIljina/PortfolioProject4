@@ -1,7 +1,29 @@
+"""
+views.py for the 'Mainpage' app.
+
+This module contains view functions that render the index page and the about
+page and handle the general views that are accessible to all website visitors.
+
+Key functionalities:
+- Show all entries on the main page
+- Show entries filtered by a specific user
+- Show entries filtered by a specific tag
+- Show the 'about' page
+
+View Functions:
+- index(request): Retrieves and renders all entries and all relevant context
+    parameters.
+- filter_user(request, username): Retrieves and renders all entries of a
+    specified user as well as all relevant context parameters.
+- filter_tag(request, tag): Retrieves and renders all entries of a specified
+    tag as well as all relevant context parameters.
+- about(request): Renders the 'about' page with all relevant context parameters
+    and shows a feedback form to authenticated users.
+"""
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
 
 from mainpage.utils import get_page_context
 from entries.utils import get_published_entries
@@ -11,6 +33,23 @@ from .forms import MessageToAdminForm
 
 
 def index(request):
+    """
+    Render the index page with a list of published entries
+
+    This view retrieves and processes a list of published entries to be
+    displayed on the main page. It also retrieves parameters for the sidebar
+    filter and sort functionalities.
+    GET requests are processed by the sort_by() function inside the
+    get_page_context() function.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+    """
+
     entries = get_published_entries(request, Entry.objects, get_comments=False)
 
     entries, sorted_param, page_obj, users, tags = get_page_context(
@@ -28,20 +67,44 @@ def index(request):
         "tags": tags,
         "enable_sorting": enable_sorting,
     }
-    print(request)
 
     return render(request, "mainpage/index.html", context)
 
 
 def filter_user(request, username):
+    """
+    Render the index page with a list of a user's published entries 
+
+    This view retrieves and processes a list of one user's published entries to
+    be displayed on the main page. It also retrieves parameters for the sidebar
+    filter and sort functionalities.
+    GET requests are processed by the sort_by() function inside the
+    get_page_context() function.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The name of a user.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+        
+    Raises:
+        Http404: If no user with that username exists.
+    """
+
     user = get_object_or_404(User.objects.all(), username=username)
+        # Only get entries if the user has added at least one entry
+
     entries = get_published_entries(
         request, user.all_entries, get_comments=False
     )
-
-    entries, sorted_param, page_obj, users, tags = get_page_context(
-        request, entries
-    )
+    if entries.count() != 0:    
+        entries, sorted_param, page_obj, users, tags = get_page_context(
+            request, entries
+        )
+    else:
+        users, tags =  get_page_context(request, None)
 
     # Tells the sidebar to keep clicked-on filter section open
     filter_user = True
@@ -63,6 +126,24 @@ def filter_user(request, username):
 
 
 def filter_tag(request, tag):
+    """
+    Render the index page with a list of entries with the specified tag 
+
+    This view retrieves and processes all entries with a specific tag to
+    be displayed on the main page. It also retrieves parameters for the sidebar
+    filter and sort functionalities.
+    GET requests are processed by the sort_by() function inside the
+    get_page_context() function.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        tag (str): The name of a tag.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+    """
+
     entries = get_published_entries(
         request, Entry.objects, get_comments=False
     ).filter(tags__name__in=[tag])
@@ -71,14 +152,9 @@ def filter_tag(request, tag):
         request, entries
     )
 
-    # entries, sorted_param = sort_by(request, entries)
-
-    # page_obj = get_page_obj(request, entries)
-    # #users = get_username_list()
-    # users = get_users_from_file()
-    # # tags = get_all_tags()
-    # tags = get_tags_from_file()
+    # Tells the sidebar to keep clicked-on filter section open
     filter_tag = True
+    # Tells the sidebar to enable sorting buttons for the user entries
     enable_sorting = True
 
     context = {
@@ -96,6 +172,22 @@ def filter_tag(request, tag):
 
 
 def about(request):
+    """
+    Render the about page with a message form 
+
+    This view shows the content of the about page as well as a message
+    submission form for authenticated users. It also retrieves parameters for
+    the sidebar filter functionality.
+    The view handles POST requests whenever a new message is submitted.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        tag (str): The name of a tag.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+    """
     users, tags = get_page_context(request, None)
 
     if request.method == "POST":
@@ -106,7 +198,6 @@ def about(request):
             message.save()
             messages.success(request, "Your message has been submitted.")
         else:
-            print(message_form.errors.as_data())
             messages.error(request, "Your message has not been submitted.")
 
     message_form = MessageToAdminForm()

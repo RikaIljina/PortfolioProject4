@@ -1,3 +1,30 @@
+"""
+views.py for the 'Users' app.
+
+This module contains view functions that render the user profile page and the
+dashboard of authenticated users.
+
+Key functionalities:
+- Show the user profile and all the user's public entries
+- Show the user's personal dashboard and all their entries
+- Allow to edit the user profile
+- Show all likes made by the user
+- Show all comments written by the user
+
+View Functions:
+- user_profile(request, username): Retrieves and renders the user profile, the
+    user's public entries and all relevant context parameters.
+- dashboard_new_user(request): Redirects the user to their 'Edit profile' page
+    after their registration.
+- dashboard(request, username): Retrieves and renders all the user's profile,
+    entries, and all relevant context parameters.
+- dashboard_entry(request, username, slug): Renders the selected entry with all
+    relevant context parameters and edit/delete buttons.
+- edit_profile(request, username): Shows the user profile form for editing.
+- user_favorites(request, username): Renders all entries the user has liked.
+- user_comments(request, username): Renders all comments the user has posted.
+"""
+
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.db.models import Count
@@ -6,7 +33,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 
 from mainpage.utils import get_page_obj, sort_by, get_page_context
-from entries.models import Entry
 from entries.utils import get_published_entries, get_all_entries
 from comments.forms import CommentForm
 from comments.utils import process_comment_form
@@ -43,11 +69,11 @@ def user_profile(request, username):
     # deleting sorting
     profile_view = True
 
-    # Only get entries if the user has added at least one entry
-    if hasattr(user, "all_entries"):
-        entries = get_published_entries(
+    entries = get_published_entries(
             request, user.all_entries, get_comments=False
         )
+    # Only get entries if the user has added at least one entry
+    if entries.count() != 0:
         entries, sorted_param, page_obj, users, tags = get_page_context(
                                                             request, entries)
 
@@ -61,6 +87,7 @@ def user_profile(request, username):
             "profile_view": profile_view,
         }
     else:
+        users, tags = get_page_context(request, None)
         context = {
             "profile": profile,
             "users": users,
@@ -72,53 +99,63 @@ def user_profile(request, username):
 
 
 def dashboard_new_user(request):
+    """
+    Redirects a user to edit profile after registration
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered profile
+            editing page.
+    """
+
     return HttpResponseRedirect(
         reverse("edit_profile", args=[request.user.username])
     )
 
 
 def dashboard(request, username):
+    """
+    View function to display an authenticated user's dashboard
+
+    This function retrieves the profile and entries of the authenticated user
+    and renders the dashboard and the sidebar with the relevant context.
+    If the user has no entries, the context is prepared accordingly.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the user whose profile is to be
+            displayed.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered
+            dashboard page.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
     user = request.user
     profile = user.profile
+    # Tells the sidebar to show dashboard buttons
     dashboard_view = True
+    # Tells the sidebar to enable sorting buttons for the user entries
     enable_sorting = True
 
-    # fields = user._meta.get_fields()
-    # for field in fields:
-    #     print(field)
-    # print(user.all_entries)
-    if hasattr(user, "all_entries"):
-        # user.all_entries.all()
-        # messages.info(request, 'Getting all entries')
-        entries = get_all_entries(
+    entries = get_all_entries(
             request, user.all_entries, get_comments=False
         )
-        most_liked = (
-            Entry.objects.annotate(likes_received=Count("all_likes"))
-            .order_by("-likes_received")
-            .first()
-        )
-        most_recent = Entry.objects.order_by("-created_on").first()
+
+    if entries.count() != 0:
         entries, sorted_param = sort_by(request, entries)
-
-        # if request.GET.get('newEntry'):
-        #     return HttpResponseRedirect(reverse('new_entry'))
-
-        # if request.GET.get('liked') and request.user.is_authenticated:
-        #     return save_like(request)
-        # Deactivate sidebar!!
         page_obj = get_page_obj(request, entries)
-        # users = get_username_list()
-        # tags = get_all_tags()
-
         context = {
             "profile": profile,
-            # 'entries': entries,
-            "most_liked": most_liked,
-            "most_recent": most_recent,
             "page_obj": page_obj,
             "sorted_param": sorted_param,
             "dashboard_view": dashboard_view,
@@ -135,31 +172,57 @@ def dashboard(request, username):
 
 
 def dashboard_entry(request, username, slug):
+    """
+    Display a detailed view of an authenticated user's entry on their dashboard
+
+    This view retrieves an entry of the authenticated user by its slug and
+    renders the dashboard and the sidebar with the relevant context.
+    It gives access to all uploaded audio files and the comment
+    section.
+    The view also shows buttons that enable editing/deleting the entry
+    and handles POST requests whenever a new comment is submitted.
+
+    Args:
+        request (HttpObject): The HTTP request object.
+        username (str): The username of the user whose entry is being
+            displayed.
+        slug (string): Slug of the entry to be shown in detailed view.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        Http404: If the user has no entry with the specified slug.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered entry
+            detail page.
+    """
+    
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
+
+    # Tells the sidebar to show dashboard buttons
+    dashboard_view = True
 
     entry = get_object_or_404(
         get_all_entries(request, request.user.all_entries), slug=slug
     )
     old_files = entry.old_files
-    print("In details:")
-    print(old_files.items())
+    # Sort the previously uploaded files by timestamp
     sorted_files = dict(
         sorted(old_files.items(), key=lambda item: item[1][1], reverse=True)
     )
-    print(sorted_files)
-    modal_text = f'Are you sure you want to delete "{entry.title}"? This action cannot be undone!'
+    # Prepare texts for 'Delete entry' modal
+    modal_text = (f'Are you sure you want to delete "{entry.title}"?'
+                  f'This action cannot be undone!')
     modal_title = f'Delete "{entry.title}"?'
-    dashboard_view = True
 
     comments = entry.all_comments.select_related("author", "author__profile")
 
-    # if request.GET.get('edit'):
-    #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
     if request.method == "POST":
         process_comment_form(request, entry)
-        # TODO: make sure to go back the same path, via js
-        # return redirect(f"{reverse('dashboard_entry', args=[username, slug])}")
+        # Redirect after comment posting to prevent resend of POST data on
+        # page refresh 
         return redirect('dashboard_entry', username=username, slug=slug)
 
     comment_form = CommentForm()
@@ -178,11 +241,34 @@ def dashboard_entry(request, username, slug):
 
 
 def edit_profile(request, username):
+    """
+    Display a form with the profile data of an authenticated user
+
+    This view retrieves the automatically created profile of the authenticated
+    user and renders the dashboard and the sidebar with the relevant context.
+    The view handles POST requests whenever the profile is updated.
+
+    Args:
+        request (HttpObject): The HTTP request object.
+        username (str): The username of the user whose profile is being
+            displayed for editing.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        ValidationError (see ProfileForm class for error handling)
+
+    Returns:
+        HttpResponse: Redirects to the 'dashboard' page if the profile was
+            successfully saved.
+        HttpResponse: The HTTP response object containing the rendered profile
+            form page.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
     profile = request.user.profile
-    # id = profile.pic.public_id
 
     if request.method == "POST" and profile.user == request.user:
         profile_form = ProfileForm(
@@ -193,30 +279,15 @@ def edit_profile(request, username):
         )
         if profile_form.is_valid():
             profile = profile_form.save(commit=False)
-
-            # if request.FILES.get('pic'):
-            #     print(cloudinary.uploader.destroy(id, invalidate=True))
             profile.save()
             messages.success(request, "Your profile has been saved.")
+            return redirect('dashboard', username=username)
 
         else:
-            print("not valid")
-            # print(profile_form.errors.as_data())
             messages.error(request, "There was an error saving your profile.")
 
-        # print(request.POST)
-        # return HttpResponseRedirect(reverse('dashboard', args=[username]))
-
     else:
-        profile_form = ProfileForm(
-            instance=profile,
-            initial={
-                "bio": profile.bio,
-                "pic": profile.pic,
-                "website": profile.website,
-                "email": profile.email,
-            },
-        )
+        profile_form = ProfileForm(instance=profile)
 
     context = {
         "profile": profile,
@@ -230,9 +301,6 @@ def user_favorites(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
-    # entries = get_published_entries(request, request.user.liked.all(), get_comments=False)
     likes = request.user.liked.select_related("entry").annotate(
         likes_received=Count("entry__all_likes", distinct=True),
         comments_received=Count("entry__all_comments", distinct=True),
@@ -242,7 +310,7 @@ def user_favorites(request, username):
     page_obj = get_page_obj(request, likes)
     print(page_obj[0].entry.author.username)
 
-    context = {  # 'likes': likes,
+    context = {
         "page_obj": page_obj,
         "is_favorite": is_favorite,
     }
@@ -250,21 +318,15 @@ def user_favorites(request, username):
     return render(request, "users/dashboard_user_likes.html", context)
 
 
-# TODO: Where to put comments and likes? move utils! make like snippets!
-
-
 def user_comments(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
-
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
 
     comments = request.user.commenter.select_related("entry")
 
     page_obj = get_page_obj(request, comments, 10)
 
-    context = {  # 'comments': comments,
+    context = {
         "page_obj": page_obj,
     }
 
