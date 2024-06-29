@@ -20,18 +20,18 @@ from users.utils import get_username_list
 def get_mainpage_context(request, entries):
     if entries == None:
         return get_username_list(), get_all_tags()
-    
+
     entries, sorted_param = sort_by(request, entries)
     page_obj = get_page_obj(request, entries)
     users = get_username_list()
     tags = get_all_tags()
-    
+
     return entries, sorted_param, page_obj, users, tags
 
 
 def get_page_obj(request, entries, amount=12):
     paginator = Paginator(entries, amount)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     return page_obj
@@ -40,62 +40,66 @@ def get_page_obj(request, entries, amount=12):
 def get_all_tags():
     # tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
     #     entry__publish=1), distinct=True)).filter(amount__gt=0).order_by('name')
-    #print(tags)
-    #print(tags.values())
-    # BUG: Tag doesn't register tagged entry immediately after tag creation or 
+    # print(tags)
+    # print(tags.values())
+    # BUG: Tag doesn't register tagged entry immediately after tag creation or
     # the entry is not counted for other reasons, thus tag isn't counted
-    tags = Tag.objects.annotate(amount=Count('entry', filter=Q(
-        entry__publish=1), distinct=True)).filter(amount__gt=0)
+    tags = Tag.objects.annotate(
+        amount=Count("entry", filter=Q(entry__publish=1), distinct=True)
+    ).filter(amount__gt=0)
 
-    tag_dict = {str(value['name']): str(value['amount']) for value in tags.values()}
+    tag_dict = {
+        str(value["name"]): str(value["amount"]) for value in tags.values()
+    }
     # tag_dict = json.dumps(tag_list)
     print(tag_dict)
     sorted_tags = dict(sorted(tag_dict.items()))
     print(sorted_tags)
-    #print(tags) # tags.values_list('name', flat=True): })
+    # print(tags) # tags.values_list('name', flat=True): })
     # with open(os.path.join(django_settings.STATIC_ROOT, 'tags.txt'), 'w') as file:
     #     #file.writelines(str(line) + '\n' for line in tag_list)
     #     file.write(tag_dict)
-   # tags.filter(amount=0).delete()
-    #print(tag_dict)
-    
+    # tags.filter(amount=0).delete()
+    # print(tag_dict)
+
     return sorted_tags
 
 
 def delete_tags():
     Tag.objects.filter(entry=None).delete()
 
+
 def get_tags_from_file():
-    with open('staticfiles/tags.txt') as f:
+    with open("staticfiles/tags.txt") as f:
         data = f.read()
-    #print(data)
+    # print(data)
     tags = json.loads(data)
     print(tags)
     return tags
 
 
 def sort_by(request, entries):
-    if request.GET.get('sorted') == 'by_likes':
-        entries = entries.annotate(count_likes=Count('all_likes',  distinct=True)).order_by('-count_likes')
-        sorted_param = '?sorted=by_likes'
-    elif request.GET.get('sorted') == 'by_date':
-        entries = entries.order_by('-created_on')
-        sorted_param = '?sorted=by_date'
-    elif request.GET.get('sorted') == 'by_published':
-        entries = entries.order_by('publish')
-        sorted_param = '?sorted=by_published'
-    elif request.GET.get('sorted') == 'by_updated':
-        entries = entries.order_by('-updated_on')
-        sorted_param = '?sorted=by_updated'
-    
+    if request.GET.get("sorted") == "by_likes":
+        entries = entries.annotate(
+            count_likes=Count("all_likes", distinct=True)
+        ).order_by("-count_likes")
+        sorted_param = "?sorted=by_likes"
+    elif request.GET.get("sorted") == "by_date":
+        entries = entries.order_by("-created_on")
+        sorted_param = "?sorted=by_date"
+    elif request.GET.get("sorted") == "by_published":
+        entries = entries.order_by("publish")
+        sorted_param = "?sorted=by_published"
+    elif request.GET.get("sorted") == "by_updated":
+        entries = entries.order_by("-updated_on")
+        sorted_param = "?sorted=by_updated"
+
     else:
-        sorted_param = ''
-        
+        sorted_param = ""
+
     print(request.GET)
-    
+
     return entries, sorted_param
-
-
 
 
 # def save_like(request, source=Entry.objects):
@@ -119,5 +123,5 @@ def sort_by(request, entries):
 
 #     else:
 #         q = ''
-        
+
 #     return HttpResponseRedirect(request.path + q)

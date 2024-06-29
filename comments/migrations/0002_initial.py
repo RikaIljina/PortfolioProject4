@@ -9,14 +9,18 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('comments', '0001_initial'),
-        ('entries', '0001_initial'),
+        ("comments", "0001_initial"),
+        ("entries", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='comment',
-            name='entry',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='all_comments', to='entries.entry'),
+            model_name="comment",
+            name="entry",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="all_comments",
+                to="entries.entry",
+            ),
         ),
     ]

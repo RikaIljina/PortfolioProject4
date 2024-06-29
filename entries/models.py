@@ -12,6 +12,7 @@ import cloudinary
 
 STATUS = ((0, "Private"), (1, "Published"))
 
+
 class Entry(models.Model):
     """
     A model representing an audio entry created by a user.
@@ -39,14 +40,15 @@ class Entry(models.Model):
     """
 
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="all_entries")
+        User, on_delete=models.CASCADE, related_name="all_entries"
+    )
     title = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    audio_file = CloudinaryField('video', resource_type='auto', format='mp3')
+    audio_file = CloudinaryField("video", resource_type="auto", format="mp3")
     old_files = models.JSONField(default=dict, blank=True)
     description = models.TextField()
-    tags = TaggableManager(verbose_name='Tags')
+    tags = TaggableManager(verbose_name="Tags")
     slug = models.SlugField(max_length=250, unique=True, blank=True)
     publish = models.IntegerField(choices=STATUS, default=0)
 
@@ -60,9 +62,8 @@ class Entry(models.Model):
         Returns:
             str: The title of the entry and the username of the author.
         """
-        
-        return f"{self.title} created by {self.author}"
 
+        return f"{self.title} created by {self.author}"
 
     def save(self, *args, **kwargs):
         """
@@ -82,11 +83,11 @@ class Entry(models.Model):
         #     print('Error!')
         #     raise ValidationError('Please choose a different title to make'
         #                           'sure the entry slug is unique.')
-            
+
         # new_slug = f'{self.title}-{self.author.username}'
         # # unidecode is needed to process non-latin titles
         # new_slug = slugify(unidecode(new_slug))
-        
+
         # if Entry.objects.filter(slug=new_slug).exclude(
         #                                         id=self.id).exists():
         #     print('Error!')
@@ -95,12 +96,11 @@ class Entry(models.Model):
         #         'slug is unique.')
         # else:
         #     print('Unique slug')
-        #Delete tags that are no longer used by any entry
-        
-        Tag.objects.filter(entry=None).delete()
-        
-        return super(Entry, self).save(*args, **kwargs)
+        # Delete tags that are no longer used by any entry
 
+        Tag.objects.filter(entry=None).delete()
+
+        return super(Entry, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         """
@@ -114,15 +114,22 @@ class Entry(models.Model):
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
         """
-        
+
         # Delete tags that are no longer used by any entry
         Tag.objects.filter(entry=None).delete()
         # Destroy unused Cloudinary files
-        print(cloudinary.uploader.destroy(
-            self.audio_file.public_id, resource_type = "video",
-            invalidate=True))
+        print(
+            cloudinary.uploader.destroy(
+                self.audio_file.public_id,
+                resource_type="video",
+                invalidate=True,
+            )
+        )
         for id, file in self.old_files.items():
-            print(cloudinary.uploader.destroy(
-                id, resource_type = "video", invalidate=True))
-            
+            print(
+                cloudinary.uploader.destroy(
+                    id, resource_type="video", invalidate=True
+                )
+            )
+
         return super().delete(*args, **kwargs)

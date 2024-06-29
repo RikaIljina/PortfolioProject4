@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 from entries.models import Entry
 
+
 class Comment(models.Model):
-    """ Model to store a comment made by a user on an entry.
+    """Model to store a comment made by a user on an entry.
 
     Attributes:
         author (ForeignKey): Reference to the user who made the comment.
@@ -23,11 +24,13 @@ class Comment(models.Model):
     Methods:
         __str__(): Returns a string representation of the comment.
     """
-    
+
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="commenter")
+        User, on_delete=models.CASCADE, related_name="commenter"
+    )
     entry = models.ForeignKey(
-        Entry, on_delete=models.CASCADE, related_name="all_comments")
+        Entry, on_delete=models.CASCADE, related_name="all_comments"
+    )
     content = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -36,5 +39,7 @@ class Comment(models.Model):
         ordering = ["-created_on"]
 
     def __str__(self):
-        return (f"{self.author} commented on {self.entry}: " +
-                f"{self.content[:15]}...")
+        return (
+            f"{self.author} commented on {self.entry}: "
+            f"{self.content[:15]}..."
+        )

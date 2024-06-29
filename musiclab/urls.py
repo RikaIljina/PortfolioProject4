@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -21,13 +22,13 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('accounts/', include('allauth.urls')),
-    path('admin/', admin.site.urls),
-    path('summernote/', include('django_summernote.urls')),
+    path("accounts/", include("allauth.urls")),
+    path("admin/", admin.site.urls),
+    path("summernote/", include("django_summernote.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
-    path('', include('mainpage.urls'), name='mainpage-urls'),
-    path('', include('users.urls'), name='users-urls'),
-    path('', include('entries.urls'), name='entries-urls'),
-    path('', include('comments.urls'), name='comments-urls'),
-    path('', include('likes.urls'), name='likes-urls'),
+    path("", include("mainpage.urls"), name="mainpage-urls"),
+    path("", include("users.urls"), name="users-urls"),
+    path("", include("entries.urls"), name="entries-urls"),
+    path("", include("comments.urls"), name="comments-urls"),
+    path("", include("likes.urls"), name="likes-urls"),
 ]

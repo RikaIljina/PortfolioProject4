@@ -8,13 +8,14 @@ from cloudinary.models import CloudinaryField
 
 
 class Profile(models.Model):
-    '''User profile
+    """User profile
     Must be created automatically when user registers
-    Move to separate "users" app?'''
+    Move to separate "users" app?"""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     # TODO: limit image size
-    pic = CloudinaryField('image', default='placeholder')
+    pic = CloudinaryField("image", default="placeholder")
     joined = models.DateTimeField(auto_now_add=True)
     facebook = models.URLField(blank=True, null=True)
     twitter = models.URLField(blank=True, null=True)
@@ -28,6 +29,6 @@ class Profile(models.Model):
         return f"User profile of {self.user.username}"
 
     def delete(self, *args, **kwargs):
-        print('Trying to delete')
+        print("Trying to delete")
         print(cloudinary.uploader.destroy(self.pic.public_id, invalidate=True))
         return super().delete(*args, **kwargs)

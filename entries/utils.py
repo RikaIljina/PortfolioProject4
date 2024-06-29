@@ -19,40 +19,66 @@ def get_published_entries(request, source, get_likes=True, get_comments=True):
         entries (queryset): A queryset with published entries along with a
             variety of annotations and related data.
     """
-    
+
     # likes_received and comments_received inform the like_comment_summary
     # snippet of the 'likes' app
     if request.user.is_authenticated and get_likes and get_comments:
-        entries = source.filter(publish=1).annotate(
-            already_liked=Count('all_likes', filter=Q(
-                                all_likes__user=request.user), distinct=True),
-            likes_received=Count('all_likes', distinct=True), 
-            comments_received=Count('all_comments', distinct=True)) \
-            .select_related('author').select_related('author__profile') \
-            .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
+        entries = (
+            source.filter(publish=1)
+            .annotate(
+                already_liked=Count(
+                    "all_likes",
+                    filter=Q(all_likes__user=request.user),
+                    distinct=True,
+                ),
+                likes_received=Count("all_likes", distinct=True),
+                comments_received=Count("all_comments", distinct=True),
+            )
+            .select_related("author")
+            .select_related("author__profile")
+            .prefetch_related("tagged_items__tag", "tags", "all_comments")
+        )
 
     elif request.user.is_authenticated and not get_comments:
-        entries = source.filter(publish=1).annotate(
-            already_liked=Count('all_likes', filter=Q(
-                                all_likes__user=request.user), distinct=True),
-            likes_received=Count('all_likes', distinct=True), 
-            comments_received=Count('all_comments', distinct=True)) \
-            .select_related('author').select_related('author__profile') \
-            .prefetch_related('tagged_items__tag', 'tags')
-    
+        entries = (
+            source.filter(publish=1)
+            .annotate(
+                already_liked=Count(
+                    "all_likes",
+                    filter=Q(all_likes__user=request.user),
+                    distinct=True,
+                ),
+                likes_received=Count("all_likes", distinct=True),
+                comments_received=Count("all_comments", distinct=True),
+            )
+            .select_related("author")
+            .select_related("author__profile")
+            .prefetch_related("tagged_items__tag", "tags")
+        )
+
     elif get_comments:
-        entries = source.filter(publish=1).annotate(
-            likes_received=Count('all_likes', distinct=True), 
-            comments_received=Count('all_comments', distinct=True)) \
-            .select_related('author').select_related('author__profile') \
-            .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
+        entries = (
+            source.filter(publish=1)
+            .annotate(
+                likes_received=Count("all_likes", distinct=True),
+                comments_received=Count("all_comments", distinct=True),
+            )
+            .select_related("author")
+            .select_related("author__profile")
+            .prefetch_related("tagged_items__tag", "tags", "all_comments")
+        )
 
     else:
-        entries = source.filter(publish=1).annotate(
-            likes_received=Count('all_likes', distinct=True), 
-            comments_received=Count('all_comments', distinct=True)) \
-            .select_related('author').select_related('author__profile') \
-            .prefetch_related('tagged_items__tag', 'tags')
+        entries = (
+            source.filter(publish=1)
+            .annotate(
+                likes_received=Count("all_likes", distinct=True),
+                comments_received=Count("all_comments", distinct=True),
+            )
+            .select_related("author")
+            .select_related("author__profile")
+            .prefetch_related("tagged_items__tag", "tags")
+        )
 
     return entries
 
@@ -72,20 +98,31 @@ def get_all_entries(request, source, get_comments=True):
         entries (queryset): A queryset with the user's published and private
             entries along with a variety of annotations and related data.
     """
-    
+
     if request.user.is_authenticated:
         if get_comments:
-            entries = source.annotate(
-                likes_received=Count('all_likes', distinct=True),
-                comments_received=Count('all_comments', distinct=True)) \
-                .select_related('author').select_related('author__profile') \
-                .prefetch_related('tagged_items__tag', 'tags', 'all_comments')
+            entries = (
+                source.annotate(
+                    likes_received=Count("all_likes", distinct=True),
+                    comments_received=Count("all_comments", distinct=True),
+                )
+                .select_related("author")
+                .select_related("author__profile")
+                .prefetch_related("tagged_items__tag", "tags", "all_comments")
+            )
 
         else:
-            entries = source.annotate(
-                likes_received=Count('all_likes', distinct=True),
-                comments_received=Count('all_comments', distinct=True)) \
-                .select_related('author').select_related('author__profile') \
-                .prefetch_related('tagged_items__tag', 'tags',)
+            entries = (
+                source.annotate(
+                    likes_received=Count("all_likes", distinct=True),
+                    comments_received=Count("all_comments", distinct=True),
+                )
+                .select_related("author")
+                .select_related("author__profile")
+                .prefetch_related(
+                    "tagged_items__tag",
+                    "tags",
+                )
+            )
 
         return entries

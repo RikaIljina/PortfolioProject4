@@ -16,20 +16,44 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('bio', models.TextField(blank=True, null=True)),
-                ('pic', cloudinary.models.CloudinaryField(default='placeholder', max_length=255, verbose_name='image')),
-                ('joined', models.DateTimeField(auto_now_add=True)),
-                ('facebook', models.URLField(blank=True, null=True)),
-                ('twitter', models.URLField(blank=True, null=True)),
-                ('instagram', models.URLField(blank=True, null=True)),
-                ('youtube', models.URLField(blank=True, null=True)),
-                ('spotify', models.URLField(blank=True, null=True)),
-                ('website', models.URLField(blank=True, null=True)),
-                ('email', models.EmailField(blank=True, max_length=254, null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("bio", models.TextField(blank=True, null=True)),
+                (
+                    "pic",
+                    cloudinary.models.CloudinaryField(
+                        default="placeholder",
+                        max_length=255,
+                        verbose_name="image",
+                    ),
+                ),
+                ("joined", models.DateTimeField(auto_now_add=True)),
+                ("facebook", models.URLField(blank=True, null=True)),
+                ("twitter", models.URLField(blank=True, null=True)),
+                ("instagram", models.URLField(blank=True, null=True)),
+                ("youtube", models.URLField(blank=True, null=True)),
+                ("spotify", models.URLField(blank=True, null=True)),
+                ("website", models.URLField(blank=True, null=True)),
+                (
+                    "email",
+                    models.EmailField(blank=True, max_length=254, null=True),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

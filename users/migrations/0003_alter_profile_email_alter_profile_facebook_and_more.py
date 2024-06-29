@@ -6,43 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_alter_profile_email_alter_profile_facebook_and_more'),
+        ("users", "0002_alter_profile_email_alter_profile_facebook_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='email',
+            model_name="profile",
+            name="email",
             field=models.EmailField(blank=True, max_length=254, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='facebook',
+            model_name="profile",
+            name="facebook",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='instagram',
+            model_name="profile",
+            name="instagram",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='spotify',
+            model_name="profile",
+            name="spotify",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='twitter',
+            model_name="profile",
+            name="twitter",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='website',
+            model_name="profile",
+            name="website",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='youtube',
+            model_name="profile",
+            name="youtube",
             field=models.URLField(blank=True, null=True),
         ),
     ]
