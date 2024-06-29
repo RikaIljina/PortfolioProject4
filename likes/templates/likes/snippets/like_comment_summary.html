@@ -4,7 +4,8 @@
         {% if user.is_authenticated and entry.author != user %}
             
             <a class="btn-like like" data-entry_id="{{ entry.id }}"
-            {% if entry.already_liked == 1 %}data-liked=True{% endif %} {% if is_favorite == 1 %}data-favorite-view=True{% endif %}
+            {% if entry.already_liked == 1 %}data-liked=True{% endif %}
+            {% if is_favorite == 1 %}data-favorite-view=True{% endif %}
             href="{{ request.path }}">
 
                 {% if entry.already_liked == 1 or is_favorite == 1 %}
@@ -16,9 +17,10 @@
         {% elif user.is_authenticated and entry.author == user %}
         <i class="fa-regular fa-heart text-muted"></i>
         {% else %}
-        <i class="fa-regular fa-heart text-muted hover-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
+        <i class="fa-regular fa-heart text-muted hover-tooltip" 
+        data-bs-toggle="tooltip" data-bs-placement="top"
         title="Log in to like and comment"></i>
         {% endif %}
-        {{ entry.likes_received }} | <i class="fa-regular fa-comment hover-scale"></i> {{entry.comments_received }}
+        {{ entry.likes_received }} | <i class="fa-regular fa-comment hover-scale"></i> 
+        {{entry.comments_received }}
     </p>
-

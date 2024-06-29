@@ -1,19 +1,28 @@
+"""
+models.py for the 'Likes' app.
+
+This module contains the model for the 'Like' object, which tracks user likes
+on entries.
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
-from cloudinary.models import CloudinaryField
-from taggit.managers import TaggableManager
 
-# from django.template.defaultfilters import slugify
-from django.utils.text import slugify
-import cloudinary
-from unidecode import unidecode
 from entries.models import Entry
 
 
-# Create your models here.
-
-
 class Like(models.Model):
+    """
+    A model representing a like given by a user to an entry.
+
+    Attributes:
+        user (ForeignKey): The user who liked the entry.
+        entry (ForeignKey): The entry being liked.
+        created_on (datetime): The date and time when the entry was liked.
+
+    Meta:
+        ordering: Specifies the default order of entries.
+    """
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="liked"
     )
@@ -26,18 +35,25 @@ class Like(models.Model):
         ordering = ["-created_on"]
 
     def save(self, *args, **kwargs):
-        """Checks if the like is valid before saving
-        This makes sure that a user cannot like an entry twice and cannot
-        like their own entry
         """
-        # if self.user.liked.all().filter(entry=self.entry.id).count() != 0 \
+        Check if the like is valid before saving
+
+        This method ensures that a user cannot like an entry twice and cannot
+        like their own entry. If the like is valid, it is saved to the database.
+        """
+        
         if self.entry.author == self.user:
-            print("This is your own entry")
             return
         else:
-            # self.entry.likes = self.entry.all_likes.count() + 1
             self.entry.save()
             super(Like, self).save(*args, **kwargs)
 
     def __str__(self):
+        """
+        Return a string representation of the Like instance
+
+        Returns:
+            str: The title of the liked entry and the username of the user.
+        """
+
         return f"Entry {self.entry} liked by {self.user}"

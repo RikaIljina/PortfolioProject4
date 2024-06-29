@@ -1,35 +1,13 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
-from django.db.models import Count, Q
-from django.contrib.auth import get_user_model
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from django.db.models.functions import Lower
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from taggit.models import Tag
-import os
 
-from .models import MessageToAdmin
-from .forms import MessageToAdminForm
-from likes.models import Like
+from mainpage.utils import get_page_context
+from entries.utils import get_published_entries
 from entries.models import Entry
 
-from comments.forms import CommentForm
-from mainpage.utils import (
-    get_all_tags,
-    get_page_obj,
-    sort_by,
-    get_tags_from_file,
-    get_page_context,
-)
-from users.utils import get_username_list, get_users_from_file
-from entries.utils import get_published_entries
-
-# util
-
-
-# Views
+from .forms import MessageToAdminForm
 
 
 def index(request):
@@ -38,16 +16,8 @@ def index(request):
     entries, sorted_param, page_obj, users, tags = get_page_context(
         request, entries
     )
-    # print(tags)
-    # entries, sorted_param = sort_by(request, entries)
 
-    # page_obj = get_page_obj(request, entries)
-
-    # # tags = get_all_tags()
-    # #users = get_username_list()
-    # users = get_users_from_file()
-    # #tags = get_all_tags()
-    # tags = get_tags_from_file()
+    # Tells the sidebar to enable sorting buttons for the user entries
     enable_sorting = True
 
     context = {
@@ -73,16 +43,9 @@ def filter_user(request, username):
         request, entries
     )
 
-    # entries, sorted_param = sort_by(request, entries)
-
-    # # if request.GET.get('liked') and request.user.is_authenticated:
-    # #     return save_like(request, entries)
-
-    # page_obj = get_page_obj(request, entries)
-    # #users = get_username_list()
-    # users = get_users_from_file()
-    # tags = get_tags_from_file()
+    # Tells the sidebar to keep clicked-on filter section open
     filter_user = True
+    # Tells the sidebar to enable sorting buttons for the user entries
     enable_sorting = True
 
     context = {
