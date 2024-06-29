@@ -35,7 +35,7 @@ def delete_like_by_entry(request, entry_id, current_path=""):
     else:
         params = ""
 
-    like = request.user.liked.filter(entry__pk=entry_id)[0]
+    like = request.user.liked.filter(entry__pk=entry_id).first()
     like.delete()
 
     return redirect(f"{reverse('home')}{current_path}{params}")
@@ -50,7 +50,10 @@ def delete_like_by_like(request, like_id, current_path=""):
     else:
         params = ""
 
-    like = Like.objects.get(id=like_id)
-    like.delete()
+    if request.user.liked.filter(id=like_id).exists():
+        like = Like.objects.get(id=like_id)
+        like.delete()
+    else:
+        raise PermissionDenied
 
     return redirect(f"{reverse('home')}{current_path}{params}")
