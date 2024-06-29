@@ -18,7 +18,7 @@
             <hr>
 
             {% for like in page_obj %}
-            {% with entry=like.entry liked=like %}
+            {% with entry=like.entry %}
             {% include 'entries/snippets/entry_cards.html' %}
 
             {% endwith %}

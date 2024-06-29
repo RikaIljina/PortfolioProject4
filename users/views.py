@@ -298,6 +298,38 @@ def edit_profile(request, username):
 
 
 def user_favorites(request, username):
+    """
+    Render the user's favorites page with a list of liked entries
+
+    This view retrieves and processes a list of entries liked by the
+    authenticated user. It ensures that only the authenticated user can access
+    their own favorites page and displays the entries along with the number of
+    likes and comments received.
+    The other views that display entries process a queryset of entries annotated
+    with like and comment amounts, and the HTML templates expect to receive an
+    'entry' object with all its attributes. However, since this view doesn't
+    process a queryset of entries but rather a queryset of Like objects, each
+    Like object is annotated with the amount of likes and comments which its
+    related entry received instead.
+    The HTML template is then wrapped in {% with entry=like.entry %} tags to
+    access entry data and in {% with entry=like %} tags to access the annotated
+    values.
+    The variable 'is_favorite' tells the HTML page that all entries on this
+    page should be treated as 'liked' and styled accordingly.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the authenticated user.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+
+    Returns:
+        HttpResponse: Rendered user favorites page with the context containing
+            the paginated list of liked entries and additional information.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
@@ -308,7 +340,6 @@ def user_favorites(request, username):
     is_favorite = 1
 
     page_obj = get_page_obj(request, likes)
-    print(page_obj[0].entry.author.username)
 
     context = {
         "page_obj": page_obj,
@@ -319,6 +350,26 @@ def user_favorites(request, username):
 
 
 def user_comments(request, username):
+    """
+    Render the user's comments page with a list of comments made by the user
+
+    This view retrieves and processes a list of comments made by the
+    authenticated user. It ensures that only the authenticated user can access
+    their own comments page and displays the comments in a paginated format.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the authenticated user.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+
+    Returns:
+        HttpResponse: Rendered user comments page with the context containing
+            the paginated list of user's comments.
+    """
+    
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 

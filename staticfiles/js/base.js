@@ -19,6 +19,7 @@ window.addEventListener("DOMContentLoaded", function () {
     // Check whether the user is on a mobile device
     if (sidebarPos === "absolute") {
       sidebarAutoCollapse = true;
+      collapseSidebar();
     } else {
       sidebarAutoCollapse = false;
     }
@@ -32,15 +33,20 @@ window.addEventListener("DOMContentLoaded", function () {
     // mobile device and if they already clicked on a filter and the view
     // shows a filtered selection of entries
     for (let filterCat of filterCategories) {
-      if (!sidebarAutoCollapse && filterCat.classList.contains("force-show")) {
-        expandSidebar();
-        filterCat.classList.add("show");
+      if (!sidebarAutoCollapse && filterCat.classList.contains("force-show") &&
+        localStorage.getItem("sidebarCollapsed") === "false") {
+        // expandSidebar();
+        $(filterCat).collapse('show');
+        // filterCat.classList.add("show");
         break;
       } else if (
-        !sidebarAutoCollapse &&
+        sidebarAutoCollapse &&
         filterCat.classList.contains("force-show")
       ) {
-        filterCat.classList.remove("show");
+        alert(sidebarAutoCollapse);
+        // $('#submenu2').collapse('hide');
+        // filterCat.classList.remove("show");
+        collapseSidebar();
       }
     }
 
@@ -131,7 +137,9 @@ function collapseSidebar() {
   // Hide the block with usernames or tags
   var filterCategories = document.getElementsByClassName("filter-cat");
   for (cat of filterCategories) {
-    cat.classList.remove("show");
+    alert(cat);
+    $(cat).collapse("hide");
+    cat.classList.remove("force-show");
   }
 
   // Hide all sidebar nav item titles
