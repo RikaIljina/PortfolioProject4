@@ -1,48 +1,55 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.db.models import Count
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.contrib import messages
 
-from mainpage.utils import get_all_tags, get_page_obj, sort_by
+from mainpage.utils import get_page_obj, sort_by, get_page_context
 from entries.models import Entry
 from entries.utils import get_published_entries, get_all_entries
 from comments.forms import CommentForm
 from comments.utils import process_comment_form
 
-from .utils import get_username_list
 from .forms import ProfileForm
 
 
 def user_profile(request, username):
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
+    """
+    View function to display a user's profile page
 
+    This function retrieves the profile and entries of a specified user and
+    renders the profile page with the relevant context. If the user has no
+    entries, the context is prepared accordingly.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the user whose profile is to be
+            displayed.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered profile
+            page.
+
+    Raises:
+        Http404: If the user with the specified username does not exist.
+    """
+    
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
+    # Tells the sidebar to enable sorting buttons for the user entries
     enable_sorting = True
+    # Makes sure the 'reset filter' button redirects to profile page when
+    # deleting sorting
     profile_view = True
-    # entries = user.entries.filter(publish=1)
+
+    # Only get entries if the user has added at least one entry
     if hasattr(user, "all_entries"):
         entries = get_published_entries(
             request, user.all_entries, get_comments=False
         )
-        # print(entries[0].likes_received)
-        # most_liked = entries.filter(publish=1).annotate(
-        #     likes_received=Count('all_likes')).order_by('-likes_received').first()
-        # most_recent = entries.filter(
-        #     publish=1).order_by('-created_on').first()
-        entries, sorted_param = sort_by(request, entries)
-
-        page_obj = get_page_obj(request, entries)
-
-        users = get_username_list()
-
-        # users = get_users_from_file()
-
-        tags = get_all_tags()
-        # tags = get_tags_from_file()
+        entries, sorted_param, page_obj, users, tags = get_page_context(
+                                                            request, entries)
 
         context = {
             "profile": profile,
@@ -152,7 +159,8 @@ def dashboard_entry(request, username, slug):
     if request.method == "POST":
         process_comment_form(request, entry)
         # TODO: make sure to go back the same path, via js
-        return redirect(f"{reverse('dashboard_entry', args=[username, slug])}")
+        # return redirect(f"{reverse('dashboard_entry', args=[username, slug])}")
+        return redirect('dashboard_entry', username=username, slug=slug)
 
     comment_form = CommentForm()
 

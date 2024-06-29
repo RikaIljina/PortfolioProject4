@@ -1,21 +1,34 @@
 const likeButtons = document.getElementsByClassName("btn-like");
 
 for (let button of likeButtons) {
-  let entryId = button.getAttribute("data-entry_id");
-//   alert(`Setting button ${entryId}`);
+  let liked = button.getAttribute("data-liked");
+  let favoriteView = button.getAttribute("data-favorite-view");
+  if (favoriteView) {
+    var mainPath = "like/delete-by-like/";
+  } else if (liked) {
+    var mainPath = "like/delete-by-entry/";
+  } else {
+    var mainPath = "like/";
+  }
+  // Could also be Like id
+  let delId = button.getAttribute("data-entry_id");
+  //   alert(`Setting button ${entryId}`);
   let oldPath = window.location.href.split("?")[0].slice(0, -1);
   let oldParams = window.location.href.split("?")[1];
   if (oldPath) {
     if (oldParams) {
-      button.setAttribute("href", `${oldPath}/like/${entryId}/?${oldParams}`);
+      button.setAttribute("href", `${oldPath}/${mainPath}${delId}/?${oldParams}`);
     } else {
-      button.setAttribute("href", `${oldPath}/like/${entryId}/`);
+      button.setAttribute("href", `${oldPath}/${mainPath}${delId}/`);
     }
   } else {
-    button.setAttribute("href", `like/${entryId}/`);
+    if (oldParams) {
+      button.setAttribute("href", `${mainPath}${delId}/?${oldParams}`);
+    } else {
+      button.setAttribute("href", `${mainPath}${delId}/`);
+    }
   }
 }
-
 
 // let commentParagraph = document.getElementById(`comment${commentId}`);
 // let commentContent = commentParagraph.innerText;

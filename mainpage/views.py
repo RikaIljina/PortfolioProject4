@@ -21,7 +21,7 @@ from mainpage.utils import (
     get_page_obj,
     sort_by,
     get_tags_from_file,
-    get_mainpage_context,
+    get_page_context,
 )
 from users.utils import get_username_list, get_users_from_file
 from entries.utils import get_published_entries
@@ -35,7 +35,7 @@ from entries.utils import get_published_entries
 def index(request):
     entries = get_published_entries(request, Entry.objects, get_comments=False)
 
-    entries, sorted_param, page_obj, users, tags = get_mainpage_context(
+    entries, sorted_param, page_obj, users, tags = get_page_context(
         request, entries
     )
     # print(tags)
@@ -69,7 +69,7 @@ def filter_user(request, username):
         request, user.all_entries, get_comments=False
     )
 
-    entries, sorted_param, page_obj, users, tags = get_mainpage_context(
+    entries, sorted_param, page_obj, users, tags = get_page_context(
         request, entries
     )
 
@@ -104,7 +104,7 @@ def filter_tag(request, tag):
         request, Entry.objects, get_comments=False
     ).filter(tags__name__in=[tag])
 
-    entries, sorted_param, page_obj, users, tags = get_mainpage_context(
+    entries, sorted_param, page_obj, users, tags = get_page_context(
         request, entries
     )
 
@@ -133,7 +133,7 @@ def filter_tag(request, tag):
 
 
 def about(request):
-    users, tags = get_mainpage_context(request, None)
+    users, tags = get_page_context(request, None)
 
     if request.method == "POST":
         message_form = MessageToAdminForm(request.POST)

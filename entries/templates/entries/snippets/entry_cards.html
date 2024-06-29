@@ -63,7 +63,7 @@
         
         <div class="card-footer d-flex flex-wrap align-content-center">
             {% if liked %}
-            {% with entry=liked %}
+            {% with entry=like %}
             {% include 'likes/snippets/like_comment_summary.html' %}
             {% endwith %}
             {% else %}

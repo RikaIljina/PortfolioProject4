@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib import admin, messages
-from django_summernote.admin import SummernoteModelAdmin
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django_summernote.admin import SummernoteModelAdmin
+
 from datetime import datetime
 from unidecode import unidecode
 import cloudinary
@@ -31,7 +31,8 @@ class EntryFormExtension(forms.ModelForm):
     def clean(self):
         print("cleaning")
         instance = self.save(commit=False)
-        new_slug = f"{self.cleaned_data['title']}-{self.cleaned_data['author'].username}"
+        new_slug = (f"{self.cleaned_data['title']}"
+                   f"-{self.cleaned_data['author'].username}")
         # unidecode is needed to process non-latin titles
         new_slug = slugify(unidecode(new_slug))
         print(new_slug)
