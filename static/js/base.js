@@ -41,7 +41,6 @@ window.addEventListener("DOMContentLoaded", function () {
         sidebarAutoCollapse &&
         filterCat.classList.contains("force-show")
       ) {
-        alert(sidebarAutoCollapse);
         collapseSidebar();
       }
     }
@@ -131,7 +130,6 @@ function collapseSidebar() {
   // Hide the block with usernames or tags
   var filterCategories = document.getElementsByClassName("filter-cat");
   for (let cat of filterCategories) {
-    alert(cat);
     $(cat).collapse("hide");
     cat.classList.remove("force-show");
   }
