@@ -1,3 +1,10 @@
+"""
+forms.py for the 'Comments' app.
+
+This module contains the form class that handles input by authenticated
+users, allowing them to enter Comment object data and create a new comment.
+"""
+
 from django import forms
 from django.forms import Textarea
 from .models import Comment

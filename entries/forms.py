@@ -1,20 +1,22 @@
-import json
-import os
-from datetime import datetime
+"""
+forms.py for the 'Entries' app.
+
+This module contains the form class that handles the input by authenticated
+users, allowing them to enter Entry object data and create a new entry.
+"""
+
 from django import forms
 from django.forms import TextInput, RadioSelect, FileInput, CheckboxInput
 from django.utils.translation import gettext_lazy as _
-from django_summernote.widgets import SummernoteWidget
-from unidecode import unidecode
 from django.utils.text import slugify
-
-
+from django.core.exceptions import ValidationError
+from django_summernote.widgets import SummernoteWidget
+import json
+from datetime import datetime
+from unidecode import unidecode
 import cloudinary
 
 from .models import Entry
-
-from django.core.exceptions import ValidationError
-
 
 class EntryForm(forms.ModelForm):
     """
@@ -24,21 +26,25 @@ class EntryForm(forms.ModelForm):
     Entry model. It allows users to keep uploaded files as previous versions
     when updating entries.
 
-    keep_file (BooleanField): Optional checkbox
+    Attributes:
+        keep_file (BooleanField): Optional checkbox
+        user (User object): The user making the request
+        new_file (TemporaryUploadedFile): The file selected by the user for
+            upload
 
-    Meta: Specifies the django model, fields, widgets and labels.
+    Meta: Specifies the django model, fields, widgets, and labels.
 
     Methods:
-    __init__: Initializes the form with additional arguments
-    clean_title: Performs custom validation of the entry title
-    save: Overrides super method to deal with Cloudinary files
+        clean_title(): Performs custom validation of the entry title.
+        clean_audio_file(): Performs custom validation of the uploaded file.
+        save(): Overrides super method to deal with Cloudinary files.
     """
 
     keep_file = forms.BooleanField(required=False, label="Keep previous file?")
 
     class Meta:
         """
-        Specify the django model, the fields, widgets and labels
+        Specify the django model, the fields, widgets, and labels
         """
 
         model = Entry
@@ -76,64 +82,52 @@ class EntryForm(forms.ModelForm):
             "publish": _("Publicity"),
         }
 
+
     def __init__(self, *args, **kwargs):
-        # Save user and new_file on form initialization, but remove them from
-        # kwargs because the super init method is not expecting them
+        # Save user on form initialization, but remove it from kwargs because
+        # the super init method is not expecting it
         self.user = kwargs.pop("user", None)
-        self.new_file = kwargs.pop("new_file", None)
-        super(EntryForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
 
     def clean_title(self):
         """
-        Validate the uniqueness of the title for entries by the same user.
+        Validate the uniqueness of the entry's slug
 
-        This method ensures that the title for an entry is unique among the
-        entries created by the same user. Raises a ValidationError if the user
-        has already used the same title for another entry.
+        This method ensures that the slug for an entry is unique among all
+        entries in the database. Raises a ValidationError if the slug already
+        exists and prompts the user to choose a different title.
+        If the slug is valid, it is saved in the instance.
 
         Returns:
             str: The validated title.
 
         Raises:
-            forms.ValidationError: If the user has already used this title for
+            ValidationError: If the user has already used this title for
                 another entry.
         """
 
-        title = self.cleaned_data.get("title")
         instance = self.instance
+        title = self.cleaned_data.get("title")
+        new_slug = f"{title}-{self.user.username}"
+        # unidecode is needed to process non-latin titles
+        new_slug = slugify(unidecode(new_slug))
 
         if (
-            Entry.objects.filter(author=self.user, title=title)
-            .exclude(id=instance.id)
-            .exists()
-        ):
-            raise forms.ValidationError(
-                "You have already used this title for another entry. Please "
-                "choose a different title."
-            )
-        else:
-            new_slug = f"{title}-{self.user.username}"
-            # unidecode is needed to process non-latin titles
-            new_slug = slugify(unidecode(new_slug))
-
-            if (
                 Entry.objects.filter(slug=new_slug)
                 .exclude(id=instance.id)
                 .exists()
             ):
-                print("Error!")
-                raise ValidationError(
-                    "Please choose a different title to make sure the entry "
-                    "slug is unique."
+            raise ValidationError(
+                "Please choose a different title to make sure the entry link"
+                " is unique."
                 )
-            else:
-                instance = super(EntryForm, self).save(commit=False)
-                instance.slug = new_slug
-                print("Unique slug")
+        else:
+            instance.slug = new_slug
 
         return title
 
-    # https://stackoverflow.com/a/6195691
+    # Adapted from https://stackoverflow.com/a/6195691
     def clean_audio_file(self):
         """
         Validate audio file before passing it on to Cloudinary
@@ -147,24 +141,24 @@ class EntryForm(forms.ModelForm):
             ValidationError: If none of the attributes could be read
 
         Returns:
-            file (UploadedFile): An abstract uploaded file
+            file (TemporaryUploadedFile): File uploaded to a temporary location
         """
+        
         file = self.cleaned_data.get("audio_file", False)
-        print(type(file))
-        if file and "cloudinary" not in str(type(file)):
-            print("checking stuff")
-            if not file.content_type in ["audio/mpeg"]:
-                print("checking type")
-                raise ValidationError("Content type is not mpeg")
-            if file.size > 10 * 1024 * 1024:
-                print("checking size")
-                raise ValidationError("Audio file too large ( > 10MB )")
 
+        if file and "cloudinary" not in str(type(file)):
+            if not file.content_type in ["audio/mpeg"]:
+                raise ValidationError(f"This is not an mp3 file, please choose"
+                                      f" a valid file.")
+            if file.size > 10 * 1024 * 1024:
+                raise ValidationError(f"The audio file is too large. The"
+                                      f" maximum allowed size is 10MB.")
             return file
         elif "cloudinary" in str(type(file)):
             return file
         else:
-            raise ValidationError("Couldn't read uploaded file")
+            raise ValidationError("Couldn't read the uploaded file")
+
 
     def save(self, commit=True):
         """
@@ -183,15 +177,19 @@ class EntryForm(forms.ModelForm):
                 Defaults to True.
 
         Returns:
-            Entry: The saved Entry model instance.
+            Entry: The Entry model instance.
         """
 
-        instance = super(EntryForm, self).save(commit=False)
+        # For some reason, entry_form.save_m2m() doesn't work in the view if
+        # instance = self.instance is used instead of the following line,
+        # even if the view initializes the instance with
+        # entry_form.save(commit=False).
+        # I have yet to figure out the reason for this.
+        instance = super().save(commit=False)
         instance.author = self.user
         keep_file = self.data.get("keep_file")
 
-        # new_file is only passed on from the edit_entry view
-        if self.new_file and keep_file:
+        if 'audio_file' in self.changed_data and keep_file:
             old_id = self.initial["audio_file"].public_id
             json_date = json.dumps(
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -202,15 +200,17 @@ class EntryForm(forms.ModelForm):
                 self.initial["audio_file"].url,
                 json_date,
             ]
-        elif self.new_file:
+        elif 'audio_file' in self.changed_data:
             old_id = self.initial["audio_file"].public_id
-            print(
-                cloudinary.uploader.destroy(
+            # The response could be used to send an error message to the admin
+            # if the file couldn't be destroyed
+            cl_response = cloudinary.uploader.destroy(
                     old_id, resource_type="video", invalidate=True
                 )
-            )
 
         if commit:
-            instance.save()
+            super().save()
 
+        # Return the instance in case further modifications are needed in the
+        # view
         return instance

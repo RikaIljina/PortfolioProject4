@@ -275,12 +275,13 @@ def edit_profile(request, username):
             request.POST,
             request.FILES,
             instance=profile,
-            new_file=request.FILES.get("pic"),
         )
+
         if profile_form.is_valid():
-            profile = profile_form.save(commit=False)
-            profile.save()
+            # See ProfileForm class for custom validation and file handling
+            profile_form.save()
             messages.success(request, "Your profile has been saved.")
+
             return redirect('dashboard', username=username)
 
         else:

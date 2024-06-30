@@ -173,16 +173,16 @@ def edit_entry(request, username, slug):
             request.FILES,
             instance=entry,
             user=request.user,
-            new_file=request.FILES.get("audio_file"),
+            #new_file=request.FILES.get("audio_file"),
         )
 
         if entry_form.is_valid():
-            entry = entry_form.save(commit=False)
+            entry = entry_form.save()
             # See overridden EntryForm clean_[field]() methods for additional
             # validation logic that is run before the final save() call
-            entry.save()
+            # Save the tag ManyToMany field
             entry_form.save_m2m()
-            new_slug = Entry.objects.get(id=entry.id).slug
+            new_slug = entry.slug
             messages.success(request, "Your entry has been saved.")
 
             return HttpResponseRedirect(
@@ -272,6 +272,7 @@ def delete_old_file(request, username, slug, file_id):
             not belong to the user making the request.
         Http404: If the user has no entry with the specified slug.
     """
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 

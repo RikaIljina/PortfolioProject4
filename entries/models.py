@@ -1,16 +1,16 @@
+"""
+models.py for the 'Entries' app.
+
+This module contains the Entry model class, which stores all entry-related
+data in the database.
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.text import slugify
-from django.core.exceptions import ValidationError
 from taggit.managers import TaggableManager
 from taggit.models import Tag
-from unidecode import unidecode
-from cloudinary.models import CloudinaryField
-
 import cloudinary
-
-
-STATUS = ((0, "Private"), (1, "Published"))
+from cloudinary.models import CloudinaryField
 
 
 class Entry(models.Model):
@@ -18,6 +18,8 @@ class Entry(models.Model):
     A model representing an audio entry created by a user.
 
     Attributes:
+        STATUS (tuple): Choices for the IntegerField to indicate whether the
+            entry is private or public. 
         author (ForeignKey): The user who created the entry.
         title (str): The title of the entry.
         created_on (datetime): The date and time when the entry was created.
@@ -37,7 +39,13 @@ class Entry(models.Model):
 
     Meta:
         ordering: Specifies the default order of entries.
+        
+    Methods:
+        save(): Override the superclass save method to handle tag cleanup.
+        delete(): Override the delete method to handle tag and file cleanup.
     """
+    
+    STATUS = ((0, "Private"), (1, "Published"))
 
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="all_entries"
@@ -56,13 +64,6 @@ class Entry(models.Model):
         ordering = ["-created_on"]
 
     def __str__(self):
-        """
-        Return a string representation of the Entry instance
-
-        Returns:
-            str: The title of the entry and the username of the author.
-        """
-
         return f"{self.title} created by {self.author}"
 
     def save(self, *args, **kwargs):
@@ -70,37 +71,12 @@ class Entry(models.Model):
         Override the save method to handle tag cleanup
 
         This method deletes tags that are no longer used by any entry.
-
-        Args:
-            *args: Variable length argument list.
-            **kwargs: Arbitrary keyword arguments.
         """
-
-        # new_slug = f'{self.title}-{self.author.username}'
-        # # unidecode is needed to process non-latin titles
-        # self.slug = slugify(unidecode(new_slug))
-        # if self.__class__.objects.filter(slug=self.slug).exists():
-        #     print('Error!')
-        #     raise ValidationError('Please choose a different title to make'
-        #                           'sure the entry slug is unique.')
-
-        # new_slug = f'{self.title}-{self.author.username}'
-        # # unidecode is needed to process non-latin titles
-        # new_slug = slugify(unidecode(new_slug))
-
-        # if Entry.objects.filter(slug=new_slug).exclude(
-        #                                         id=self.id).exists():
-        #     print('Error!')
-        #     raise ValidationError(
-        #         'Please choose a different title to make sure the entry '
-        #         'slug is unique.')
-        # else:
-        #     print('Unique slug')
-        # Delete tags that are no longer used by any entry
 
         Tag.objects.filter(entry=None).delete()
 
         return super(Entry, self).save(*args, **kwargs)
+
 
     def delete(self, *args, **kwargs):
         """
@@ -109,23 +85,19 @@ class Entry(models.Model):
         This method deletes tags that are no longer used by any entry.
         The method also ensures that the main audio file as well as all
         previous versions of the file are deleted from Cloudinary storage.
-
-        Args:
-            *args: Variable length argument list.
-            **kwargs: Arbitrary keyword arguments.
         """
 
         # Delete tags that are no longer used by any entry
         Tag.objects.filter(entry=None).delete()
         # Destroy unused Cloudinary files
-        print(
-            cloudinary.uploader.destroy(
+        # The response could be used to send an error message to the admin
+        # if the file couldn't be destroyed
+        cl_response = cloudinary.uploader.destroy(
                 self.audio_file.public_id,
                 resource_type="video",
                 invalidate=True,
             )
-        )
-        for id, file in self.old_files.items():
+        for id in self.old_files.keys():
             print(
                 cloudinary.uploader.destroy(
                     id, resource_type="video", invalidate=True

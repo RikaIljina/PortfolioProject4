@@ -14,12 +14,13 @@ from .models import Entry
 
 class EntryFormExtension(forms.ModelForm):
     """
-    Extend admin form with additional fields
+    Extend admin form with additional functionality
 
     This class extends the Entry form shown on the Django Admin page by a
     checkbox. When updating an entry, the admin can check this box to make sure
     the link to a previously uploaded file is saved in the Entry model instance
     and not deleted from Cloudinary.
+    The class also overrides the clean() method to validate the slug.
     """
 
     keep_file = forms.BooleanField(required=False, label="Keep previous file?")
@@ -29,13 +30,26 @@ class EntryFormExtension(forms.ModelForm):
         fields = "__all__"
 
     def clean(self):
-        print("cleaning")
-        instance = self.save(commit=False)
+        """
+        Override superclass method to validate the uniqueness of the slug
+
+        This method ensures that the slug for an entry is unique among all
+        entries in the database. Raises a ValidationError if the slug already
+        exists and prompts the admin to choose a different title.
+        If the slug is valid, it is saved in the instance.
+        Calls the superclass method on completion.
+
+        Raises:
+            ValidationError: If the user has already used this title for
+                another entry.
+        """
+
+        instance = self.instance
         new_slug = (f"{self.cleaned_data['title']}"
                    f"-{self.cleaned_data['author'].username}")
         # unidecode is needed to process non-latin titles
         new_slug = slugify(unidecode(new_slug))
-        print(new_slug)
+
         if (
             Entry.objects.filter(slug=new_slug)
             .exclude(id=instance.id)
@@ -48,7 +62,7 @@ class EntryFormExtension(forms.ModelForm):
         else:
             instance.slug = new_slug
 
-        super(EntryFormExtension, self).clean()
+        super().clean()
 
 
 @admin.register(Entry)
@@ -67,7 +81,8 @@ class EntryAdmin(SummernoteModelAdmin):
     delete_queryset: Overrides super method to delete uploaded Cloudinary files
     """
 
-    list_display = ("title", "slug", "publish", "created_on", "updated_on")
+    list_display = ("title", "author", "slug", "publish", "created_on",
+                    "updated_on")
     search_fields = ["title", "author__username", "tags__name"]
     list_filter = (
         "publish",
@@ -78,14 +93,10 @@ class EntryAdmin(SummernoteModelAdmin):
     )
     summernote_fields = ("description",)
 
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        queryset = queryset.select_related("author").all()
-        return queryset
 
     def get_form(self, request, obj=None, **kwargs):
         """
-        Customize admin form to add a checkbox
+        Override superclass method to customize admin form
 
         Args:
             request (HttpRequest): The HTTP request object containing metadata
@@ -98,9 +109,9 @@ class EntryAdmin(SummernoteModelAdmin):
         """
 
         kwargs["form"] = EntryFormExtension
+
         return super().get_form(request, obj, **kwargs)
 
-    # TODO: Allow admin to delete individual old files
 
     def save_model(self, request, obj, form, change):
         """
@@ -125,27 +136,6 @@ class EntryAdmin(SummernoteModelAdmin):
         """
 
         instance = form.save(commit=False)
-
-        # TODO: check if this always works
-        new_slug = f"{form.cleaned_data['title']}-{form.cleaned_data['author'].username}"
-        # unidecode is needed to process non-latin titles
-        new_slug = slugify(unidecode(new_slug))
-
-        if (
-            Entry.objects.filter(slug=new_slug)
-            .exclude(id=instance.id)
-            .exists()
-        ):
-
-            messages.error("The title is not unique")
-
-            raise ValidationError(
-                "Please choose a different title to make sure the entry "
-                "slug is unique."
-            )
-        else:
-            instance.slug = new_slug
-            print("Unique slug")
 
         # Get checkbox value
         keep_file = form.data.get("keep_file")
@@ -195,7 +185,7 @@ class EntryAdmin(SummernoteModelAdmin):
                 resource_type="video",
                 invalidate=True,
             )
-            for id, file in obj.old_files.items():
+            for id in obj.old_files.keys():
                 result_old = cloudinary.uploader.destroy(
                     id, resource_type="video", invalidate=True
                 )

@@ -1,20 +1,16 @@
-from django import forms
-from django.forms import (
-    TextInput,
-    Textarea,
-    RadioSelect,
-    FileInput,
-    EmailInput,
-    URLInput,
-)
-from django.utils.translation import gettext_lazy as _
-from cloudinary.forms import CloudinaryFileField
-from django.core.exceptions import ValidationError
+"""
+forms.py for the 'Users' app.
 
+This module contains the form class that handles input by authenticated
+users, allowing them to enter Profile object data and edit their user profile.
+"""
+
+from django import forms
+from django.forms import FileInput, EmailInput, URLInput
+from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from django_summernote.widgets import SummernoteWidget
 import cloudinary
-
-from entries.models import Entry
 
 from .models import Profile
 
@@ -22,13 +18,15 @@ from .models import Profile
 class ProfileForm(forms.ModelForm):
     """
     Form class for users to edit their profile
+
+    Meta: Specifies the django model, fields, widgets, and labels.
+    
+    Methods:
+        clean_pic(): Performs custom validation of the uploaded picture.
+        save(): Overrides super method to deal with Cloudinary files.
     """
 
     class Meta:
-        """
-        Specify the django model and order of the fields
-        """
-
         model = Profile
         fields = (
             "bio",
@@ -86,46 +84,59 @@ class ProfileForm(forms.ModelForm):
             "spotify": _("Spotify"),
         }
 
-    def __init__(self, *args, **kwargs):
-        print("initializing profile")
-        self.new_file = kwargs.pop("new_file", None)
-        super(ProfileForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        print("entering class")
-        instance = super(ProfileForm, self).save(commit=False)
-        print(f"Instance in save: {instance}")
+        """
+        Overrides superclass save method to handle Cloudinary file deletion
 
-        if self.new_file:
+        Args:
+            commit (bool, optional): If True, the changes are saved to the database.
+                Defaults to True.
+
+        Returns:
+            Profile: The Profile model instance.
+        """
+
+        instance = self.instance
+
+        if 'pic' in self.changed_data:
             old_id = self.initial["pic"].public_id
-            # old_id = Profile.objects.get(id=instance.id).pic.public_id
-            print(f"changed file: {self.new_file}, old: {old_id}")
-            instance.save()
-            print(cloudinary.uploader.destroy(old_id, invalidate=True))
-            # print(cloudinary.uploader.destroy(self.old_id, resource_type = "video", invalidate=True))
-        else:
-            print("just saving in class")
-            instance.save()
+            # The response could be used to send an error message to the admin
+            # if the file couldn't be destroyed
+            cl_response = cloudinary.uploader.destroy(old_id, invalidate=True)
 
         if commit:
-            print("saving in class with commit true")
-            instance.save()
+            super().save()
 
+        # Return the instance in case further modifications are needed in the
+        # view
         return instance
 
-    def clean_pic(self):
-        file = self.cleaned_data.get("pic", False)
-        print(type(file))
-        print("check pic")
-        if file and "cloudinary" not in str(type(file)):
-            print("checking stuff", file)
-            if not file.content_type in ["image/jpeg", "image/png"]:
-                print("checking type", file.content_type)
-                raise ValidationError("Content type is not image")
-            if file.size > 1 * 1024 * 1024:
-                print("checking size")
-                raise ValidationError("Image file too large ( > 1MB )")
 
+    def clean_pic(self):
+        """
+        Validate image file before passing it on to Cloudinary
+
+        This method performs a few basic checks before Cloudinary runs its own
+        validation and attempts to upload the file.
+
+        Raises:
+            ValidationError: If content type is not image
+            ValidationError: If the file is too large ( > 1MB )
+            ValidationError: If none of the attributes could be read
+
+        Returns:
+            file (UploadedFile): An abstract uploaded file
+        """
+
+        file = self.cleaned_data.get("pic", False)
+        if file and "cloudinary" not in str(type(file)):
+            if not file.content_type in ["image/jpeg", "image/png"]:
+                raise ValidationError(f"This is not an image file, please"
+                                      f" choose a valid file.")
+            if file.size > 1 * 1024 * 1024:
+                raise ValidationError(f"The image file is too large. The"
+                                      f" maximum allowed size is 1MB.")
             return file
         elif "cloudinary" in str(type(file)):
             return file

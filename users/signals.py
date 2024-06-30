@@ -1,25 +1,25 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_delete
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 import cloudinary
+from django.contrib import admin, messages
+
 
 from .models import Profile
 
 
-# https://dev.to/earthcomfy/django-user-profile-3hik
-
-
+# Adapted from https://dev.to/earthcomfy/django-user-profile-3hik
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
         instance.profile.save()
-        # get_username_list()
 
 
 # Delete profile pic when deleting users in bulk on the admin page
-@receiver(post_delete, sender=Profile)
+@receiver(pre_delete, sender=Profile)
 def delete_profile_pic(sender, instance, **kwargs):
+    print('signalling')
     print(cloudinary.uploader.destroy(instance.pic.public_id, invalidate=True))
 
 

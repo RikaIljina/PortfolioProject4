@@ -1,16 +1,12 @@
+"""
+models.py for the 'Mainpage' app.
+
+This module contains the MessageToAdmin model class, which stores all messages
+submitted by authenticated users to be read by the admin.
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
-from cloudinary.models import CloudinaryField
-from taggit.managers import TaggableManager
-
-# from django.template.defaultfilters import slugify
-from django.utils.text import slugify
-import cloudinary
-from unidecode import unidecode
-from entries.models import Entry
-
-
-# Create your models here.
 
 
 class MessageToAdmin(models.Model):

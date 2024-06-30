@@ -1,3 +1,10 @@
+"""
+models.py for the 'Comments' app.
+
+This module contains the Comment model class, which stores all comment-related
+data in the database.
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -5,7 +12,8 @@ from entries.models import Entry
 
 
 class Comment(models.Model):
-    """Model to store a comment made by a user on an entry.
+    """
+    Model to store a comment made by a user on an entry
 
     Attributes:
         author (ForeignKey): Reference to the user who made the comment.
@@ -20,9 +28,6 @@ class Comment(models.Model):
     Meta:
         ordering (list): Specifies that comments should be ordered by creation
                          date in descending order.
-
-    Methods:
-        __str__(): Returns a string representation of the comment.
     """
 
     author = models.ForeignKey(
