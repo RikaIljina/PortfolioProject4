@@ -17,8 +17,8 @@ from entries.models import Entry
 @receiver(post_delete, sender=Entry)
 def delete_tags(sender, instance, **kwargs):
     """
-    Deletes all tags with no associated entries 
-    
+    Deletes all tags with no associated entries
+
     This function is triggered when an entry has been deleted. It queries the
     Tag model to find tags with no associated entries and deletes them.
     """

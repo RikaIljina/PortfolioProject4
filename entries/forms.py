@@ -19,6 +19,7 @@ import cloudinary
 
 from .models import Entry
 
+
 class EntryForm(forms.ModelForm):
     """
     Form class for users to add a new entry
@@ -83,13 +84,11 @@ class EntryForm(forms.ModelForm):
             "publish": _("Publicity"),
         }
 
-
     def __init__(self, *args, **kwargs):
         # Save user on form initialization, but remove it from kwargs because
         # the super init method is not expecting it
         self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-
 
     def clean_title(self):
         """
@@ -115,14 +114,14 @@ class EntryForm(forms.ModelForm):
         new_slug = slugify(unidecode(new_slug))
 
         if (
-                Entry.objects.filter(slug=new_slug)
-                .exclude(id=instance.id)
-                .exists()
-            ):
+            Entry.objects.filter(slug=new_slug)
+            .exclude(id=instance.id)
+            .exists()
+        ):
             raise ValidationError(
                 "Please choose a different title to make sure the entry link"
                 " is unique."
-                )
+            )
         else:
             instance.slug = new_slug
 
@@ -144,22 +143,24 @@ class EntryForm(forms.ModelForm):
         Returns:
             file (TemporaryUploadedFile): File uploaded to a temporary location
         """
-        
+
         file = self.cleaned_data.get("audio_file", False)
 
         if file and "cloudinary" not in str(type(file)):
             if not file.content_type in ["audio/mpeg"]:
-                raise ValidationError(f"This is not an mp3 file, please choose"
-                                      f" a valid file.")
+                raise ValidationError(
+                    f"This is not an mp3 file, please choose" f" a valid file."
+                )
             if file.size > 10 * 1024 * 1024:
-                raise ValidationError(f"The audio file is too large. The"
-                                      f" maximum allowed size is 10MB.")
+                raise ValidationError(
+                    f"The audio file is too large. The"
+                    f" maximum allowed size is 10MB."
+                )
             return file
         elif "cloudinary" in str(type(file)):
             return file
         else:
             raise ValidationError("Couldn't read the uploaded file")
-
 
     def save(self, commit=True):
         """
@@ -190,13 +191,13 @@ class EntryForm(forms.ModelForm):
         instance.author = self.user
         keep_file = self.data.get("keep_file")
         old_file = self.initial.get("audio_file")
-        
+
         # If a user adds a file in the upload field but then submits the form
         # with an error, the 'audio_file' key is already registered in
         # self.changed_data, without having a value in self.initial. To prevent
         # an AttributeError while getting its public_id, it must be checked
         # beforehand if old_file is empty.
-        if 'audio_file' in self.changed_data and old_file and keep_file:
+        if "audio_file" in self.changed_data and old_file and keep_file:
             old_id = old_file.public_id
             json_date = json.dumps(
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -207,13 +208,13 @@ class EntryForm(forms.ModelForm):
                 old_file.url,
                 json_date,
             ]
-        elif 'audio_file' in self.changed_data and old_file:
+        elif "audio_file" in self.changed_data and old_file:
             old_id = old_file.public_id
             # The response could be used to send an error message to the admin
             # if the file couldn't be destroyed
             cl_response = cloudinary.uploader.destroy(
-                    old_id, resource_type="video", invalidate=True
-                )
+                old_id, resource_type="video", invalidate=True
+            )
 
         if commit:
             super().save()

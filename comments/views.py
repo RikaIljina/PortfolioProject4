@@ -36,7 +36,7 @@ def edit_comment(request, current_path, comment_id):
 
     Returns:
         HttpResponseRedirect: A redirect response to the specified path.
-        
+
     Raises:
         PermissionDenied: If the user is not authenticated.
         Http404: If the user has no comment with the specified ID.

@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 def get_all_usernames():
     """
     Creates a dict with all current usernames and profile picture URLs
-    
+
     This function creates a dictionary containing all usernames and their
     profile picture links. The dictionary is sorted alphabetically by username.
 

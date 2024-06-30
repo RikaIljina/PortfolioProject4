@@ -22,23 +22,23 @@ def get_page_context(request, entries=None):
     """
     Prepare and provide context data for views
 
-    This function returns different context data depending on whether the 
+    This function returns different context data depending on whether the
     'entries' parameter is provided. If 'entries' is None, it returns user and
     tag data for filtering purposes. If 'entries' is provided, it sorts the
     entries based on the request parameters, paginates the sorted entries, and
     returns the sorted and paginated entries along with the user and tag data.
 
     Args:
-        request (HttpRequest): The HTTP request object containing metadata 
+        request (HttpRequest): The HTTP request object containing metadata
             about the request.
-        entries (QuerySet, optional): A queryset of entry objects to be sorted 
+        entries (QuerySet, optional): A queryset of entry objects to be sorted
             and paginated. Defaults to None.
 
     Returns:
         tuple: If 'entries' is None, returns a tuple containing:
                - dict: A dictionary of all usernames and their profile images.
                - dict: A dictionary of all tags and their respective amounts.
-               
+
                If 'entries' is provided, returns a tuple containing:
                - QuerySet: The sorted and paginated entries.
                - str: The sorting parameter used.
@@ -62,15 +62,15 @@ def get_page_obj(request, entries, amount=12):
     """
     Paginate a given queryset of entries and return the page object
 
-    This function takes a queryset of entries and paginates them according to 
-    the specified amount per page. It then returns the page object for the 
+    This function takes a queryset of entries and paginates them according to
+    the specified amount per page. It then returns the page object for the
     current page number, which is obtained from the request's GET parameters.
 
     Args:
-        request (HttpRequest): The HTTP request object containing metadata 
+        request (HttpRequest): The HTTP request object containing metadata
             about the request, including GET parameters.
         entries (QuerySet): The queryset of entry objects to be paginated.
-        amount (int, optional): The number of entries to display per page. 
+        amount (int, optional): The number of entries to display per page.
             Defaults to 12.
 
     Returns:
@@ -88,12 +88,12 @@ def get_all_tags():
     """
     Retrieve all tags for published entries and their respective counts
 
-    This function queries the Tag model to annotate each tag with the number 
-    of published entries associated with it. It filters out tags with no 
+    This function queries the Tag model to annotate each tag with the number
+    of published entries associated with it. It filters out tags with no
     published entries and returns a sorted dictionary of tags and their counts.
 
     Returns:
-        dict: A dictionary where keys are tag names and values are the counts 
+        dict: A dictionary where keys are tag names and values are the counts
             of published entries associated with each tag.
     """
 
@@ -112,12 +112,12 @@ def get_all_tags():
 def sort_by(request, entries):
     """
     Process GET request to sort entries
-    
+
     This method processes the GET request and sorts the received QuerySet
     with entries accordingly.
 
     Args:
-        request (HttpRequest): The HTTP request object containing metadata 
+        request (HttpRequest): The HTTP request object containing metadata
             about the request, including GET parameters.
         entries (QuerySet): The queryset of entry objects to be sorted.
 

@@ -60,7 +60,7 @@ def user_profile(request, username):
     Raises:
         Http404: If the user with the specified username does not exist.
     """
-    
+
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
     # Tells the sidebar to enable sorting buttons for the user entries
@@ -70,12 +70,13 @@ def user_profile(request, username):
     profile_view = True
 
     entries = get_published_entries(
-            request, user.all_entries, get_comments=False
-        )
+        request, user.all_entries, get_comments=False
+    )
     # Only get entries if the user has added at least one entry
     if entries.count() != 0:
         entries, sorted_param, page_obj, users, tags = get_page_context(
-                                                            request, entries)
+            request, entries
+        )
 
         context = {
             "profile": profile,
@@ -147,9 +148,7 @@ def dashboard(request, username):
     # Tells the sidebar to enable sorting buttons for the user entries
     enable_sorting = True
 
-    entries = get_all_entries(
-            request, user.all_entries, get_comments=False
-        )
+    entries = get_all_entries(request, user.all_entries, get_comments=False)
 
     if entries.count() != 0:
         entries, sorted_param = sort_by(request, entries)
@@ -197,7 +196,7 @@ def dashboard_entry(request, username, slug):
         HttpResponse: The HTTP response object containing the rendered entry
             detail page.
     """
-    
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
@@ -213,8 +212,10 @@ def dashboard_entry(request, username, slug):
         sorted(old_files.items(), key=lambda item: item[1][1], reverse=True)
     )
     # Prepare texts for 'Delete entry' modal
-    modal_text = (f'Are you sure you want to delete "{entry.title}"?'
-                  f'This action cannot be undone!')
+    modal_text = (
+        f'Are you sure you want to delete "{entry.title}"?'
+        f"This action cannot be undone!"
+    )
     modal_title = f'Delete "{entry.title}"?'
 
     comments = entry.all_comments.select_related("author", "author__profile")
@@ -222,8 +223,8 @@ def dashboard_entry(request, username, slug):
     if request.method == "POST":
         process_comment_form(request, entry)
         # Redirect after comment posting to prevent resend of POST data on
-        # page refresh 
-        return redirect('dashboard_entry', username=username, slug=slug)
+        # page refresh
+        return redirect("dashboard_entry", username=username, slug=slug)
 
     comment_form = CommentForm()
 
@@ -282,7 +283,7 @@ def edit_profile(request, username):
             profile_form.save()
             messages.success(request, "Your profile has been saved.")
 
-            return redirect('dashboard', username=username)
+            return redirect("dashboard", username=username)
 
         else:
             messages.error(request, "There was an error saving your profile.")
@@ -370,7 +371,7 @@ def user_comments(request, username):
         HttpResponse: Rendered user comments page with the context containing
             the paginated list of user's comments.
     """
-    
+
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 

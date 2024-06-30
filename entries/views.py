@@ -173,7 +173,6 @@ def edit_entry(request, username, slug):
             request.FILES,
             instance=entry,
             user=request.user,
-            #new_file=request.FILES.get("audio_file"),
         )
 
         if entry_form.is_valid():
@@ -222,7 +221,7 @@ def delete_entry(request, username, slug):
     Handle the deletion of an existing entry
 
     This view handles both the GET request for deleting an existing entry.
-    
+
     Args:
         request (HttpRequest): The HTTP request object containing metadata
             about the request.
@@ -288,7 +287,9 @@ def delete_old_file(request, username, slug, file_id):
         )
         messages.success(request, "Your file has been deleted.")
     else:
-        messages.error(request, f"The file could not be deleted or the file id"
-                                f" doesn't exist.")
+        messages.error(
+            request,
+            f"The file could not be deleted or the file id doesn't exist.",
+        )
 
     return redirect("edit_entry", username=username, slug=slug)

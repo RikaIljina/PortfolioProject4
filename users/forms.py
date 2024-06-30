@@ -20,7 +20,7 @@ class ProfileForm(forms.ModelForm):
     Form class for users to edit their profile
 
     Meta: Specifies the django model, fields, widgets, and labels.
-    
+
     Methods:
         clean_pic(): Performs custom validation of the uploaded picture.
         save(): Overrides super method to deal with Cloudinary files.
@@ -84,7 +84,6 @@ class ProfileForm(forms.ModelForm):
             "spotify": _("Spotify"),
         }
 
-
     def save(self, commit=True):
         """
         Overrides superclass save method to handle Cloudinary file deletion
@@ -99,7 +98,7 @@ class ProfileForm(forms.ModelForm):
 
         instance = self.instance
 
-        if 'pic' in self.changed_data:
+        if "pic" in self.changed_data:
             old_id = self.initial["pic"].public_id
             # The response could be used to send an error message to the admin
             # if the file couldn't be destroyed
@@ -111,7 +110,6 @@ class ProfileForm(forms.ModelForm):
         # Return the instance in case further modifications are needed in the
         # view
         return instance
-
 
     def clean_pic(self):
         """
@@ -132,11 +130,15 @@ class ProfileForm(forms.ModelForm):
         file = self.cleaned_data.get("pic", False)
         if file and "cloudinary" not in str(type(file)):
             if not file.content_type in ["image/jpeg", "image/png"]:
-                raise ValidationError(f"This is not an image file, please"
-                                      f" choose a valid file.")
+                raise ValidationError(
+                    f"This is not an image file, please"
+                    f" choose a valid file."
+                )
             if file.size > 1 * 1024 * 1024:
-                raise ValidationError(f"The image file is too large. The"
-                                      f" maximum allowed size is 1MB.")
+                raise ValidationError(
+                    f"The image file is too large. The"
+                    f" maximum allowed size is 1MB."
+                )
             return file
         elif "cloudinary" in str(type(file)):
             return file

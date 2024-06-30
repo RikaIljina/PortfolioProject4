@@ -30,32 +30,31 @@ def add_like(request, entry_id, current_path=""):
     Add a like to a specified entry for the authenticated user
 
     This view function is triggered when a user clicks on a like button, it
-    handles the process of adding a like to an entry. 
+    handles the process of adding a like to an entry.
     If the user is not authenticated, it raises a PermissionDenied exception.
     If the user is authenticated, it checks if the entry with the given
     'entry_id' exists and is public (publish=1). If the user has not already
     liked this entry, a new Like object is created for the user and entry.
 
     Args:
-        request (HttpRequest): The HTTP request object containing metadata 
+        request (HttpRequest): The HTTP request object containing metadata
             about the request.
         entry_id (int): The ID of the entry to be liked.
-        current_path (str, optional): The current path to redirect to after 
+        current_path (str, optional): The current path to redirect to after
             processing the like. Defaults to an empty string.
 
     Raises:
         PermissionDenied: If the user is not authenticated.
 
     Returns:
-        HttpResponseRedirect: Redirects to the home page with the current 
+        HttpResponseRedirect: Redirects to the home page with the current
             path and any existing GET parameters.
     """
 
     if not request.user.is_authenticated:
         raise PermissionDenied
 
-    entry = get_object_or_404(
-        Entry.objects.filter(publish=1), id=entry_id)
+    entry = get_object_or_404(Entry.objects.filter(publish=1), id=entry_id)
 
     if not request.user.liked.filter(entry__pk=entry_id).exists():
         Like.objects.create(user=request.user, entry=entry)
@@ -74,27 +73,27 @@ def delete_like_by_entry(request, entry_id, current_path=""):
     Delete a like from a specified entry for the authenticated user
 
     This view function is triggered when a user clicks on a like button on an
-    already liked entry; it handles the process of deleting the like. 
+    already liked entry; it handles the process of deleting the like.
     If the user is not authenticated, it raises a PermissionDenied exception.
     If the user is authenticated, it looks for the entry with the given
     'entry_id' among the user's liked entries. If it is found, the Like object
     is deleted.
 
     Args:
-        request (HttpRequest): The HTTP request object containing metadata 
+        request (HttpRequest): The HTTP request object containing metadata
             about the request.
         entry_id (int): The ID of the entry to be unliked.
-        current_path (str, optional): The current path to redirect to after 
+        current_path (str, optional): The current path to redirect to after
             processing the unlike. Defaults to an empty string.
 
     Raises:
         PermissionDenied: If the user is not authenticated.
 
     Returns:
-        HttpResponseRedirect: Redirects to the home page with the current 
+        HttpResponseRedirect: Redirects to the home page with the current
             path and any existing GET parameters.
     """
-    
+
     if not request.user.is_authenticated:
         raise PermissionDenied
 
@@ -124,27 +123,27 @@ def delete_like_by_like(request, like_id, current_path=""):
     is deleted.
 
     Args:
-        request (HttpRequest): The HTTP request object containing metadata 
+        request (HttpRequest): The HTTP request object containing metadata
             about the request.
         entry_id (int): The ID of the like to be deleted.
-        current_path (str, optional): The current path to redirect to after 
+        current_path (str, optional): The current path to redirect to after
             processing the unlike. Defaults to an empty string.
 
     Raises:
         PermissionDenied: If the user is not authenticated.
 
     Returns:
-        HttpResponseRedirect: Redirects to the home page with the current 
+        HttpResponseRedirect: Redirects to the home page with the current
             path and any existing GET parameters.
     """
-    
+
     if not request.user.is_authenticated:
         raise PermissionDenied
 
     if request.user.liked.filter(id=like_id).exists():
         like = Like.objects.get(id=like_id)
         like.delete()
-    
+
     # Needed to preserve sorting and page parameters
     if request.GET.dict():
         params = f"?{request.GET.urlencode()}"

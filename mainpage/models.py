@@ -22,6 +22,7 @@ class MessageToAdmin(models.Model):
     Meta:
         ordering: Specifies the default order of entries.
     """
+
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="admin_messages"
     )

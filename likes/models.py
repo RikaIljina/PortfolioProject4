@@ -22,6 +22,7 @@ class Like(models.Model):
     Meta:
         ordering: Specifies the default order of entries.
     """
+
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="liked"
     )
@@ -40,7 +41,7 @@ class Like(models.Model):
         This method ensures that a user cannot like an entry twice and cannot
         like their own entry. If the like is valid, it is saved to the database.
         """
-        
+
         if self.entry.author == self.user:
             return
         else:

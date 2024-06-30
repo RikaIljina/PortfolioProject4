@@ -73,7 +73,7 @@ def index(request):
 
 def filter_user(request, username):
     """
-    Render the index page with a list of a user's published entries 
+    Render the index page with a list of a user's published entries
 
     This view retrieves and processes a list of one user's published entries to
     be displayed on the main page. It also retrieves parameters for the sidebar
@@ -88,23 +88,23 @@ def filter_user(request, username):
     Returns:
         HttpResponse: Rendered index page with the context containing entries
         and additional information for pagination, sorting, and filtering.
-        
+
     Raises:
         Http404: If no user with that username exists.
     """
 
     user = get_object_or_404(User.objects.all(), username=username)
-        # Only get entries if the user has added at least one entry
+    # Only get entries if the user has added at least one entry
 
     entries = get_published_entries(
         request, user.all_entries, get_comments=False
     )
-    if entries.count() != 0:    
+    if entries.count() != 0:
         entries, sorted_param, page_obj, users, tags = get_page_context(
             request, entries
         )
     else:
-        users, tags =  get_page_context(request, None)
+        users, tags = get_page_context(request, None)
 
     # Tells the sidebar to keep clicked-on filter section open
     filter_user = True
@@ -127,7 +127,7 @@ def filter_user(request, username):
 
 def filter_tag(request, tag):
     """
-    Render the index page with a list of entries with the specified tag 
+    Render the index page with a list of entries with the specified tag
 
     This view retrieves and processes all entries with a specific tag to
     be displayed on the main page. It also retrieves parameters for the sidebar
@@ -173,7 +173,7 @@ def filter_tag(request, tag):
 
 def about(request):
     """
-    Render the about page with a message form 
+    Render the about page with a message form
 
     This view shows the content of the about page as well as a message
     submission form for authenticated users. It also retrieves parameters for
@@ -188,6 +188,7 @@ def about(request):
         HttpResponse: Rendered index page with the context containing entries
         and additional information for pagination, sorting, and filtering.
     """
+
     users, tags = get_page_context(request, None)
 
     if request.method == "POST":

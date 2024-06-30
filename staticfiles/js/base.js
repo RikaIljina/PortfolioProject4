@@ -35,17 +35,13 @@ window.addEventListener("DOMContentLoaded", function () {
     for (let filterCat of filterCategories) {
       if (!sidebarAutoCollapse && filterCat.classList.contains("force-show") &&
         localStorage.getItem("sidebarCollapsed") === "false") {
-        // expandSidebar();
         $(filterCat).collapse('show');
-        // filterCat.classList.add("show");
         break;
       } else if (
         sidebarAutoCollapse &&
         filterCat.classList.contains("force-show")
       ) {
         alert(sidebarAutoCollapse);
-        // $('#submenu2').collapse('hide');
-        // filterCat.classList.remove("show");
         collapseSidebar();
       }
     }
@@ -68,10 +64,9 @@ window.addEventListener("DOMContentLoaded", function () {
       getComputedStyle(sidebar).width;
 
     if (sidebarPos === "absolute") {
-      // let newHeight = getComputedStyle(sidebar).height;
       let newHeight = getComputedStyle(
         document.querySelector(".main-content")
-      ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sidebar).height} + 10rem);` //"calc(100vh + 10rem)";
+      ).height;
       document.querySelector("#sidebar").style.height = newHeight;
     }
 
@@ -99,10 +94,9 @@ window.addEventListener("DOMContentLoaded", function () {
       }
 
       if (sidebarPos === "absolute") {
-        // let newHeight = getComputedStyle(sidebar).height;
         let newHeight = getComputedStyle(
           document.querySelector(".main-content")
-        ).height; //style.minHeight; // = newHeight; //`calc(${getComputedStyle(sidebar).height} + 10rem);` //"calc(100vh + 10rem)";
+        ).height;
         document.querySelector("#sidebar").style.height = newHeight;
       }
       document.querySelector("#about-link-container").style.width =
@@ -136,7 +130,7 @@ function collapseSidebar() {
 
   // Hide the block with usernames or tags
   var filterCategories = document.getElementsByClassName("filter-cat");
-  for (cat of filterCategories) {
+  for (let cat of filterCategories) {
     alert(cat);
     $(cat).collapse("hide");
     cat.classList.remove("force-show");
@@ -144,7 +138,7 @@ function collapseSidebar() {
 
   // Hide all sidebar nav item titles
   var filterTitles = document.getElementsByClassName("filter-title");
-  for (title of filterTitles) {
+  for (let title of filterTitles) {
     title.classList.add("d-none");
     title.classList.remove("d-inline");
   }
@@ -165,7 +159,7 @@ function expandSidebar() {
 
   // Show all sidebar nav item titles
   var filterTitles = document.getElementsByClassName("filter-title");
-  for (title of filterTitles) {
+  for (let title of filterTitles) {
     title.classList.remove("d-none");
     title.classList.add("d-inline");
   }
@@ -178,16 +172,6 @@ function expandSidebar() {
   document.querySelector("#about-link-container").style.width =
     getComputedStyle(sidebar).width;
 }
-
-// The menu toggle button in the navbar has a hover effect that stops working
-// once the button is clicked and therefore focused. The following code removes
-// the focus from the button.
-// document.getElementById("toggler-btn").addEventListener("click", function () {
-//   // Use setTimeout to remove focus from the icon after clicking it
-//   setTimeout(() => {
-//     this.blur();
-//   }, 500);
-// });
 
 function setMsgColor() {
   const msgAlerts = document.querySelectorAll(".alert");
@@ -212,15 +196,15 @@ function activateTooltips() {
   const activeTooltips = document.querySelectorAll(".active-tooltip");
   const hoverTooltips = document.querySelectorAll(".hover-tooltip");
 
-  for (var activeTooltip of activeTooltips) {
-    var tooltip = new bootstrap.Tooltip(activeTooltip, (placement = "top"));
+  for (let activeTooltip of activeTooltips) {
+    let tooltip = new bootstrap.Tooltip(activeTooltip, (placement = "top"));
     tooltip.show();
     activeTooltip.addEventListener("hide.bs.tooltip", (e) => {
       e.preventDefault();
     });
   }
 
-  for (var hoverTooltip of hoverTooltips) {
-    var tooltip = new bootstrap.Tooltip(hoverTooltip, (placement = "top"));
+  for (let hoverTooltip of hoverTooltips) {
+    let tooltip = new bootstrap.Tooltip(hoverTooltip, (placement = "top"));
   }
 }

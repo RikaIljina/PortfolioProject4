@@ -21,7 +21,7 @@ from .models import Profile
 def create_profile(sender, instance, created, **kwargs):
     """
     Automatically create profile after user registration
-    
+
     This function automatically creates a user profile whenever a user is added
     by the admin or registers via the website to ensure that every User object
     is associated with a Profile object containing the placeholder avatar.
@@ -35,10 +35,11 @@ def create_profile(sender, instance, created, **kwargs):
 def delete_profile_pic(sender, instance, **kwargs):
     """
     Delete image from Cloudinary when deleting users in bulk
-    
+
     This function is called before a user profile is deleted. It deletes
     the associated profile pic from Cloudinary.
     """
-    
+
     cl_response = cloudinary.uploader.destroy(
-        instance.pic.public_id, invalidate=True)
+        instance.pic.public_id, invalidate=True
+    )

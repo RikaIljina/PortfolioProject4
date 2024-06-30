@@ -19,7 +19,7 @@ class Entry(models.Model):
 
     Attributes:
         STATUS (tuple): Choices for the IntegerField to indicate whether the
-            entry is private or public. 
+            entry is private or public.
         author (ForeignKey): The user who created the entry.
         title (str): The title of the entry.
         created_on (datetime): The date and time when the entry was created.
@@ -39,12 +39,12 @@ class Entry(models.Model):
 
     Meta:
         ordering: Specifies the default order of entries.
-        
+
     Methods:
         save(): Override the superclass save method to handle tag cleanup.
         delete(): Override the delete method to handle file cleanup.
     """
-    
+
     STATUS = ((0, "Private"), (1, "Published"))
 
     author = models.ForeignKey(
@@ -77,7 +77,6 @@ class Entry(models.Model):
 
         return super().save(*args, **kwargs)
 
-
     def delete(self, *args, **kwargs):
         """
         Override the delete method to handle file cleanup
@@ -90,10 +89,10 @@ class Entry(models.Model):
         # The response could be used to send an error message to the admin
         # if the file couldn't be destroyed
         cl_response = cloudinary.uploader.destroy(
-                self.audio_file.public_id,
-                resource_type="video",
-                invalidate=True,
-            )
+            self.audio_file.public_id,
+            resource_type="video",
+            invalidate=True,
+        )
         for id in self.old_files.keys():
             print(
                 cloudinary.uploader.destroy(

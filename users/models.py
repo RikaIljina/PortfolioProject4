@@ -55,6 +55,8 @@ class Profile(models.Model):
 
         # The response could be used to send an error message to the admin
         # if the file couldn't be destroyed
-        cl_response = cloudinary.uploader.destroy(self.pic.public_id, invalidate=True)
+        cl_response = cloudinary.uploader.destroy(
+            self.pic.public_id, invalidate=True
+        )
 
         return super().delete(*args, **kwargs)

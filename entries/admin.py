@@ -49,8 +49,10 @@ class EntryFormExtension(forms.ModelForm):
         """
 
         instance = self.save(commit=False)
-        new_slug = (f"{self.cleaned_data['title']}"
-                   f"-{self.cleaned_data['author'].username}")
+        new_slug = (
+            f"{self.cleaned_data['title']}"
+            f"-{self.cleaned_data['author'].username}"
+        )
         # unidecode is needed to process non-latin titles
         new_slug = slugify(unidecode(new_slug))
 
@@ -86,8 +88,14 @@ class EntryAdmin(SummernoteModelAdmin):
             files.
     """
 
-    list_display = ("title", "author", "slug", "publish", "created_on",
-                    "updated_on")
+    list_display = (
+        "title",
+        "author",
+        "slug",
+        "publish",
+        "created_on",
+        "updated_on",
+    )
     search_fields = ["title", "author__username", "tags__name"]
     list_filter = (
         "publish",
@@ -97,7 +105,6 @@ class EntryAdmin(SummernoteModelAdmin):
         "updated_on",
     )
     summernote_fields = ("description",)
-
 
     def get_form(self, request, obj=None, **kwargs):
         """
@@ -116,7 +123,6 @@ class EntryAdmin(SummernoteModelAdmin):
         kwargs["form"] = EntryFormExtension
 
         return super().get_form(request, obj, **kwargs)
-
 
     def save_model(self, request, obj, form, change):
         """
@@ -145,8 +151,10 @@ class EntryAdmin(SummernoteModelAdmin):
         """
 
         instance = form.save(commit=False)
-        new_slug = (f"{form.cleaned_data['title']}"
-                   f"-{form.cleaned_data['author'].username}")
+        new_slug = (
+            f"{form.cleaned_data['title']}"
+            f"-{form.cleaned_data['author'].username}"
+        )
         # unidecode is needed to process non-latin titles
         new_slug = slugify(unidecode(new_slug))
         instance.slug = new_slug
@@ -174,7 +182,6 @@ class EntryAdmin(SummernoteModelAdmin):
                 instance.old_files[old_id] = [old_file.url, json_date]
 
         super().save_model(request, obj, form, change)
-
 
     def delete_queryset(self, request, queryset):
         """
