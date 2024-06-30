@@ -1,21 +1,11 @@
 """
+admin.py for the 'Comments' app.
+
+This module registers the Comment model on the admin page.
 """
 
 from django.contrib import admin
 from .models import Comment
 
 
-# Register your models here.
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-
-    # TODO: Fix prefetch!
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        queryset = (
-            queryset.select_related("author")
-            .select_related("entry")
-            .prefetch_related("author__commenter")
-            .all()
-        )
-        return queryset
+admin.site.register(Comment)

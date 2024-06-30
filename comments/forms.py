@@ -1,7 +1,7 @@
 """
 forms.py for the 'Comments' app.
 
-This module contains the form class that handles input by authenticated
+This module contains the CommentForm class that handles input by authenticated
 users, allowing them to enter Comment object data and create a new comment.
 """
 

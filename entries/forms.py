@@ -1,8 +1,9 @@
 """
 forms.py for the 'Entries' app.
 
-This module contains the form class that handles the input by authenticated
-users, allowing them to enter Entry object data and create a new entry.
+This module contains the EntryForm class that handles the input by
+authenticated users, allowing them to enter Entry object data and create a new
+entry.
 """
 
 from django import forms
@@ -188,20 +189,26 @@ class EntryForm(forms.ModelForm):
         instance = super().save(commit=False)
         instance.author = self.user
         keep_file = self.data.get("keep_file")
-
-        if 'audio_file' in self.changed_data and keep_file:
-            old_id = self.initial["audio_file"].public_id
+        old_file = self.initial.get("audio_file")
+        
+        # If a user adds a file in the upload field but then submits the form
+        # with an error, the 'audio_file' key is already registered in
+        # self.changed_data, without having a value in self.initial. To prevent
+        # an AttributeError while getting its public_id, it must be checked
+        # beforehand if old_file is empty.
+        if 'audio_file' in self.changed_data and old_file and keep_file:
+            old_id = old_file.public_id
             json_date = json.dumps(
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             )
             # Add old file to the json object 'old_files' together with
             # a timestamp for ordering purposes
             instance.old_files[old_id] = [
-                self.initial["audio_file"].url,
+                old_file.url,
                 json_date,
             ]
-        elif 'audio_file' in self.changed_data:
-            old_id = self.initial["audio_file"].public_id
+        elif 'audio_file' in self.changed_data and old_file:
+            old_id = old_file.public_id
             # The response could be used to send an error message to the admin
             # if the file couldn't be destroyed
             cl_response = cloudinary.uploader.destroy(

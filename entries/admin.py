@@ -1,3 +1,9 @@
+"""
+admin.py for the 'Entries' app.
+
+This module registers the Entry model on the admin page.
+"""
+
 from django import forms
 from django.contrib import admin, messages
 from django.utils.text import slugify
@@ -36,15 +42,13 @@ class EntryFormExtension(forms.ModelForm):
         This method ensures that the slug for an entry is unique among all
         entries in the database. Raises a ValidationError if the slug already
         exists and prompts the admin to choose a different title.
-        If the slug is valid, it is saved in the instance.
         Calls the superclass method on completion.
 
         Raises:
-            ValidationError: If the user has already used this title for
-                another entry.
+            ValidationError: If another entry with this slug already exists.
         """
 
-        instance = self.instance
+        instance = self.save(commit=False)
         new_slug = (f"{self.cleaned_data['title']}"
                    f"-{self.cleaned_data['author'].username}")
         # unidecode is needed to process non-latin titles
@@ -59,10 +63,8 @@ class EntryFormExtension(forms.ModelForm):
                 "Please choose a different title to make sure the entry "
                 "slug is unique."
             )
-        else:
-            instance.slug = new_slug
 
-        super().clean()
+        return super().clean()
 
 
 @admin.register(Entry)
@@ -76,9 +78,12 @@ class EntryAdmin(SummernoteModelAdmin):
     summernote_fields: Fields that use Summernote extension for richtext
 
     Methods:
-    get_form: Overrides super method to extend class with EntryFormExtension
-    save_model: Overrides super method to handle Cloudinary files when editing
-    delete_queryset: Overrides super method to delete uploaded Cloudinary files
+        get_form(): Overrides super method to extend class with
+            EntryFormExtension.
+        save_model(): Overrides super method to handle Cloudinary files when
+            editing.
+        delete_queryset(): Overrides super method to delete uploaded Cloudinary
+            files.
     """
 
     list_display = ("title", "author", "slug", "publish", "created_on",
@@ -115,7 +120,11 @@ class EntryAdmin(SummernoteModelAdmin):
 
     def save_model(self, request, obj, form, change):
         """
-        Overrides super method to handle Cloudinary files when editing
+        Override super method to save slug and handle Cloudinary files
+
+        This method constructs a slug from the title and author after both have
+        been validated by the clean() method of the EntryFormExtension class
+        and saves it.
 
         This project uses Cloudinary for uploaded file storage.
         Since replacing an uploaded file with a new file doesn't automatically
@@ -136,6 +145,11 @@ class EntryAdmin(SummernoteModelAdmin):
         """
 
         instance = form.save(commit=False)
+        new_slug = (f"{form.cleaned_data['title']}"
+                   f"-{form.cleaned_data['author'].username}")
+        # unidecode is needed to process non-latin titles
+        new_slug = slugify(unidecode(new_slug))
+        instance.slug = new_slug
 
         # Get checkbox value
         keep_file = form.data.get("keep_file")
@@ -144,8 +158,8 @@ class EntryAdmin(SummernoteModelAdmin):
         if old_file:
             old_id = old_file.public_id
 
-            # Potential BUG: If for some reason the new_file has the same name as
-            # the cloudinary id, the following logic won't work
+            # Potential BUG: If for some reason the new_file has the same name
+            # as the old cloudinary id, the following logic won't work
             if old_file != new_file and not keep_file:
                 result = cloudinary.uploader.destroy(
                     old_id, resource_type="video", invalidate=True
@@ -159,9 +173,8 @@ class EntryAdmin(SummernoteModelAdmin):
                 # a timestamp for ordering purposes
                 instance.old_files[old_id] = [old_file.url, json_date]
 
-        # instance.save()
-
         super().save_model(request, obj, form, change)
+
 
     def delete_queryset(self, request, queryset):
         """

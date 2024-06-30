@@ -1,9 +1,20 @@
+"""
+utils.py for the 'Entries' app
+
+This module contains entry-related functions that are used by the views.
+
+get_published_entries(): Process a queryset to filter, prefetch/select data and
+    add annotations
+get_all_entries(): Process queryset for authenticated users, add related data
+    and annotations
+"""
+
 from django.db.models import Count, Q
 
 
 def get_published_entries(request, source, get_likes=True, get_comments=True):
     """
-    Process a queryset to prefetch/select data and add annotations
+    Process a queryset to filter, prefetch/select data and add annotations
 
     Args:
         request (HttpRequestObject): The request object

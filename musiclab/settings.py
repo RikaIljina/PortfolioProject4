@@ -85,7 +85,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    # 'mainpage.middleware.InitializeUsernamesMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = {
@@ -101,7 +100,6 @@ config = cloudinary.config(secure=True)
 
 TAGGIT_CASE_INSENSITIVE = True
 
-# SUMMERNOTE_THEME = 'lite'
 SUMMERNOTE_CONFIG = {
     "iframe": True,
     "summernote": {

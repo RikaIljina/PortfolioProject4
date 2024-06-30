@@ -1,10 +1,11 @@
-from django.contrib import admin
-from django_summernote.admin import SummernoteModelAdmin
-from .models import Like
-from django.contrib.auth.models import User
-import cloudinary
+"""
+admin.py for the 'Likes' app.
 
-# Register your models here.
+This module registers the Like model on the admin page.
+"""
+
+from django.contrib import admin
+from .models import Like
 
 
 admin.site.register(Like)

@@ -1,3 +1,9 @@
+"""
+admin.py for the 'Users' app.
+
+This module registers the User model on the admin page.
+"""
+
 from django.contrib import admin, messages
 from django_summernote.admin import SummernoteModelAdmin
 import cloudinary
@@ -5,9 +11,22 @@ import cloudinary
 from .models import Profile
 
 
-# Register your models here.
 @admin.register(Profile)
 class ProfileAdmin(SummernoteModelAdmin):
+    """
+    Handle admin form and summary display for the Profile model
+
+    list_display: Fields to show in the admin list view of all entries
+    search_fields: Fields to consider in the admin free text search
+    list_filter: Fields to use as filter conditions
+    summernote_fields: Fields with richtext functionality
+    
+    Methods:
+        save_model(): Overrides superclass method to delete replaced Cloudinary
+            image file.
+        delete_queryset(): Overrides superclass method to delete Cloudinary
+            files in bulk.
+    """
 
     list_display = (
         "user",
@@ -60,7 +79,7 @@ class ProfileAdmin(SummernoteModelAdmin):
 
     def delete_queryset(self, request, queryset):
         """
-        Override superclass method to delete Cloudinary files
+        Override superclass method to delete Cloudinary files in bulk
         
         This method deletes the Cloudinary file in each of the queryset objects
         and logs the result as an info message. After deleting the Cloudinary 

@@ -42,7 +42,7 @@ class Entry(models.Model):
         
     Methods:
         save(): Override the superclass save method to handle tag cleanup.
-        delete(): Override the delete method to handle tag and file cleanup.
+        delete(): Override the delete method to handle file cleanup.
     """
     
     STATUS = ((0, "Private"), (1, "Published"))
@@ -75,20 +75,17 @@ class Entry(models.Model):
 
         Tag.objects.filter(entry=None).delete()
 
-        return super(Entry, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
     def delete(self, *args, **kwargs):
         """
-        Override the delete method to handle tag and file cleanup
+        Override the delete method to handle file cleanup
 
-        This method deletes tags that are no longer used by any entry.
-        The method also ensures that the main audio file as well as all
+        This method ensures that the main audio file as well as all
         previous versions of the file are deleted from Cloudinary storage.
         """
 
-        # Delete tags that are no longer used by any entry
-        Tag.objects.filter(entry=None).delete()
         # Destroy unused Cloudinary files
         # The response could be used to send an error message to the admin
         # if the file couldn't be destroyed

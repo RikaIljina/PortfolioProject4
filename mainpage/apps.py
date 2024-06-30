@@ -7,7 +7,3 @@ class MainpageConfig(AppConfig):
 
     def ready(self):
         import mainpage.signals
-
-    # from .utils import get_all_tags, delete_tags
-    # delete_tags()
-    # get_all_tags()

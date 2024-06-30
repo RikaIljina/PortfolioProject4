@@ -1,8 +1,7 @@
 """
 models.py for the 'Likes' app.
 
-This module contains the model for the 'Like' object, which tracks user likes
-on entries.
+This module contains the Like model class which tracks user likes on entries.
 """
 
 from django.db import models
@@ -49,11 +48,4 @@ class Like(models.Model):
             super(Like, self).save(*args, **kwargs)
 
     def __str__(self):
-        """
-        Return a string representation of the Like instance
-
-        Returns:
-            str: The title of the liked entry and the username of the user.
-        """
-
         return f"Entry {self.entry} liked by {self.user}"

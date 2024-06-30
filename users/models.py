@@ -2,7 +2,7 @@
 models.py for the 'Users' app.
 
 This module contains the Profile model class, which stores all profile data
-for a specific authenticated user in the database.
+for a specific registered user in the database.
 """
 
 from django.db import models

@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import PermissionDenied
 import cloudinary
 
-from mainpage.utils import get_tags_from_file, get_all_tags
-from users.utils import get_users_from_file, get_username_list
+from mainpage.utils import get_all_tags
+from users.utils import get_all_usernames
 from comments.forms import CommentForm
 from comments.utils import process_comment_form
 from .models import Entry
@@ -44,7 +44,7 @@ def entry_details(request, slug):
 
     comments = entry.all_comments.select_related("author", "author__profile")
 
-    users = get_username_list()
+    users = get_all_usernames()
     tags = get_all_tags()
 
     if request.user.is_authenticated and request.method == "POST":

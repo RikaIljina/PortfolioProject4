@@ -1,3 +1,9 @@
+"""
+urls.py for the "Entries" app
+
+Registers all entry-related URL patterns.
+"""
+
 from django.urls import path
 
 from . import views
@@ -23,5 +29,5 @@ urlpatterns = [
         views.delete_old_file,
         name="delete_old_file",
     ),
-    path("song/<slug:slug>/", views.entry_details, name="entry_details"),
+    path("entry/<slug:slug>/", views.entry_details, name="entry_details"),
 ]

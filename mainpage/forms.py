@@ -1,9 +1,9 @@
 """
 forms.py for the 'Mainpage' app.
 
-This module contains the form class that handles input by authenticated
-users, allowing them to enter MessageToAdmin object data and create and submit
-a new message to the admin.
+This module contains the MessageToAdminForm class that handles input by
+authenticated users, allowing them to enter MessageToAdmin object data and
+create and submit a new message to the admin.
 """
 
 from django import forms

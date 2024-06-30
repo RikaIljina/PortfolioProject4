@@ -10,6 +10,18 @@ from django.contrib.auth.models import User
 
 
 class MessageToAdmin(models.Model):
+    """
+    A model representing a message.
+
+    Attributes:
+        user (ForeignKey): The user submitting the message.
+        subject (str): The subject of the message.
+        message (str): The text content of the message.
+        created_on (datetime): The date and time when the message was sent.
+
+    Meta:
+        ordering: Specifies the default order of entries.
+    """
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="admin_messages"
     )
@@ -21,11 +33,4 @@ class MessageToAdmin(models.Model):
         ordering = ["-created_on"]
 
     def __str__(self):
-        """
-        Return a string representation of the MessageToAdmin instance
-
-        Returns:
-            str: The message subject and the username of the sender.
-        """
-
         return f"Message {self.subject} by {self.user}"

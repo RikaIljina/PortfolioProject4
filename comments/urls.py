@@ -1,3 +1,9 @@
+"""
+urls.py for the "Comments" app
+
+Registers all comment-related URL patterns.
+"""
+
 from django.urls import path
 
 from . import views

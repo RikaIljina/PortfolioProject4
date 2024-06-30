@@ -1,7 +1,7 @@
 """
 forms.py for the 'Users' app.
 
-This module contains the form class that handles input by authenticated
+This module contains the ProfileForm class that handles input by authenticated
 users, allowing them to enter Profile object data and edit their user profile.
 """
 

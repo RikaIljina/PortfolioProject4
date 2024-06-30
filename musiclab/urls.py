@@ -1,5 +1,6 @@
 """
 URL configuration for musiclab project.
+Registers the URLs of all project apps. 
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -17,8 +18,6 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -26,9 +25,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("summernote/", include("django_summernote.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
-    path("", include("mainpage.urls"), name="mainpage-urls"),
-    path("", include("users.urls"), name="users-urls"),
-    path("", include("entries.urls"), name="entries-urls"),
-    path("", include("comments.urls"), name="comments-urls"),
-    path("", include("likes.urls"), name="likes-urls"),
+    path("", include("mainpage.urls")),
+    path("", include("users.urls")),
+    path("", include("entries.urls")),
+    path("", include("comments.urls")),
+    path("", include("likes.urls")),
 ]
