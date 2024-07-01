@@ -13,7 +13,6 @@ sort_by(): Process GET request to sort entries
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from taggit.models import Tag
-import json
 
 from users.utils import get_all_usernames
 
