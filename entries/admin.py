@@ -80,8 +80,8 @@ class EntryAdmin(SummernoteModelAdmin):
     summernote_fields: Fields that use Summernote extension for richtext
 
     Methods:
-        get_form(): Overrides super method to extend class with
-            EntryFormExtension.
+        get_form(): Links the custom form with the admin form to extend form
+            with EntryFormExtension.
         save_model(): Overrides super method to handle Cloudinary files when
             editing.
         delete_queryset(): Overrides super method to delete uploaded Cloudinary
@@ -108,7 +108,7 @@ class EntryAdmin(SummernoteModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         """
-        Override superclass method to customize admin form
+        Link the custom form with the admin form
 
         Args:
             request (HttpRequest): The HTTP request object containing metadata

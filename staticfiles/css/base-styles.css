@@ -1,15 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Sono:wght@200..800&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-@import url("https://fonts.googleapis.com/css?family=PT+Mono");
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
 
-/* *,
-*::before,
-*::after {
-  box-sizing: inherit;
- } */
-
 body {
-  font-family: "Raleway", "Courier New", Courier, monospace; /*"Ubuntu Mono", */
+  font-family: "Raleway", "Courier New", Courier, monospace;
   font-weight: 400;
   color: rgb(0, 0, 0);
   background-color: #f1f8e8;
@@ -438,7 +430,7 @@ audio {
 }
 
 .bg-2 {
-  background-image: url("../images/saxophone-white-background_lg.webp");
+  background-image: url("../images/musical-background-with-musical-keys-white-flat-lay-copy-space.webp");
   background-color: white;
   width: auto;
   height: 100%;
