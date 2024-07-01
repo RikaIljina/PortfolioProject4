@@ -3,6 +3,7 @@
 
 <nav class="navbar navbar-expand-md nav nav-upper p-0 p-md-1 justify-content-center">
     <div class="container-fluid">
+        <!-- Site logo -->
         <a class="navbar-brand ps-0 ms-0" href="{% url 'home' %}">
             <div class="logo-image my-auto ps-md-4 ps-sm-2">
                 <img class="img-fluid" src="{% static 'images/logo-inst-l.webp' %}"
@@ -12,7 +13,8 @@
 
         <div class="flex-fill"></div>
 
-            {% if not user.is_authenticated %}
+        <!-- Login/Signup buttons for non-authenticated users -->
+        {% if not user.is_authenticated %}
         <div class="d-flex flex-grow-0 my-auto me-2 me-md-3" id="navbarContent">
 
             <div class="nav-link-box d-inline mx-auto me-2 me-sm-3 my-auto hover-highlight {% if request.path == login_url %}active{% endif %}">
@@ -25,35 +27,37 @@
                     aria-current="page{% endif %}" href="{% url 'account_signup' %}">Sign Up</a>
             </div>
         </div>
-        {% else %}
 
-    <div class="my-auto pe-2 pe-md-4 d-inline-flex flex-row order-md-last">
-        <div class="dropdown flex-shrink-0 py-1 ps-3">
-            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                {% if "placeholder" in user.profile.pic.url %}
-                <img src="{% static 'images/default_profile.webp' %}" alt="user profile picture" width="30"
-                    height="30" class="rounded-circle avatar-sm">
-                {% else %}
-                <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
-                    class="rounded-circle avatar-sm">
-                {% endif %}
-                <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                <li>
-                    <a class="dropdown-item hover-highlight" href="{% url 'dashboard' user.username %}">Dashboard</a>
-                </li>
-                <li><a class="dropdown-item hover-highlight" href="{% url 'edit_profile' user.username %}">Update profile</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li>
-                    <a class="dropdown-item hover-highlight" href="{% url 'account_logout' %}">Sign out</a>
-                </li>
-            </ul>
+        <!-- User avatar/name and a dropdown with the most important links -->
+        {% else %}
+        <div class="my-auto pe-2 pe-md-4 d-inline-flex flex-row order-md-last">
+            <div class="dropdown flex-shrink-0 py-1 ps-3">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if "placeholder" in user.profile.pic.url %}
+                    <img src="{% static 'images/default_profile.webp' %}" alt="user profile picture" width="30"
+                        height="30" class="rounded-circle avatar-sm">
+                    {% else %}
+                    <img src="{{ user.profile.pic.url }}" alt="user profile picture" width="30" height="30"
+                        class="rounded-circle avatar-sm">
+                    {% endif %}
+                    <span class="d-none d-sm-inline mx-1 username">{{ user.username }}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-light text-small shadow">
+                    <li>
+                        <a class="dropdown-item hover-highlight" href="{% url 'dashboard' user.username %}">Dashboard</a>
+                    </li>
+                    <li><a class="dropdown-item hover-highlight" href="{% url 'edit_profile' user.username %}">Update profile</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item hover-highlight" href="{% url 'account_logout' %}">Sign out</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    {% endif %}
+        {% endif %}
     </div>
 </nav>

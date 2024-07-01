@@ -1,7 +1,7 @@
 
 
-![alt text](.drawio.svg)
-
+![alt text](static/readme-assets/.drawio.svg)
+![alt text](static/readme-assets/musiclab-erd.jpg)
 ```
 PortfolioProject4
 ├─ comments

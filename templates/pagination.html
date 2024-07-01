@@ -1,3 +1,5 @@
+<!-- The pagination links contain the GET sorting parameters, if any, in order to not lose
+ the sorting applied by the user on page 1 -->
 <div class="row">
     <div class="col-12 col-md-10 m-auto">
         {% if page_obj.paginator.num_pages > 1 %}
@@ -42,7 +44,6 @@
                     <i class="fa-solid fa-angles-right"></i>
                 </li>
                 {% endif %}
-
             </ul>
         </nav>
         {% endif %}

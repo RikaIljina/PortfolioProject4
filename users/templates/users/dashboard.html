@@ -1,29 +1,33 @@
-{% extends 'base.html' %} {% load static %} {% load humanize %} {% block styles %}
-<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}" />
-<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
 
-{% endblock %} {% block content %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}">
+{% endblock %}
 
+{% block content %}
 <div class="row g-0 sidebar-margin">
+  <!-- User profile card with 'about' and 'contact' info -->
   <div class="col-12">
     {% include 'users/snippets/profile_card.html' %}
   </div>
 
   <div class="col-12 col-md-10 m-auto px-1">
-
     <hr>
         <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center filter-results">
             <div class="col-12 py-auto">
                 {% if sorted_param == '?sorted=by_date' %}
-                <h3 class="">Most <b>recent</b> entries</h3>
+                <h1 class="">Most <b>recent</b> entries</h1>
                 {% elif sorted_param == '?sorted=by_likes' %}
-                <h3 class="">Most <b>liked</b> entries</h3>
+                <h1 class="">Most <b>liked</b> entries</h1>
                 {% elif sorted_param == '?sorted=by_updated' %}
-                <h3 class="">Last <b>updated</b> first</h3>
+                <h1 class="">Last <b>updated</b> first</h1>
                 {% elif sorted_param == '?sorted=by_published' %}
-                <h3 class=""><b>Unpublished</b> first</h3>
+                <h1 class=""><b>Unpublished</b> first</h1>
                 {% else %}
-                <h3 class="">All entries</h3>
+                <h1 class="">All entries</h1>
                 {% endif %}
             </div>
         </div>
@@ -31,9 +35,9 @@
 
     <div class="row g-0">
       <div class="m-auto col">
-
         <div class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start h-100">
           
+          <!-- All entries by the authenticated user -->
           {% for entry in page_obj %}
           {% include 'entries/snippets/entry_cards.html' %}
           {% endfor %}
@@ -46,7 +50,8 @@
 
 {% include 'pagination.html' %}
 
+{% endblock %}
 
-{% endblock %} {% block extras %}
+{% block extras %}
 <script src="{% static 'js/likes.js' %}"></script>
 {% endblock %}

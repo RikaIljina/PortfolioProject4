@@ -2,13 +2,12 @@
 {% load humanize %}
 
 <!-- Sidebar adapted from https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb -->
-
 {% if not request.path == signup_url and not request.path == login_url %}
 <div class="col-auto sidebar flex-column mx-0 px-0" id="sidebar" role="navigation">
 
     <!-- Toggle button to expand/collapse sidebar -->
     <div class="row g-0 sidebar-toggle-div pos-relative">
-        <button class="btn sidebar-toggle-btn hover-highlight" id="sidebar-toggle-btn" href="#">
+        <button class="btn sidebar-toggle-btn hover-highlight" id="sidebar-toggle-btn">
             <span class="toggle-icon-collapse d-none" id="toggle-icon-collapse"><i
                     class="fa-solid fa-angles-left"></i></span>
             <span class="toggle-icon-expand d-inline" id="toggle-icon-expand"><i
@@ -20,16 +19,14 @@
         <div class="pt-2 h-100">
             <ul class="navbar-nav" id="menu">
 
+                <!-- Sidebar content for the dashboard view -->
                 {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
-
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
                         <i class="fa-solid fa-house"></i>
                         <span class="ms-1 d-none filter-title">Back Home</span></a>
                 </li>
-                
                 <li><hr class="mx-2"></li>
-
                 <li class="nav-item hover-highlight active">
                     <a href="{% url 'dashboard' user.username %}"
                         class="nav-link mx-md-2 px-3 align-middle">
@@ -42,57 +39,60 @@
                         <i class="fa-solid fa-square-plus"></i>
                         <span class="ms-1 d-none filter-title">New Entry</span></a>
                 </li>
-
                 <li><hr class="mx-2 mb-1"></li>
                 <li
-                    class="nav-item mx-md-2 px-3 py-0 align-middle {% if not enable_sorting %}disabled{% endif %}">
+                    class="nav-item mx-md-2 px-3 py-0 align-middle 
+                    {% if not enable_sorting %}disabled{% endif %}">
                     <i class="fa-solid fa-arrow-down-short-wide text-muted"></i>
                     <span class="ms-1 d-none filter-title text-muted">Sort by ...</span>
-
                 </li>
-                <hr class="mx-2 mt-1">
+                <li><hr class="mx-2 mt-1"></li>
 
-                <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a href="{{ request.path }}" class="nav-link mx-md-2 px-3 align-middle {% if not enable_sorting %}disabled{% endif %}">
+                <li class="nav-item hover-highlight 
+                    {% if not enable_sorting %}disabled{% endif %}">
+                    <a href="{{ request.path }}" class="nav-link mx-md-2 px-3 align-middle 
+                        {% if not enable_sorting %}disabled{% endif %}">
                         <i class="fa-solid fa-xmark"></i>
                         <span class="ms-1 d-none filter-title">Reset</span>
                     </a>
                 </li>
-
-                <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if not enable_sorting %}disabled{% endif %}"
+                <li class="nav-item hover-highlight 
+                    {% if not enable_sorting %}disabled{% endif %}">
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                        {% if not enable_sorting %}disabled{% endif %}"
                         {% if enable_sorting %} href="{{ request.path }}?sorted=by_published" {% endif %}>
                         <i class="fa-solid fa-lock"></i>
                         <span class="ms-1 d-none filter-title">unpublished</span>
                     </a>
                 </li>
-
-                <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if not enable_sorting %}disabled{% endif %}"
+                <li class="nav-item hover-highlight 
+                    {% if not enable_sorting %}disabled{% endif %}">
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                        {% if not enable_sorting %}disabled{% endif %}"
                         {% if enable_sorting %} href="{{ request.path }}?sorted=by_updated" {% endif %}>
                         <i class="fa-solid fa-pen"></i>
                         <span class="ms-1 d-none filter-title">last updated</span>
                     </a>
                 </li>
-
-                <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if not enable_sorting %}disabled{% endif %}"
+                <li class="nav-item hover-highlight 
+                    {% if not enable_sorting %}disabled{% endif %}">
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                        {% if not enable_sorting %}disabled{% endif %}"
                         {% if enable_sorting %} href="{{ request.path }}?sorted=by_likes" {% endif %}>
                         <i class="fa-solid fa-heart"></i>
                         <span class="ms-1 d-none filter-title">likes</span>
                     </a>
                 </li>
-
-                <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if not enable_sorting %}disabled{% endif %}"
+                <li class="nav-item hover-highlight 
+                    {% if not enable_sorting %}disabled{% endif %}">
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                        {% if not enable_sorting %}disabled{% endif %}"
                         {% if enable_sorting %} href="{{ request.path }}?sorted=by_date" {% endif %}>
                         <i class="fa-solid fa-clock"></i>
                         <span class="ms-1 d-none filter-title">recent</span>
                     </a>
                 </li>
-
                 <li><hr class="mx-2"></li>
-
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'user_favorites' user.username %}"
                         class="nav-link mx-md-2 px-3 align-middle">
@@ -106,8 +106,8 @@
                         <span class="ms-1 d-none filter-title">My Comments</span></a>
                 </li>
 
+                <!-- Sidebar content for the mainpage view -->
                 {% else %}
-
                 {% if request.user.is_authenticated %}
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'dashboard' user.username %}"
@@ -124,40 +124,38 @@
                         <span class="ms-1 d-none filter-title">Home</span></a>
                 </li>
                 <li><hr class="mx-2"></li>
-
-                <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
+                <li class="nav-item hover-highlight 
+                    {% if not enable_sorting %}disabled{% endif %}">
                     <a href="{% if profile_view %}{{ request.path }}{% else %}{% url 'home' %}{% endif %}"
-                        class="nav-link mx-md-2 px-3 align-middle {% if not enable_sorting %}disabled{% endif %}">
+                        class="nav-link mx-md-2 px-3 align-middle 
+                            {% if not enable_sorting %}disabled{% endif %}">
                         <i class="fa-solid fa-xmark"></i>
                         <span class="ms-1 d-none filter-title">Reset all</span>
                     </a>
                 </li>
-
                 <li><hr class="mx-2 mb-1"></li>
                 <li
                     class="nav-item mx-md-2 px-3 align-middle">
                     <i class="fa-solid fa-arrow-down-short-wide text-muted"></i>
                     <span class="ms-1 d-none filter-title text-muted">Sort by ...</span>
-
                 </li>
-                <hr class="mx-2 mt-1">
-
+                <li><hr class="mx-2 mt-1"></li>
                 <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if not enable_sorting %}disabled{% endif %}"
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                        {% if not enable_sorting %}disabled{% endif %}"
                         {% if enable_sorting %} href="{{ request.path }}?sorted=by_likes" {% endif %}>
                         <i class="fa-solid fa-heart"></i>
                         <span class="ms-1 d-none filter-title">likes</span>
                     </a>
                 </li>
-
                 <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link {% if not enable_sorting %}disabled{% endif %}"
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                        {% if not enable_sorting %}disabled{% endif %}"
                         {% if enable_sorting %} href="{{ request.path }}?sorted=by_date" {% endif %}>
                         <i class="fa-solid fa-clock"></i>
                         <span class="ms-1 d-none filter-title">recent</span>
                     </a>
                 </li>
-
                 <li><hr class="mx-2 mb-1"></li>
                 <li
                     class="nav-item mx-md-2 px-3 align-middle">
@@ -165,14 +163,15 @@
                     <span class="ms-1 d-none filter-title text-muted">Filter by ...</span>
 
                 </li>
-                <hr class="mx-2 mt-1">
-
+                <li><hr class="mx-2 mt-1"></li>
                 <li class="nav-item">
+                    <!-- Link that opens the username collapsible -->
                     <a href="#submenu2" data-bs-toggle="collapse"
                         class="nav-link hover-highlight align-middle filter-link" aria-expanded="false">
                         <i class="fa-solid fa-user ms-md-2 ps-3"></i>
                         <span class="ms-1 d-none filter-title">user</span>
                     </a>
+                    <!-- Collapsible with all usernames to filter by -->
                     <ul class="collapse navbar-nav ms-1 filter-cat {% if filter_user %}force-show{% endif %}"
                         id="submenu2" data-bs-parent="#menu">
                         {% for user, pic in users.items %}
@@ -188,18 +187,19 @@
                                     width="30" height="30" class="rounded-circle avatar-sm">
                                 {% endif %}
                                 <span class="ms-1">{{ user }}</span>
-
                             </a>
                         </li>
                         {% endfor %}
                     </ul>
                 </li>
                 <li class="nav-item menu-margin">
+                    <!-- Link that opens the tag name collapsible -->
                     <a href="#submenu3" data-bs-toggle="collapse"
                         class="nav-link hover-highlight align-middle filter-link" aria-expanded="false">
                         <i class="fa-solid fa-tag ms-md-2 ps-3"></i>
                         <span class="ms-1 d-none filter-title">tag</span>
                     </a>
+                    <!-- Collapsible with all tag names to filter by -->
                     <ul class="collapse navbar-nav filter-cat menu-margin {% if filter_tag %}force-show{% endif %}"
                         id="submenu3" data-bs-parent="#menu">
                         {% for tag, amount in tags.items %}
@@ -212,15 +212,14 @@
                             </a>
                         </li>
                         {% endfor %}
-
                     </ul>
                 </li>
-
                 {% endif %}
             </ul>
         </div>
     </div>
-
+    
+    <!-- Link to the 'About' page, always placed at the bottom of the sidebar -->
     <div class="nav-item about-link-container" id="about-link-container">
         <hr class="mx-2 mb-1">
         <div class="hover-highlight">
@@ -229,6 +228,5 @@
                 <span class="ms-1 d-none filter-title">About</span></a>
         </div>
     </div>
-
 </div>
 {% endif %}

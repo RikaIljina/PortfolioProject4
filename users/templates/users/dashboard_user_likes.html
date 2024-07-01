@@ -4,15 +4,13 @@
 
 {% block styles %}
 <!-- Entries CSS -->
-<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="row g-0 sidebar-margin">
     <div class="m-auto col-12 col-md-10">
-
         <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center justify-content-md-start card-full-page">
-
             <hr>
             <p class="px-3 px-md-0">Your favorites</p>
             <hr>
@@ -20,9 +18,7 @@
             {% for like in page_obj %}
             {% with entry=like.entry %}
             {% include 'entries/snippets/entry_cards.html' %}
-
             {% endwith %}
-
             {% empty %}
             <div>
                 <p>You have no favorites yet.</p>
@@ -31,7 +27,6 @@
         </div>
     </div>
 </div>
-
 {% include 'pagination.html' %}
 
 {% endblock %}

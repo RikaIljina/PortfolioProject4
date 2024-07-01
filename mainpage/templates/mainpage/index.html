@@ -1,44 +1,55 @@
-{% extends 'base.html' %} {% load static %} {% load humanize %} {% block styles %}
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block styles %}
 <!-- Mainpage CSS -->
-<link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}" />
-<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
-{% endblock %} {% block content %} 
+<link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}">
+{% endblock %}
 
+{% block content %}
 <div class="row g-0 sidebar-margin">
-    <div class="col-12">
-        <div class="row g-0 mt-0 mt-3 mb-2 justify-content-center filter-results">
-            <div class="col-12 col-md-10 py-auto">
-                {% if user_filter %}
-                <h1 class="ps-3">Entries by <b>{{ user_filter }}</b></h1>
-                {% elif tag_filter %}
-                <h1 class="ps-3">Entries with the tag <b>{{ tag_filter }}</b></h1>
-                {% elif sorted_param == '?sorted=by_date' %}
-                <h1 class="ps-3">Most <b>recent</b> entries</h1>
-                {% elif sorted_param == '?sorted=by_likes' %}
-                <h1 class="ps-3">Most <b>liked</b> entries</h1>
-                {% else %}
-                <h1 class="visually-hidden">Showing all entries unfiltered</h1>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="row g-0">
-            <div class="m-auto col-12 col-md-10">
-                <div
-                    class="d-flex flex-wrap w-100 m-auto mt-4 card-container justify-content-center justify-content-md-start">
-
-                    {% for entry in page_obj %}
-                    {% include 'entries/snippets/entry_cards.html' %}
-                    {% endfor %}
-
-                </div>
-            </div>
-        </div>
-        {% include 'pagination.html' %}
+  <div class="col-12">
+    <div class="row g-0 mt-0 mt-3 mb-2 justify-content-center filter-results">
+      <div class="col-12 col-md-10 py-auto">
+        {% if user_filter %}
+        <hr>
+        <h1 class="ps-3 mb-0">Entries by <b>{{ user_filter }}</b></h1>
+        <hr>
+        {% elif tag_filter %}
+        <hr>
+        <h1 class="ps-3 mb-0">Entries with the tag <b>{{ tag_filter }}</b></h1>
+        <hr>
+        {% elif sorted_param == '?sorted=by_date' %}
+        <hr>
+        <h1 class="ps-3 mb-0">Most <b>recent</b> entries first</h1>
+        <hr>
+        {% elif sorted_param == '?sorted=by_likes' %}
+        <hr>
+        <h1 class="ps-3 mb-0">Most <b>liked</b> entries first</h1>
+        <hr>
+        {% else %}
+        <h1 class="visually-hidden">Showing all entries unfiltered</h1>
+        {% endif %}
+      </div>
     </div>
-</div>
 
-{% endblock content %} 
+    <div class="row g-0">
+      <div class="m-auto col-12 col-md-10">
+        <div
+          class="d-flex flex-wrap w-100 m-auto mt-4 card-container justify-content-center justify-content-md-start">
+          <!-- Entry preview cards to be shown in a paginated form -->
+          {% for entry in page_obj %}
+          {% include 'entries/snippets/entry_cards.html' %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% include 'pagination.html' %}
+  </div>
+</div>
+{% endblock content %}
 
 {% block extras %}
 <script src="{% static 'js/likes.js' %}"></script>

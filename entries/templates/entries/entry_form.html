@@ -6,7 +6,6 @@
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{% static 'css/entries-styles.css' %}">
 <link rel="stylesheet" href="{% static 'css/form-styles.css' %}">
-
 {% endblock %}
 
 {% block content %}
@@ -19,11 +18,12 @@
         {% else %}
             Add new entry
         {% endif %}
-        </h2>
+    </h2>
 
     <div class="row g-0 justify-content-center ps-1 p-md-1">
         <div class="col-12 col-md-10 col-xl-6 d-flex flex-column ps-1 pe-0 p-md-4">
-
+            
+            <!-- Form for adding/editing entries -->
             <form method="POST" action="" id="entryForm" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row my-3">
@@ -92,17 +92,21 @@
                     </div>
                     <div class="col-12 col-md-9">
                         {% for key, value in old_files.items %}
+                        <!-- Date the file was added -->
                         <p class="text-muted">added {{ value.1 }}</p>
                         <div class="d-flex flex-row flex-wrap">
-                        <audio controls preload="none" class="old-audio">
-                            <source src="{{ value.0 }}" type="audio/mpeg">
-                            Your browser does not support the audio tag.
-                        </audio>
-                        <button type="button" class="btn btn-delete hover-highlight ms-1" data-file_id="{{ key }}"
-                            data-bs-toggle="modal" data-bs-target="#modalDeleteOldFile"><i class="fa-solid fa-trash"></i></button>
+                            <audio controls preload="none" class="old-audio">
+                                <source src="{{ value.0 }}" type="audio/mpeg">
+                                Your browser does not support the audio tag.
+                            </audio>
+                            <!-- Button to delete previous file versions -->
+                            <button type="button" class="btn btn-delete hover-highlight ms-1" data-file_id="{{ key }}"
+                                data-bs-toggle="modal" data-bs-target="#modalDeleteOldFile">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                         {% empty %}
-                        <p>No files yet</p>
+                        <p>No previous files yet</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -133,7 +137,8 @@
                         <p></p>
                     </div>
                     <div class="col-12 col-md-9">
-                        <p>Please do <b>not</b> close the page after clicking the "Save" button. Wait for the file upload to finish. </button>
+                        <p>Please do <b>not</b> close the page after clicking the "Save" button.
+                            Wait for the file upload to finish.</p>
                     </div>
                 </div>
                 <div class="row my-3">
@@ -146,18 +151,15 @@
                         </button>
                     </div>
                 </div>
-
             </form>
-
         </div>
     </div>
+</div>
 
-   
-    <!-- Modal for file deletion -->
-    {% with modal_text="Are you sure you want to delete your old file? This action cannot be undone!" modal_id="modalDeleteOldFile" modal_title_id="modalTitleIdDeleteFiles" modal_title_text="Delete old file?" delete_button_id="deleteFileConfirm" %}
-    {% include 'mainpage/snippets/modal.html' %}
-    {% endwith %}
-
+<!-- Modal for file deletion -->
+{% with modal_text="Are you sure you want to delete your old file? This action cannot be undone!" modal_id="modalDeleteOldFile" modal_title_id="modalTitleIdDeleteFiles" modal_title_text="Delete old file?" delete_button_id="deleteFileConfirm" %}
+{% include 'mainpage/snippets/modal.html' %}
+{% endwith %}
 
 {% endblock %}
 

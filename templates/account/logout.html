@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/form-styles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/form-styles.css' %}">
 {% endblock %}
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
@@ -18,7 +18,7 @@
             <form method="post" action="{% url 'account_logout' %}">
                 {% csrf_token %}
                 {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
                 {% endif %}
                 <button class="btn btn-general hover-highlight" type="submit">{% trans 'Yes, sign out' %}</button>
             </form>

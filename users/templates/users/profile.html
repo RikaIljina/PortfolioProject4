@@ -5,55 +5,44 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
 <link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}">
-
 {% endblock %}
 
-
 {% block content %}
-
 <div class="row g-0 sidebar-margin">
+    <!-- User profile card with 'about' and 'contact' info -->
     <div class="col-12">
         {% include 'users/snippets/profile_card.html' %}
     </div>
 
     <div class="col-12 col-md-10 m-auto">
-
         <hr>
         <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center filter-results">
             <div class="col-12 py-auto">
                 {% if sorted_param == '?sorted=by_date' %}
-                <h3 class="">Most <b>recent</b> entries</h3>
+                <h1 class="mb-0">Most <b>recent</b> entries</h1>
                 {% elif sorted_param == '?sorted=by_likes' %}
-                <h3 class="">Most <b>liked</b> entries</h3>
+                <h1 class="mb-0">Most <b>liked</b> entries</h1>
                 {% else %}
-                <h3 class="">All entries</h3>
+                <h1 class="mb-0">All entries</h1>
                 {% endif %}
             </div>
         </div>
         <hr>
-
         <div class="row g-0">
-            <div class="m-auto col">
-
+            <div class="col m-auto">
                 <div
-                    class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start ">
-
+                    class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start">
+                    <!-- All public entries by this user -->
                     {% for entry in page_obj %}
-          {% include 'entries/snippets/entry_cards.html' %}
-          {% endfor %}
-
+                    {% include 'entries/snippets/entry_cards.html' %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
-
     </div>
-
     {% include 'pagination.html' %}
-
 </div>
 <div class="mb-4"></div>
-
-
 {% endblock %}
 
 {% block extras %}
