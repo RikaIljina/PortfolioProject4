@@ -120,23 +120,73 @@ See credits for source attribution.
 
 ### Existing Features:
 
-#### Main page:
+#### Navigation
 
-#### Navigation bar:
+The website has a navigation bar containing the logo and the account buttons at the top. This bar is shown on every page.
 
-##### Desktop:
+- Navigation bar on desktops:
 
-##### Mobile:
+- Navigation bar on mobile devices:
 
-#### Sidebar:
+The website also has a collapsible sidebar that is shown everywhere but on the Login/Signup pages and the error pages. The sidebar automatically collapses on mobile devices and can be left in an expanded or collapsed state by the user on larger screens.
+The sidebar icons differ depending on whether the user is on the main page or in their personal dashboard.
 
-##### Desktop:
+- Sidebar on desktops, main page:
 
-##### Mobile:
+- Sidebar on desktops, dashboard:
 
+- Sidebar on mobile devices, main page:
+
+- Sidebar on mobile devices, dashboard:
+
+#### Viewing
+All users have access to the main page with all entries in card form:
+
+Users can click the card or the card title to open the full-page view of the card containing the entry description and the comment section:
+
+Users can also click on the username on a card to navigate to the profile page of a user containing their 'About me' and 'Contact' info as well as all their public entries in card form:
+
+Users can click the 'About' link at the bottom of the sidebar to access the 'About' page outlining the idea behind the website and the rules and providing a way to send feedback to the site admins:
+
+Authenticated users can view all their public and private entries in their personal dashboard:
+
+Authenticated users can also view their 'Comments' and 'Favorites' pages:
+
+#### Editing
+
+Authenticated users can click on the 'Edit' button on their profile page beneath their large avatar or click the 'Update profile' link in the dropdown menu in the upper navigation bar to open the "Edit profile" form and update their data:
+
+Authenticated users can click on an existing entry to get access to the 'Edit'/'Delete' buttons:
+
+A click on 'Edit' opens the 'Edit entry' form where users can change their entry data or upload another version of their song:
+
+A click on 'Delete' opens a modal that asks for confirmation before deleting the song permanently:
+
+Authenticated users can use the 'Like' button to like/unlike entries anywhere on the page where entries are displayed:
+
+Authenticated users can edit and delete their comments on all pages where comments are displayed:
+
+Authenticated users can send a message to the admins on the 'About' page:
+
+#### Logging in
+
+Users can use the 'Login'/'Signup' buttons on the upper navbar to create an account or log in:
+
+They can sign out via the link in the dropdown with their avatar and name in the navbar:
+
+#### Error pages
+
+The website has four custom  error pages:
+- 404 for pages that don't exist
+- 403 for cases where users try to access a page or perform an action they are not authorized to
+- 400 for bad requests
+- 500 for server errors
+
+All error pages provide a description of the error and a link to get back to the main page. 
 
 ### Future Features:
 
+- [ ] Account management for users: Change password, reset password, delete account
 - [ ] Collaboration page that allows creators to start joint projects
 - [ ] Flagging option to allow users to report inappropriate content
 - [ ] Direct messaging system for private user communication
