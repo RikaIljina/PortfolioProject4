@@ -1,126 +1,212 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
-from django.db.models import Count, Q
-from django.contrib.auth import get_user_model
+"""
+views.py for the 'Mainpage' app.
+
+This module contains view functions that render the index page and the about
+page and handle the general views that are accessible to all website visitors.
+
+Key functionalities:
+- Show all entries on the main page
+- Show entries filtered by a specific user
+- Show entries filtered by a specific tag
+- Show the 'about' page
+
+View Functions:
+- index(request): Retrieves and renders all entries and all relevant context
+    parameters.
+- filter_user(request, username): Retrieves and renders all entries of a
+    specified user as well as all relevant context parameters.
+- filter_tag(request, tag): Retrieves and renders all entries of a specified
+    tag as well as all relevant context parameters.
+- about(request): Renders the 'about' page with all relevant context parameters
+    and shows a feedback form to authenticated users.
+"""
+
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from django.db.models.functions import Lower
-from taggit.models import Tag
+from django.contrib import messages
 
-from .models import Entry, Like
-from .forms import CommentForm
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
+from mainpage.utils import get_page_context
+from entries.utils import get_published_entries
+from entries.models import Entry
 
+from .forms import MessageToAdminForm
 
-# Views
 
 def index(request):
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
-    
-    entries = get_published_entries(request, Entry.objects)
-    entries, sorted_param = sort_by(request, entries)
+    """
+    Render the index page with a list of published entries
 
-    page_obj = get_page_obj(request, entries)
-    
-    users = get_username_list()
-    tags = get_all_tags()
-    
-    context = {'entries': entries,
-               'sorted_param': sorted_param,
-               'page_obj': page_obj,
-               'users': users,
-               'tags': tags,
-               }
-    print(request)
+    This view retrieves and processes a list of published entries to be
+    displayed on the main page. It also retrieves parameters for the sidebar
+    filter and sort functionalities.
+    GET requests are processed by the sort_by() function inside the
+    get_page_context() function.
 
-    return render(
-        request,
-        'mainpage/index.html',
-        context)
+    Args:
+        request (HttpRequest): The HTTP request object.
 
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+    """
 
-def entry_details(request, slug):
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
-    
-    entry = get_object_or_404(get_published_entries(request, Entry.objects), slug=slug)
+    entries = get_published_entries(request, Entry.objects, get_comments=False)
 
-    users = get_username_list()
-    tags = get_all_tags()
+    entries, sorted_param, page_obj, users, tags = get_page_context(
+        request, entries
+    )
 
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.entry = entry
-            comment.save()
-        print(request.POST)
-            
-    comment_form = CommentForm()
+    # Tells the sidebar to enable sorting buttons for the user entries
+    enable_sorting = True
 
-    context = {'entry': entry,
-               'users': users,
-               'tags': tags,
-               'comment_form': comment_form,
-               }
+    context = {
+        "entries": entries,
+        "sorted_param": sorted_param,
+        "page_obj": page_obj,
+        "users": users,
+        "tags": tags,
+        "enable_sorting": enable_sorting,
+    }
 
-    return render(
-        request,
-        'mainpage/entry_details.html',
-        context)
+    return render(request, "mainpage/index.html", context)
 
 
 def filter_user(request, username):
-    user = get_object_or_404(User.objects.all(), username=username)
-    
-    entries = get_published_entries(request, user.entries)
-    entries, sorted_param = sort_by(request, entries)
-    
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request, entries)
-    
-    page_obj = get_page_obj(request, entries)
-    users = get_username_list()
-    tags = get_all_tags()
-    
-    context = {'entries': entries,
-               'users': users,
-               'user_filter': username,
-               'tags': tags,
-               'page_obj': page_obj,
-               'sorted_param': sorted_param,
-               }
+    """
+    Render the index page with a list of a user's published entries
 
-    return render(
-        request,
-        'mainpage/index.html',
-        context)
+    This view retrieves and processes a list of one user's published entries to
+    be displayed on the main page. It also retrieves parameters for the sidebar
+    filter and sort functionalities.
+    GET requests are processed by the sort_by() function inside the
+    get_page_context() function.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The name of a user.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+
+    Raises:
+        Http404: If no user with that username exists.
+    """
+
+    user = get_object_or_404(User.objects.all(), username=username)
+    # Only get entries if the user has added at least one entry
+
+    entries = get_published_entries(
+        request, user.all_entries, get_comments=False
+    )
+    if entries.count() != 0:
+        entries, sorted_param, page_obj, users, tags = get_page_context(
+            request, entries
+        )
+    else:
+        users, tags = get_page_context(request, None)
+
+    # Tells the sidebar to keep clicked-on filter section open
+    filter_user = True
+    # Tells the sidebar to enable sorting buttons for the user entries
+    enable_sorting = True
+
+    context = {
+        "entries": entries,
+        "users": users,
+        "user_filter": username,
+        "tags": tags,
+        "page_obj": page_obj,
+        "sorted_param": sorted_param,
+        "filter_user": filter_user,
+        "enable_sorting": enable_sorting,
+    }
+
+    return render(request, "mainpage/index.html", context)
 
 
 def filter_tag(request, tag):
-    entries = get_published_entries(request, Entry.objects).filter(tags__name__in=[tag])
-    entries, sorted_param = sort_by(request, entries)
-    
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request, entries)
-        
-    page_obj = get_page_obj(request, entries)
-    users = get_username_list()
-    tags = get_all_tags()
-    
-    context = {'entries': entries,
-               'tag_filter': tag,
-               'users': users,
-               'tags': tags,
-               'page_obj': page_obj,
-               'sorted_param': sorted_param,
-               }
+    """
+    Render the index page with a list of entries with the specified tag
 
-    return render(
-        request,
-        'mainpage/index.html',
-        context)
-    
+    This view retrieves and processes all entries with a specific tag to
+    be displayed on the main page. It also retrieves parameters for the sidebar
+    filter and sort functionalities.
+    GET requests are processed by the sort_by() function inside the
+    get_page_context() function.
 
+    Args:
+        request (HttpRequest): The HTTP request object.
+        tag (str): The name of a tag.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+    """
+
+    entries = get_published_entries(
+        request, Entry.objects, get_comments=False
+    ).filter(tags__name__in=[tag])
+
+    entries, sorted_param, page_obj, users, tags = get_page_context(
+        request, entries
+    )
+
+    # Tells the sidebar to keep clicked-on filter section open
+    filter_tag = True
+    # Tells the sidebar to enable sorting buttons for the user entries
+    enable_sorting = True
+
+    context = {
+        "entries": entries,
+        "tag_filter": tag,
+        "users": users,
+        "tags": tags,
+        "page_obj": page_obj,
+        "sorted_param": sorted_param,
+        "filter_tag": filter_tag,
+        "enable_sorting": enable_sorting,
+    }
+
+    return render(request, "mainpage/index.html", context)
+
+
+def about(request):
+    """
+    Render the about page with a message form
+
+    This view shows the content of the about page as well as a message
+    submission form for authenticated users. It also retrieves parameters for
+    the sidebar filter functionality.
+    The view handles POST requests whenever a new message is submitted.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        tag (str): The name of a tag.
+
+    Returns:
+        HttpResponse: Rendered index page with the context containing entries
+        and additional information for pagination, sorting, and filtering.
+    """
+
+    users, tags = get_page_context(request, None)
+
+    if request.method == "POST":
+        message_form = MessageToAdminForm(request.POST)
+        if message_form.is_valid():
+            message = message_form.save(commit=False)
+            message.user = request.user
+            message.save()
+            messages.success(request, "Your message has been submitted.")
+        else:
+            messages.error(request, "Your message has not been submitted.")
+
+    message_form = MessageToAdminForm()
+
+    context = {
+        "users": users,
+        "tags": tags,
+        "message_form": message_form,
+    }
+
+    return render(request, "mainpage/about.html", context)

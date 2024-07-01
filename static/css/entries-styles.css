@@ -1,0 +1,290 @@
+/* ---- Entry form -------- */
+
+.tooltip-inner {
+  max-width: 400px;
+  background-color: #e6646e;
+  font-size: 1.2rem;
+}
+
+#entryForm {
+  font-weight: 400;
+}
+
+/* ---- Entry cards ----- */
+
+h3 {
+  font-size: 1.4rem;
+}
+
+.larger-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.filter-results {
+  background-color: #95d2b3;
+}
+
+/* .card-container {
+    justify-content: start;
+  } */
+
+.card-outer {
+  min-width: 300px;
+  max-width: 300px;
+  flex-grow: 0;
+}
+
+.card-full-page {
+  flex-grow: 1;
+}
+
+.inner-card {
+  border: 1px solid black;
+  border-radius: 0;
+  min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+.card-desc {
+  /* border: 1px solid black; */
+  border-radius: 0;
+  min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.card-comments {
+  /* border: 1px solid black; */
+  border-radius: 0;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.card-desc {
+  min-height: fit-content;
+  border-top: none;
+}
+
+/* Remove margin bottom from p elements to reduce line height in the HTML description area;
+looks better especially when displaying song lyrics */
+.card-desc p {
+  margin-bottom: 0;
+}
+
+.accordion-header {
+  box-shadow: 0px 0.5px 1.5px black;
+  border-radius: 0;
+  background-color: #d8efd3;
+}
+
+.accordion-footer {
+  box-shadow: 0px -0.5px 1.5px black;
+  border-radius: 0;
+  background-color: #d8efd3;
+}
+
+.accordion-button:focus-visible {
+  box-shadow: none !important;
+  border-color: transparent;
+}
+
+.accordion-button,
+.accordion-button:not(.collapsed) {
+  background-color: #d8efd3;
+  border-radius: 0 !important;
+  box-shadow: 0px 0.1px 0.5px black;
+  color: black;
+}
+
+.accordion-body {
+  padding: 0;
+}
+
+/* Accordion preview styles from https://stackoverflow.com/a/72364245 */
+.accordion-preview .collapse:not(.show) {
+  display: block;
+}
+
+.accordion-preview .collapse:not(.show) .accordion-body {
+  max-height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.accordion-preview .collapse:not(.show) .accordion-body:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 1) 5%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  pointer-events: none; /* so the text is still selectable */
+}
+/* ------------------------------ */
+
+.inner-card:hover,
+.inner-card:focus-visible {
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
+}
+
+.no-shadow:hover,
+.no-shadow.focus-visible {
+  box-shadow: none;
+}
+
+.inner-card a {
+  text-decoration: none;
+  color: rgb(39, 36, 36);
+}
+
+.card-header a.user-link {
+  text-decoration: none;
+  color: rgb(39, 36, 36);
+}
+
+.card-header span {
+  text-decoration: underline;
+}
+
+.card-header,
+.card-footer {
+  background-color: #dfeddc;
+}
+
+.card-body {
+  padding: 0.5rem;
+  /* word-break: break-word; */
+}
+.card-footer {
+  padding: 0.5rem 0.3rem;
+}
+
+.title-link {
+  display: block;
+}
+
+.tag {
+  padding: 1px;
+  border: 1px solid black;
+}
+
+.tag-container a {
+  display: inline-block;
+}
+
+.tag-container a:focus-visible {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+}
+
+.tag-container a:focus-visible span {
+  /* outline: rgb(156, 221, 229); */
+  box-shadow: 0 2px 2px rgb(107, 103, 103);
+}
+
+.publicity-icon {
+  font-size: 0.9rem;
+}
+
+
+
+/* ---------- Comment section styles ----------- */
+
+#submitButton {
+  min-width: 8rem;
+}
+
+.btn-comment,
+.btn-update {
+  min-width: 8rem;
+  border: 2px solid #4d4d4d;
+
+  border-radius: 0px;
+  transition: all 0.3s;
+}
+
+/* .btn-comment:hover,
+.btn-comment:focus-visible,
+.btn-update:hover,
+.btn-update:focus-visible,
+.btn-edit,
+.btn-delete {
+  background-color: rgb(238, 238, 84);
+  transition: all 0.3s;
+} */
+
+.btn-edit,
+.btn-delete {
+  font-size: 0.8rem;
+  border-radius: 0;
+  min-width: 3rem;
+}
+
+.btn-general {
+  border: 1px solid #000000;
+  border-radius: 0;
+}
+
+/* .btn-edit {
+  border: 1px solid #75ed6f;
+} */
+
+.btn-delete,
+.btn-delete-entry {
+  color: #e6646e;
+}
+
+.form-control {
+  border: 1px solid gray;
+  border-radius: 0;
+  width: 100% !important;
+}
+
+.entry-button-container {
+  margin: 1rem 0 2rem 0;
+  padding: 0;
+}
+
+.entry-button-container .btn {
+  font-size: 1.5rem;
+}
+
+/* ---------- Media queries ----------- */
+
+@media screen and (max-width: 768px) {
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .card-outer {
+    max-width: 400px;
+    flex-grow: 1;
+  }
+
+  .larger-title {
+    font-size: 1.5rem;
+  }
+  
+}
+
+@media screen and (max-width: 576px) {
+  h3 {
+    font-size: 1rem;
+  }
+  .card-outer {
+    width: 100%;
+    min-width: 150px;
+  }
+
+  .larger-title {
+    font-size: 1.3rem;
+  }
+}

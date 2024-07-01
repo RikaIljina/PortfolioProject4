@@ -1,25 +1,49 @@
+"""
+forms.py for the 'Mainpage' app.
+
+This module contains the MessageToAdminForm class that handles input by
+authenticated users, allowing them to enter MessageToAdmin object data and
+create and submit a new message to the admin.
+"""
+
 from django import forms
-from django.forms import TextInput, EmailInput, Textarea
-from .models import Comment
+from django.forms import Textarea, TextInput
 from django.utils.translation import gettext_lazy as _
+from .models import MessageToAdmin
 
 
-class CommentForm(forms.ModelForm):
+class MessageToAdminForm(forms.ModelForm):
     """
-    Form class for users to comment on a post 
+    Form class for users to submit a new message to the admin
+
+    Meta: Specifies the django model, fields, widgets, and labels.
     """
-    
-  #  content = forms.TextInput(widget=forms.TextInput(attrs={'class':'flex-fill form-control me-3'}))
-    
+
     class Meta:
-        """
-        Specify the django model and order of the fields
-        """
-        model = Comment
-        fields = ('content',)
+        model = MessageToAdmin
+        fields = (
+            "subject",
+            "message",
+        )
         widgets = {
-            "content": Textarea(attrs={"rows":"3", "class":"flex-fill form-control me-3", "placeholder":"Add comment", "type":"text", "name":"comment"}),
+            "subject": TextInput(
+                attrs={
+                    "placeholder": "Max 200 characters",
+                    "type": "text",
+                    "name": "subject",
+                }
+            ),
+            "message": Textarea(
+                attrs={
+                    "rows": "3",
+                    "class": "flex-fill form-control me-3",
+                    "placeholder": "Max 5000 characters",
+                    "type": "text",
+                    "name": "message",
+                }
+            ),
         }
         labels = {
-            'content': _('Your comment'),
+            "subject": _("Subject"),
+            "message": _("Your message"),
         }

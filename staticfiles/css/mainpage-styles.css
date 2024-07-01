@@ -1,0 +1,153 @@
+h3 {
+  font-size: 1.2rem;
+}
+
+.filter-results h1 {
+  background-color: #95d2b3;
+  font-size: 1.2rem;
+}
+
+/* .card-container {
+  justify-content: start;
+} */
+
+.card-outer {
+  min-width: 300px;
+  width: 300px;
+  flex-grow: 0;
+}
+
+.card-full-page {
+  min-width: 80%;
+}
+
+.inner-card {
+  border: 1px solid black;
+  border-radius: 0;
+  min-height: 350px;
+  font-weight: 400;
+  word-break: break-word;
+}
+
+.inner-card:hover,
+.inner-card:focus-visible {
+  box-shadow: rgba(0, 0, 0, 0.4) 1.5px 1.5px 10px;
+}
+
+.inner-card a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+
+/* .card-header a {
+  text-decoration: underline;
+} */
+
+.card-header,
+.card-footer {
+  background-color: #dfeddc;
+}
+
+.card-body {
+  padding: 0.5rem;
+  /* word-break: break-word; */
+}
+.card-footer {
+  padding: 0.5rem 0.3rem;
+}
+
+.title-link {
+  display: block;
+}
+
+/* --------- Card styles --------------- */
+
+.title-link,
+.user-line {
+  transition: all 0.3s;
+  display: inline-block;
+  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  perspective: 1000;
+  -webkit-perspective: 1000; */
+}
+
+.title-link:hover,
+.user-line:hover {
+  opacity: 0.7;
+  /* transform: scale(1.02); */
+  transition: all 0.3s;
+}
+.title-link:focus-visible,
+.user-link:focus-visible {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+}
+
+/* .title-link,
+.user-link {
+  text-decoration: underline;
+} */
+
+.tag {
+  padding: 1px;
+  border: 1px solid black;
+}
+
+.tag-container a:focus-visible {
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 white;
+  outline: none;
+}
+
+/* About page */
+
+.about-page h3 {
+  font-size: 1.5rem;
+}
+
+.about-page .btn-general {
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+input,
+.form-control {
+  /* width: 100% !important; */
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #f5f8f1;
+}
+
+@media screen and (max-width: 768px) {
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  /* .card-container {
+    justify-content: center;
+  } */
+
+  .card-outer {
+    max-width: 400px;
+    flex-grow: 1;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  h3 {
+    font-size: 1rem;
+  }
+
+  .card-outer {
+    min-width: 200px;
+    flex-grow: 1;
+  }
+}

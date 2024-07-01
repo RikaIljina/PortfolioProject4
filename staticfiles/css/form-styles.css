@@ -1,0 +1,27 @@
+.btn-general {
+  border: 1px solid #000000;
+  border-radius: 0;
+  padding: 0.5rem 0.8rem;
+}
+
+input:not([type="checkbox"]):not([type="radio"]) {
+  width: 100% !important;
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #f5f8f1;
+}
+
+input[type="checkbox"] {
+  accent-color: #55ad9b;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #55ad9b;
+}
+
+@media screen and (max-width: 576px) {
+  #commentForm {
+    flex-wrap: wrap;
+  }
+}

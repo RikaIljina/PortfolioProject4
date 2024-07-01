@@ -1,357 +1,386 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.urls import resolve
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator
-from django.db.models import Count, Q
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.db.models.functions import Lower
-from django.core.files.storage import FileSystemStorage 
-from taggit.models import Tag
-import cloudinary
-from django.core.exceptions import ValidationError
-#import cloudinary.uploader
-from mainpage.models import Entry, Like
-from musiclab.utils import get_all_tags, get_page_obj, get_username_list, sort_by, get_published_entries
-from mainpage.forms import CommentForm
-from .forms import EntryForm, ProfileForm
+"""
+views.py for the 'Users' app.
 
-# Create your views here.
+This module contains view functions that render the user profile page and the
+dashboard of authenticated users.
+
+Key functionalities:
+- Show the user profile and all the user's public entries
+- Show the user's personal dashboard and all their entries
+- Allow to edit the user profile
+- Show all likes made by the user
+- Show all comments written by the user
+
+View Functions:
+- user_profile(request, username): Retrieves and renders the user profile, the
+    user's public entries and all relevant context parameters.
+- dashboard_new_user(request): Redirects the user to their 'Edit profile' page
+    after their registration.
+- dashboard(request, username): Retrieves and renders all the user's profile,
+    entries, and all relevant context parameters.
+- dashboard_entry(request, username, slug): Renders the selected entry with all
+    relevant context parameters and edit/delete buttons.
+- edit_profile(request, username): Shows the user profile form for editing.
+- user_favorites(request, username): Renders all entries the user has liked.
+- user_comments(request, username): Renders all comments the user has posted.
+"""
+
+from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.http import HttpResponseRedirect
+from django.db.models import Count
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+
+from mainpage.utils import get_page_obj, sort_by, get_page_context
+from entries.utils import get_published_entries, get_all_entries
+from comments.forms import CommentForm
+from comments.utils import process_comment_form
+
+from .forms import ProfileForm
 
 
 def user_profile(request, username):
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
+    """
+    View function to display a user's profile page
+
+    This function retrieves the profile and entries of a specified user and
+    renders the profile page with the relevant context. If the user has no
+    entries, the context is prepared accordingly.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the user whose profile is to be
+            displayed.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered profile
+            page.
+
+    Raises:
+        Http404: If the user with the specified username does not exist.
+    """
 
     user = get_object_or_404(User.objects.all(), username=username)
     profile = user.profile
-   # entries = user.entries.filter(publish=1)
-    entries = get_published_entries(request, user.entries)
-    print(entries[0].likes_received)
-    most_liked = entries.order_by('-likes_received').first
-    most_recent = entries.order_by('-created_on').first
-    entries, sorted_param = sort_by(request, entries)
+    # Tells the sidebar to enable sorting buttons for the user entries
+    enable_sorting = True
+    # Makes sure the 'reset filter' button redirects to profile page when
+    # deleting sorting
+    profile_view = True
 
-    page_obj = get_page_obj(request, entries)
-    users = get_username_list()
-    tags = get_all_tags()
+    entries = get_published_entries(
+        request, user.all_entries, get_comments=False
+    )
+    # Only get entries if the user has added at least one entry
+    if entries.count() != 0:
+        entries, sorted_param, page_obj, users, tags = get_page_context(
+            request, entries
+        )
 
-    context = {'profile': profile,
-               #'entries': entries,
-               'most_liked': most_liked,
-               'most_recent': most_recent,
-               'users': users,
-               'tags': tags,
-               'page_obj': page_obj,
-               'sorted_param': sorted_param,
-               }
+        context = {
+            "profile": profile,
+            "users": users,
+            "tags": tags,
+            "page_obj": page_obj,
+            "sorted_param": sorted_param,
+            "enable_sorting": enable_sorting,
+            "profile_view": profile_view,
+        }
+    else:
+        users, tags = get_page_context(request, None)
+        context = {
+            "profile": profile,
+            "users": users,
+            "tags": tags,
+            "profile_view": profile_view,
+        }
 
-    return render(
-        request,
-        'users/profile.html',
-        context)
+    return render(request, "users/profile.html", context)
 
 
 def dashboard_new_user(request):
-        return HttpResponseRedirect(reverse('edit_profile', args=[request.user.username]))
+    """
+    Redirects a user to edit profile after registration
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered profile
+            editing page.
+    """
+
+    return HttpResponseRedirect(
+        reverse("edit_profile", args=[request.user.username])
+    )
 
 
 def dashboard(request, username):
+    """
+    View function to display an authenticated user's dashboard
+
+    This function retrieves the profile and entries of the authenticated user
+    and renders the dashboard and the sidebar with the relevant context.
+    If the user has no entries, the context is prepared accordingly.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the user whose profile is to be
+            displayed.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered
+            dashboard page.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
     user = request.user
     profile = user.profile
-    entries = user.entries.all()
-    most_liked = entries.annotate(likes_received=Count('all_likes')).order_by('-likes_received').first
-    most_recent = entries.order_by('-created_on').first
-    entries, sorted_param = sort_by(request, entries)
+    # Tells the sidebar to show dashboard buttons
+    dashboard_view = True
+    # Tells the sidebar to enable sorting buttons for the user entries
+    enable_sorting = True
 
-    # if request.GET.get('newEntry'):
-    #     return HttpResponseRedirect(reverse('new_entry'))
+    entries = get_all_entries(request, user.all_entries, get_comments=False)
 
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
-# Deactivate sidebar!!
-    page_obj = get_page_obj(request, entries)
-    # users = get_username_list()
-    # tags = get_all_tags()
+    if entries.count() != 0:
+        entries, sorted_param = sort_by(request, entries)
+        page_obj = get_page_obj(request, entries)
+        context = {
+            "profile": profile,
+            "page_obj": page_obj,
+            "sorted_param": sorted_param,
+            "dashboard_view": dashboard_view,
+            "enable_sorting": enable_sorting,
+        }
+    else:
+        context = {
+            "profile": profile,
+            "dashboard_view": dashboard_view,
+            "enable_sorting": enable_sorting,
+        }
 
-    context = {'profile': profile,
-               #'entries': entries,
-               'most_liked': most_liked,
-               'most_recent': most_recent,
-               'page_obj': page_obj,
-               'sorted_param': sorted_param,
-               }
-
-    return render(
-        request,
-        'users/dashboard.html',
-        context)
-
-
-def edit_profile(request, username):
-    if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
-    
-    profile = request.user.profile
-    #id = profile.pic.public_id
-    
-    if request.method == 'POST' and profile.user == request.user:
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile, new_file=request.FILES.get('pic'))
-        if profile_form.is_valid():
-            # if request.FILES.get('pic'):
-            #     print(cloudinary.uploader.destroy(id, invalidate=True))
-            profile_form.save()
-
-        else:
-            print('not valid')
-            print(profile_form.errors.as_data())
-
-        print(request.POST)
-        return HttpResponseRedirect(reverse('dashboard', args=[username]))
-    
-    profile_form = ProfileForm(instance=profile, initial={'bio': profile.bio, 'pic': profile.pic, 'social': profile.social, 'email': profile.email})
-    
-    context = {'profile': profile,
-               'profile_form': profile_form,
-               }
-
-    return render(
-        request,
-        'users/profile_form.html',
-        context)
+    return render(request, "users/dashboard.html", context)
 
 
 def dashboard_entry(request, username, slug):
+    """
+    Display a detailed view of an authenticated user's entry on their dashboard
+
+    This view retrieves an entry of the authenticated user by its slug and
+    renders the dashboard and the sidebar with the relevant context.
+    It gives access to all uploaded audio files and the comment
+    section.
+    The view also shows buttons that enable editing/deleting the entry
+    and handles POST requests whenever a new comment is submitted.
+
+    Args:
+        request (HttpObject): The HTTP request object.
+        username (str): The username of the user whose entry is being
+            displayed.
+        slug (string): Slug of the entry to be shown in detailed view.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        Http404: If the user has no entry with the specified slug.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered entry
+            detail page.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
-    entry = get_object_or_404(request.user.entries.all(), slug=slug)
+    # Tells the sidebar to show dashboard buttons
+    dashboard_view = True
 
-    # if request.GET.get('edit'):
-    #     return HttpResponseRedirect(reverse('edit_entry', args=[username, slug]))
+    entry = get_object_or_404(
+        get_all_entries(request, request.user.all_entries), slug=slug
+    )
+    old_files = entry.old_files
+    # Sort the previously uploaded files by timestamp
+    sorted_files = dict(
+        sorted(old_files.items(), key=lambda item: item[1][1], reverse=True)
+    )
+    # Prepare texts for 'Delete entry' modal
+    modal_text = (
+        f'Are you sure you want to delete "{entry.title}"?'
+        f"This action cannot be undone!"
+    )
+    modal_title = f'Delete "{entry.title}"?'
 
-    if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.entry = entry
-            comment.save()
-        print(request.POST)
+    comments = entry.all_comments.select_related("author", "author__profile")
+
+    if request.method == "POST":
+        process_comment_form(request, entry)
+        # Redirect after comment posting to prevent resend of POST data on
+        # page refresh
+        return redirect("dashboard_entry", username=username, slug=slug)
 
     comment_form = CommentForm()
 
-    context = {'entry': entry,
-               'comment_form': comment_form,
-               }
-
-    return render(
-        request,
-        'users/dashboard_entry.html',
-        context)
-
-
-def new_entry(request, username):
-    if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
-    
-    #all_titles = list(request.user.entries.all().values_list('title', flat=True))
-    #titles = [title.get('title') for title in all_titles]
-
-    if request.method == 'POST':
-        entry_form = EntryForm(request.POST, request.FILES, user=request.user)
-        if entry_form.is_valid():
-            entry = entry_form.save(commit=False)
-           # entry.author = request.user
-            # cloudinary.uploader.upload(request.FILES['audio_file'])
-            #entry.likes = 0
-            entry.save()
-            entry_form.save_m2m()
-            return HttpResponseRedirect(reverse('dashboard', args=[username]))
-            
-        else:
-            print('not valid')
-            print(entry_form.errors.as_data())
-            #return reverse('new_entry', args=[entry_form])
-
-        #print(request.POST)
-
-    else:
-        entry_form = EntryForm(user=request.user)
-
     context = {
-        'entry_form': entry_form,
+        "entry": entry,
+        "old_files": sorted_files,
+        "comments": comments,
+        "comment_form": comment_form,
+        "modal_text": modal_text,
+        "modal_title": modal_title,
+        "dashboard_view": dashboard_view,
     }
 
-    return render(
-        request,
-        'users/entry_form.html',
-        context)
+    return render(request, "users/dashboard_entry.html", context)
 
 
-def edit_entry(request, username, slug):
+def edit_profile(request, username):
+    """
+    Display a form with the profile data of an authenticated user
+
+    This view retrieves the automatically created profile of the authenticated
+    user and renders the dashboard and the sidebar with the relevant context.
+    The view handles POST requests whenever the profile is updated.
+
+    Args:
+        request (HttpObject): The HTTP request object.
+        username (str): The username of the user whose profile is being
+            displayed for editing.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+        ValidationError (see ProfileForm class for error handling)
+
+    Returns:
+        HttpResponse: Redirects to the 'dashboard' page if the profile was
+            successfully saved.
+        HttpResponse: The HTTP response object containing the rendered profile
+            form page.
+    """
 
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
+        raise PermissionDenied
 
-    entry = get_object_or_404(request.user.entries.all(), slug=slug)
-    #id = entry.audio_file.public_id
+    profile = request.user.profile
 
-    if request.method == 'POST':
-        entry_form = EntryForm(request.POST, request.FILES, instance=entry, user=request.user, new_file=request.FILES.get('audio_file'))
+    if request.method == "POST" and profile.user == request.user:
+        profile_form = ProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile,
+        )
 
-        if entry_form.is_valid():
-            print('form is valid')
-            entry = entry_form.save(commit=False)
-            print('in view now')
-            #print(f'old: {id}')
-            # if request.FILES.get('audio_file'):
-            #     print(f'changed file: {request.FILES['audio_file']}, old: {id}')
-            #     print(cloudinary.uploader.destroy(id, resource_type = "video", invalidate=True))
-            entry.author = request.user
-            #entry.likes = 0
-            entry.save()
-            entry_form.save_m2m()
-            print('finished saving in view')
-            return HttpResponseRedirect(reverse('dashboard', args=[username]))
-            
+        if profile_form.is_valid():
+            # See ProfileForm class for custom validation and file handling
+            profile_form.save()
+            messages.success(request, "Your profile has been saved.")
+
+            return redirect("dashboard", username=username)
+
         else:
-            print('not valid')
-            print(entry_form.errors.as_data())
+            messages.error(request, "There was an error saving your profile.")
 
     else:
-        tag_list = [value['name'] for value in entry.tags.all().values()]
-        entry_form = EntryForm(instance=entry, user=request.user, initial={'title': entry.title, 'description': entry.description,
-                           'audio_file': entry.audio_file, 'tags':(',').join(tag_list), 'publish': entry.publish})
+        profile_form = ProfileForm(instance=profile)
 
     context = {
-        'entry': entry,
-        'entry_form': entry_form,
+        "profile": profile,
+        "profile_form": profile_form,
     }
 
-    return render(
-        request,
-        'users/entry_form.html',
-        context)
-
-
-def delete_entry(request, username, slug):
-    if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
-    
-    entry = get_object_or_404(request.user.entries.all(), slug=slug)
-    print(entry.audio_file.public_id)
-    print(entry.audio_file.url)
-    #print(cloudinary.uploader.destroy(entry.audio_file.public_id, resource_type = "video", invalidate=True))
-#    storage_instance.delete(name=entry.audio_file.name)
-    #entry.audio_file.delete()
-
-    entry.delete()
-    
-    return HttpResponseRedirect(reverse('dashboard', args=[username]))
-
-
-def edit_comment(request, current_path, comment_id):
-    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-   # next = request.POST.get('next')
-    
-    if request.method == 'POST' and comment.author == request.user:
-        
-        if 'updateOld' in request.POST:
-            print(request.POST)
-            comment_form = CommentForm(data=request.POST, instance=comment)
-
-            if comment_form.is_valid():
-                comment_form.save()
-            else:
-                print(comment_form.errors.as_data())
-
-    return redirect(f'{reverse('home')}{current_path}')
-
-
-def delete_comment(request, current_path, comment_id):
-    comment = get_object_or_404(request.user.commenter.all(), id=comment_id)
-   # next = request.GET.get('old')
-   # print('resolving:')
-   # print(resolve(current_path))
-   # print(resolve(request.path))
-   # print(next)
-    
-    if comment.author == request.user:
-        comment.delete()
-    print(f'current: {current_path}')
-    print('going to last path')
-    print(f'{reverse('home')}{current_path}')
-    return redirect(f'{reverse('home')}{current_path}')
+    return render(request, "users/profile_form.html", context)
 
 
 def user_favorites(request, username):
+    """
+    Render the user's favorites page with a list of liked entries
+
+    This view retrieves and processes a list of entries liked by the
+    authenticated user. It ensures that only the authenticated user can access
+    their own favorites page and displays the entries along with the number of
+    likes and comments received.
+    The other views that display entries process a queryset of entries annotated
+    with like and comment amounts, and the HTML templates expect to receive an
+    'entry' object with all its attributes. However, since this view doesn't
+    process a queryset of entries but rather a queryset of Like objects, each
+    Like object is annotated with the amount of likes and comments which its
+    related entry received instead.
+    The HTML template is then wrapped in {% with entry=like.entry %} tags to
+    access entry data and in {% with entry=like %} tags to access the annotated
+    values.
+    The variable 'is_favorite' tells the HTML page that all entries on this
+    page should be treated as 'liked' and styled accordingly.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the authenticated user.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+
+    Returns:
+        HttpResponse: Rendered user favorites page with the context containing
+            the paginated list of liked entries and additional information.
+    """
+
     if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
-    
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
-    
-    likes = request.user.liked.select_related('entry')
+        raise PermissionDenied
+
+    likes = request.user.liked.select_related("entry").annotate(
+        likes_received=Count("entry__all_likes", distinct=True),
+        comments_received=Count("entry__all_comments", distinct=True),
+    )
     is_favorite = 1
 
     page_obj = get_page_obj(request, likes)
-    
-    context = {#'likes': likes,
-               'page_obj': page_obj,
-                'is_favorite': is_favorite,
-               }
-    
-    return render(request,
-                  'users/favorites.html',
-                  context)
-    
+
+    context = {
+        "page_obj": page_obj,
+        "is_favorite": is_favorite,
+    }
+
+    return render(request, "users/dashboard_user_likes.html", context)
+
 
 def user_comments(request, username):
-    if not request.user.is_authenticated or username != request.user.username:
-        return HttpResponseRedirect(reverse('home'))
-    
-    # if request.GET.get('liked') and request.user.is_authenticated:
-    #     return save_like(request)
-    
-    comments = request.user.commenter.select_related('entry')
+    """
+    Render the user's comments page with a list of comments made by the user
 
+    This view retrieves and processes a list of comments made by the
+    authenticated user. It ensures that only the authenticated user can access
+    their own comments page and displays the comments in a paginated format.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        username (str): The username of the authenticated user.
+
+    Raises:
+        PermissionDenied: If the user is not authenticated or the username does
+            not belong to the user making the request.
+
+    Returns:
+        HttpResponse: Rendered user comments page with the context containing
+            the paginated list of user's comments.
+    """
+
+    if not request.user.is_authenticated or username != request.user.username:
+        raise PermissionDenied
+
+    comments = request.user.commenter.select_related("entry")
 
     page_obj = get_page_obj(request, comments, 10)
-    
-    context = {#'comments': comments,
-               'page_obj': page_obj,
-               }
-    
-    return render(request,
-                  'users/comments.html',
-                  context)
-    
-def add_like(request, entry_id, current_path=''):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('home'))
-    
-    entry = get_object_or_404(get_published_entries(request, Entry.objects, False), id=entry_id)
-    
-    if request.method == 'GET':
-        print('...getting...')
-        params = f'?{request.GET.urlencode()}'
-    else:
-        params = ''
-    #print(request.user.liked.filter(entry=entry).exists())
-    #print(entry.already_liked)
-    
-    #if entry.already_liked == 0:
-    if not request.user.liked.filter(entry=entry).exists():
-        like = Like.objects.create(user=request.user, entry=entry)
-    else:
-        like = request.user.liked.get(entry=entry)
-        like.delete()
 
-    print('going to last path')
-    print(f'{reverse('home')}{current_path}')
-    return redirect(f'{reverse('home')}{current_path}{params}')
+    context = {
+        "page_obj": page_obj,
+    }
 
+    return render(request, "users/dashboard_user_comments.html", context)

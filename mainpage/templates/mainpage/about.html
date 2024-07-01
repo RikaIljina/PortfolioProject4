@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block styles %}
+<!-- Mainpage CSS -->
+<link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row g-0 sidebar-margin">
+    <div class="col-12">
+        <div class="row g-0 py-md-2 px-2 mt-0 mt-md-2 mb-2 justify-content-center">
+            <div class="col-12 col-md-8 py-auto mb-5 about-page">
+                <hr>
+                <h1>About this Website</h1>
+                <hr>
+                <p>Welcome to MusicLab, a place where artists can share their creations, give and receive
+                    constructive feedback, and explore fresh avenues of collaboration.</p>
+                <hr>
+
+                <h3>
+                    What will you find here?
+                </h3>
+
+                <p>We provide a space for musicians of each and every skill level and all genres – from pop ballad and
+                    classic rock to experimental House and Klingon opera.</p>
+                <hr>
+
+                <h3>What can you share?</h3>
+
+                <p>As long as it consists of soundwaves you’ve created with our own mouth, hands, gills, etc. you are
+                    welcome to share it. Covers are allowed if tagged accordingly. While not mandatory, other users will
+                    also welcome it if you tag NSFW entries and other possible triggering content.</p>
+
+                <p>If you want to document a work in progress, check <i>"Keep file"</i> when editing an entry and
+                    uploading a
+                    new
+                    version - the old file will not be deleted.</p>
+                <hr>
+
+                <h3>How to interact with other creators?</h3>
+
+                <p>We encourage users to like and comment on entries and get in touch with each other via the contact
+                    info
+                    provided.</p>
+
+                <p>When commenting on other people’s works, please remember to be open-minded and constructive. MusicLab
+                    reserves the right to delete comments or block users who use abusive and discriminatory language or
+                    troll others.</p>
+
+                <p>Please also refrain from advertising your own music in the comments section of other creators.</p>
+                <hr>
+
+                <h3>What about ownership and copyright?</h3>
+
+                <p>MusicLab does not own any of the content hosted on its site. All audio files and the information
+                    provided in the description field belong to the creators. If a file is deleted, no copy of any kind
+                    remains in the database.</p>
+
+                <p>Users are not allowed to re-upload entries other creators have deleted, even if they are tagged as
+                    foreign work. MusicLab will block users who do not adhere to this rule.</p>
+                <hr>
+
+                <h3>What about donations and commissions?</h3>
+
+                <p>MusicLab does not allow users to ask for donations or offer commissions on its website. However, you
+                    are welcome to post a link to your own website where such information may be found.</p>
+                {% if user.is_authenticated %}
+                <hr>
+
+                <h3>User Feedback</h3>
+
+                <p>Do you want to report an issue with the site or a problem with another user? Do you have questions or
+                    suggestions?
+                    Send a message to the admins - we'll get back to you as soon as possible.</p>
+
+                <div class="mt-4 mb-5">
+                    <form id="message-form" action="" method="POST">
+                        {% csrf_token %}
+                        <div class="p-1">
+                            {{ message_form.subject.label }}
+                        </div>
+                        <div class="py-2">
+                            {{ message_form.subject }}
+                        </div>
+                        <div class="p-1">
+                            {{ message_form.message.label }}
+                        </div>
+                        <div class="py-2">
+                            {{ message_form.message }}
+                        </div>
+
+                        <button class="btn btn-general hover-highlight my-2" type="submit">Send message</button>
+                    </form>
+                </div>
+
+                {% else %}
+                <hr>
+
+                <h3>User Feedback</h3>
+
+                <p>Do you want to report an issue with the site or a problem with another user? Do you have questions or
+                    suggestions?
+                    Log in to send a message to the admins - we'll get back to you as soon as possible.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

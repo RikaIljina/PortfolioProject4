@@ -1,0 +1,76 @@
+{% load static %}
+{% load humanize %}
+
+<!-- Adapted from https://mdbootstrap.com/docs/standard/extended/profiles/ -->
+
+<div class="row d-flex justify-content-center w-100 profile-bg mx-0">
+    <div class="col col-md-10 mb-4 mt-2 mb-lg-0">
+        <div class="card profile-card mb-3">
+            <div class="row g-0 justify-content-center pt-md-2">
+                <div class="col-lg-3 text-center">
+
+                    {% if "placeholder" in profile.pic.url %}
+                    <img src="{% static 'images/default_profile.webp' %}" alt="Placeholder avatar"
+                        class="img-fluid my-2 rounded-circle avatar-lg">
+                    {% else %}
+                    <img src="{{ profile.pic.url }}" alt="User profile picture" class="img-fluid my-2 rounded-circle avatar-lg">
+                    {% endif %}
+
+                    <h3>{{ profile.user.username }}</h3>
+                    <p>Joined {{ profile.joined|naturalday }}</p>
+
+                    {% if user.is_authenticated and profile == user.profile %}
+                    <a href="{% url 'edit_profile' user.username %}" aria-label="Opens the user profile for editing"><i class="far fa-edit mb-1"></i></a>
+                    {% endif %}
+                </div>
+                <div class="col-lg-5 col-xl-6">
+                    <div class="pt-1 px-4">
+                        <h6>About me</h6>
+                        <hr class="mt-0 mb-2">
+                        <div class="row pt-1">
+                            <div class="col-12 mb-3">
+                                {% if profile.bio %}
+                                <p class="text-muted">{{ profile.bio|safe }}</p>
+                                {% else %}
+                                <p class="text-muted"> --- </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xl-3">
+                    <div class="pt-1 px-4">
+                        <h6>Contact Me</h6>
+                        <hr class="mt-0 mb-2">
+                        <div class="pt-1">
+
+                            {% if profile.email %}
+                            <a href="mailto:{{ profile.email }}" aria-label="Opens email app in a new tab to send email" target="_blank"><i class="fa fa-envelope fa-lg"></i></a>
+                            {% endif %}
+                            {% if profile.website %}
+                            <a href="{{ profile.website }}" aria-label="Opens website link in a new tab" target="_blank"><i class="fa-solid fa-globe"></i></a>
+                            {% endif %}
+                            {% if profile.facebook %}
+                            <a href="{{ profile.facebook }}" aria-label="Opens facebook link in a new tab" target="_blank"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.twitter %}
+                            <a href="{{ profile.twitter }}" aria-label="Opens twitter (X) link in a new tab" target="_blank"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.instagram %}
+                            <a href="{{ profile.instagram }}" aria-label="Opens instagram link in a new tab" target="_blank"><i class="fab fa-instagram fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.youtube %}
+                            <a href="{{ profile.youtube }}" aria-label="Opens youtube link in a new tab" target="_blank"><i class="fab fa-youtube fa-lg me-3"></i></a>
+                            {% endif %}
+                            {% if profile.spotify %}
+                            <a href="{{ profile.spotify }}" aria-label="Opens spotify link in a new tab" target="_blank"><i class="fab fa-spotify fa-lg me-3"></i></a>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

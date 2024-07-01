@@ -1,75 +1,52 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block styles %}
+<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
 
-{% block styles %}
-<link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
-{% endblock %}
+{% endblock %} {% block content %}
 
-{% block content %}
+<div class="row g-0 sidebar-margin">
+  <div class="col-12">
+    {% include 'users/snippets/profile_card.html' %}
+  </div>
 
-<section style="background-color: #f4f5f7;">
+  <div class="col-12 col-md-10 m-auto px-1">
 
-    {% include 'profile_card.html' %}
-
-    <div class="container">
-        <h1>My Entries</h1>
-
-        <a href="{% url 'new_entry' user.username %}" class="btn btn-success" role="button">New Entry</a>
-
-        <form method="GET">
-            <p>Sort entries:</p>
-            <button name="sorted" id="by_likes" value="by_likes" class="btn btn-primary" href="#" type="submit">Most
-                popular</button>
-            <button name="sorted" id="by_date" value="by_date" class="btn btn-primary" href="#" type="submit">Newest
-                first</button>
-            <button name="sorted" id="by_published" value="by_published" class="btn btn-primary" href="#"
-                type="submit">By published</button>
-        </form>
-
-        <!-- Maybe load entry details for this user on the profile page? -->
-
-        
-        {% for entry in page_obj %}
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex flex-row align-items-center">
-                {% if entry.publish == 0 %}
-                <i class="fa-solid fa-lock"></i>
+    <hr>
+        <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center filter-results">
+            <div class="col-12 py-auto">
+                {% if sorted_param == '?sorted=by_date' %}
+                <h3 class="">Most <b>recent</b> entries</h3>
+                {% elif sorted_param == '?sorted=by_likes' %}
+                <h3 class="">Most <b>liked</b> entries</h3>
+                {% elif sorted_param == '?sorted=by_updated' %}
+                <h3 class="">Last <b>updated</b> first</h3>
+                {% elif sorted_param == '?sorted=by_published' %}
+                <h3 class=""><b>Unpublished</b> first</h3>
                 {% else %}
-                <i class="fa-solid fa-globe"></i>
+                <h3 class="">All entries</h3>
                 {% endif %}
-                <a href="{% url 'dashboard_entry' user.username entry.slug %}" class="ms-3">
-                    <h3>{{ entry.title }}</h3>
-                </a>
-            </div>
-
-                <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
-            </div>
-            <div class="card-body">
-                <audio controls class="w-100">
-                    <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                    Your browser does not support the audio tag.
-                </audio>
-                <p>
-                    {{ entry.tags.all|join:", " }}
-                </p>
-
-                {% include 'like_comment_summary.html' %}
-
             </div>
         </div>
-        {% empty %}
-        <div>
-            <p>This user has not uploaded any songs yet.</p>
+        <hr>
+
+    <div class="row g-0">
+      <div class="m-auto col">
+
+        <div class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start h-100">
+          
+          {% for entry in page_obj %}
+          {% include 'entries/snippets/entry_cards.html' %}
+          {% endfor %}
+
         </div>
-        {% endfor %}
-
-        {% include 'pagination.html' %}
-
+      </div>
     </div>
-</section>
-{% endblock %}
+  </div>
+</div>
 
-{% block extras %}
+{% include 'pagination.html' %}
+
+
+{% endblock %} {% block extras %}
 <script src="{% static 'js/likes.js' %}"></script>
 {% endblock %}

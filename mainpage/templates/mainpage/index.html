@@ -1,66 +1,44 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block styles %}
+<!-- Mainpage CSS -->
+<link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}" />
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
+{% endblock %} {% block content %} 
 
-<div class="container">
-    <h1>MusicLab</h1>
-<div>
-    {% if user_filter %}
-    <h3>Results for user "{{ user_filter }}"</h3>
-    {% endif %}
-    {% if tag_filter %}
-    <h3>Results for tag "{{ tag_filter }}"</h3>
-    {% endif %}
-</div>
-    <form method="GET">
-        <p>Sort entries:</p>
-        <button name="sorted" id="by_likes" value="by_likes" class="btn btn-primary" href="#" type="submit">Most
-            popular</button>
-        <button name="sorted" id="by_date" value="by_date" class="btn btn-primary" href="#" type="submit">Newest
-            first</button>
-    </form>
-
-    {% for entry in page_obj %}
-    <div class="card">
-        <div class="card-header">
-            <p>
-                {% if "placeholder" in entry.author.profile.pic.url %}
-                <img src="{% static 'images/default_profile.jpg' %}" alt="user profile picture" width="30" height="30"
-                class="rounded-circle">
+<div class="row g-0 sidebar-margin">
+    <div class="col-12">
+        <div class="row g-0 mt-0 mt-3 mb-2 justify-content-center filter-results">
+            <div class="col-12 col-md-10 py-auto">
+                {% if user_filter %}
+                <h1 class="ps-3">Entries by <b>{{ user_filter }}</b></h1>
+                {% elif tag_filter %}
+                <h1 class="ps-3">Entries with the tag <b>{{ tag_filter }}</b></h1>
+                {% elif sorted_param == '?sorted=by_date' %}
+                <h1 class="ps-3">Most <b>recent</b> entries</h1>
+                {% elif sorted_param == '?sorted=by_likes' %}
+                <h1 class="ps-3">Most <b>liked</b> entries</h1>
                 {% else %}
-                <img src="{{ entry.author.profile.pic.url }}" alt="user profile picture" width="30" height="30"
-                    class="rounded-circle">
+                <h1 class="visually-hidden">Showing all entries unfiltered</h1>
                 {% endif %}
-                <a href="{% url 'user_profile' entry.author.username %}">{{ entry.author }}</a></p>
-            <a href="{% url 'entry_details' entry.slug %}">
-                <h3>{{ entry.title }}</h3>
-            </a>
-            <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
+            </div>
         </div>
-        <div class="card-body">
-            <audio controls class="w-100">
-                <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                Your browser does not support the audio tag.
-            </audio>
-            <p>
-                {{ entry.tags.all|join:", " }}
-            </p>
 
+        <div class="row g-0">
+            <div class="m-auto col-12 col-md-10">
+                <div
+                    class="d-flex flex-wrap w-100 m-auto mt-4 card-container justify-content-center justify-content-md-start">
+
+                    {% for entry in page_obj %}
+                    {% include 'entries/snippets/entry_cards.html' %}
+                    {% endfor %}
+
+                </div>
+            </div>
         </div>
-        {% include 'like_comment_summary.html' %}
-       
+        {% include 'pagination.html' %}
     </div>
-    {% empty %}
-    <div>
-        <p>This user has not uploaded any songs yet.</p>
-    </div>
-    {% endfor %}
-
-    {% include 'pagination.html' %}
-
 </div>
 
-{% endblock content %}
+{% endblock content %} 
 
 {% block extras %}
 <script src="{% static 'js/likes.js' %}"></script>

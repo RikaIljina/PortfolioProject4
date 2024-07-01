@@ -1,127 +1,146 @@
+"""
+forms.py for the 'Users' app.
+
+This module contains the ProfileForm class that handles input by authenticated
+users, allowing them to enter Profile object data and edit their user profile.
+"""
+
 from django import forms
-from django.forms import TextInput, Textarea, RadioSelect, FileInput, EmailInput, URLInput
+from django.forms import FileInput, EmailInput, URLInput
 from django.utils.translation import gettext_lazy as _
-from cloudinary.forms import CloudinaryFileField
+from django.core.exceptions import ValidationError
 from django_summernote.widgets import SummernoteWidget
 import cloudinary
 
-from mainpage.models import Entry
 from .models import Profile
 
 
-class EntryForm(forms.ModelForm):
-    """
-    Form class for users to add a new entry 
-    """
-
-    class Meta:
-        """
-        Specify the django model and order of the fields
-        """
-        model = Entry
-        fields = ('title', 'description', 'audio_file', 'tags', 'publish')
-        widgets = {
-            "title": TextInput(attrs={"class":"flex-fill form-control me-3"}),
-            "description": SummernoteWidget(attrs={"rows":"3", "class":"flex-fill form-control me-3", "type":"text", "name":"description"}),
-            "audio_file": FileInput(attrs={"class":"flex-fill form-control me-3"}),
-            "tags": TextInput(attrs={"class":"flex-fill form-control me-3"}),
-            "publish": RadioSelect(),
-        }
-        
-        labels = {
-            'title': _('Title'),
-            'description': _('Description'),
-            'audio_file': _('Audio file (mp3)'),
-            'tags': _('Tags (comma-separated)'),
-            'publish': _('Publicity'),
-        }
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        self.new_file = kwargs.pop('new_file', None)
-        super(EntryForm, self).__init__(*args, **kwargs)
-
-    def clean_title(self):
-        title = self.cleaned_data.get('title')
-        print(title)
-        print(Entry.objects.filter(author=self.user, title=title))
-        instance = self.instance
-        if Entry.objects.filter(author=self.user, title=title).exclude(id=instance.id).exists():
-            raise forms.ValidationError("You have already used this title for another song.")
-        return title
-    
-    def save(self, commit=True):
-        print('entering class')
-        instance = super(EntryForm, self).save(commit=False)
-        instance.author = self.user
-        print(f'Instance in save: {instance}')
-    
-        if self.new_file:
-            old_id = self.initial['audio_file'].public_id
-            #old_id = Entry.objects.get(id=instance.id).audio_file.public_id
-            print(f'changed file: {self.new_file}, old: {old_id}')
-            instance.save()
-            print(cloudinary.uploader.destroy(old_id, resource_type = "video", invalidate=True))
-            # print(cloudinary.uploader.destroy(self.old_id, resource_type = "video", invalidate=True))
-        else:
-            print('just saving in class')
-            instance.save()
-            
-        if commit:
-            print('saving in class with commit true')
-            instance.save()
-
-        return instance
-
-        
 class ProfileForm(forms.ModelForm):
     """
-    Form class for users to edit their profile 
+    Form class for users to edit their profile
+
+    Meta: Specifies the django model, fields, widgets, and labels.
+
+    Methods:
+        clean_pic(): Performs custom validation of the uploaded picture.
+        save(): Overrides super method to deal with Cloudinary files.
     """
 
     class Meta:
-        """
-        Specify the django model and order of the fields
-        """
         model = Profile
-        fields = ('bio', 'pic', 'social', 'email')
+        fields = (
+            "bio",
+            "pic",
+            "website",
+            "email",
+            "facebook",
+            "twitter",
+            "instagram",
+            "youtube",
+            "spotify",
+        )
         widgets = {
-            "bio": SummernoteWidget(attrs={"rows":"3", "class":"flex-fill form-control me-3", "type":"text", "name":"bio"}),
-            "pic": FileInput(attrs={"class":"flex-fill form-control me-3"}),
-            "social": URLInput(attrs={"class":"flex-fill form-control me-3"}),
-            "email": EmailInput(attrs={"class":"flex-fill form-control me-3"}),
+            "bio": SummernoteWidget(
+                attrs={
+                    "rows": "3",
+                    "class": "flex-fill form-control me-3",
+                    "type": "text",
+                    "name": "bio",
+                }
+            ),
+            "pic": FileInput(attrs={"class": "flex-fill form-control me-3"}),
+            "website": URLInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
+            "email": EmailInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
+            "facebook": URLInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
+            "twitter": URLInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
+            "instagram": URLInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
+            "youtube": URLInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
+            "spotify": URLInput(
+                attrs={"class": "flex-fill form-control me-3"}
+            ),
         }
-        
-        labels = {
-            'bio': _('About me'),
-            'pic': _('Profile pic'),
-            'social': _('Social link'),
-            'email': _('Email address'),
-        }
-        
-    def __init__(self, *args, **kwargs):
-        print("initializing profile")
-        self.new_file = kwargs.pop('new_file', None)
-        super(ProfileForm, self).__init__(*args, **kwargs)
-        
-    def save(self, commit=True):
-        print('entering class')
-        instance = super(ProfileForm, self).save(commit=False)
-        print(f'Instance in save: {instance}')
-    
-        if self.new_file:
-            old_id = self.initial['pic'].public_id
-            #old_id = Profile.objects.get(id=instance.id).pic.public_id
-            print(f'changed file: {self.new_file}, old: {old_id}')
-            instance.save()
-            print(cloudinary.uploader.destroy(old_id, invalidate=True))
-            # print(cloudinary.uploader.destroy(self.old_id, resource_type = "video", invalidate=True))
-        else:
-            print('just saving in class')
-            instance.save()
-            
-        if commit:
-            print('saving in class with commit true')
-            instance.save()
 
+        labels = {
+            "bio": _("About me"),
+            "pic": _("Profile pic"),
+            "website": _("Website"),
+            "email": _("Email address"),
+            "facebook": _("Facebook"),
+            "twitter": _("Twitter"),
+            "Instagram": _("Instagram"),
+            "youtube": _("Youtube"),
+            "spotify": _("Spotify"),
+        }
+
+    def save(self, commit=True):
+        """
+        Overrides superclass save method to handle Cloudinary file deletion
+
+        Args:
+            commit (bool, optional): If True, the changes are saved to the database.
+                Defaults to True.
+
+        Returns:
+            Profile: The Profile model instance.
+        """
+
+        instance = self.instance
+
+        if "pic" in self.changed_data:
+            old_id = self.initial["pic"].public_id
+            # The response could be used to send an error message to the admin
+            # if the file couldn't be destroyed
+            cl_response = cloudinary.uploader.destroy(old_id, invalidate=True)
+
+        if commit:
+            super().save()
+
+        # Return the instance in case further modifications are needed in the
+        # view
         return instance
+
+    def clean_pic(self):
+        """
+        Validate image file before passing it on to Cloudinary
+
+        This method performs a few basic checks before Cloudinary runs its own
+        validation and attempts to upload the file.
+
+        Raises:
+            ValidationError: If content type is not image
+            ValidationError: If the file is too large ( > 1MB )
+            ValidationError: If none of the attributes could be read
+
+        Returns:
+            file (UploadedFile): An abstract uploaded file
+        """
+
+        file = self.cleaned_data.get("pic", False)
+        if file and "cloudinary" not in str(type(file)):
+            if not file.content_type in ["image/jpeg", "image/png"]:
+                raise ValidationError(
+                    f"This is not an image file, please"
+                    f" choose a valid file."
+                )
+            if file.size > 1 * 1024 * 1024:
+                raise ValidationError(
+                    f"The image file is too large. The"
+                    f" maximum allowed size is 1MB."
+                )
+            return file
+        elif "cloudinary" in str(type(file)):
+            return file
+        else:
+            raise ValidationError("Couldn't read uploaded file")

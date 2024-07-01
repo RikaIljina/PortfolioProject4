@@ -1,0 +1,119 @@
+{% load static %}
+{% load humanize %}
+
+
+<!-- https://bbbootstrap.com/snippets/bootstrap-comment-section-reply-input-and-vote-up-and-down-73363704 -->
+
+
+<div class="row g-0 justify-content-center pb-5">
+    <div class="card-full-page mt-1 mt-md-2 mb-md-2 p-1">
+        <div class="card card-comments no-shadow">
+
+            <div class="col-md-10 m-auto">
+
+                <div class="comment-bottom bg-white p-1 p-md-2 px-md-4">
+
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="" id="commentForm"
+                        class="d-flex flex-row add-comment-section align-items-start gap-3 mt-2 mt-md-4 mb-2 mb-md-4">
+                        <div class="d-flex flex-row flex-fill add-comment-section align-items-start gap-1">
+                            {% if "placeholder" in user.profile.pic.url %}
+                            <img class="img-responsive flex-shrink-0 rounded-circle mt-4 mb-4 avatar-md"
+                                src="{% static 'images/default_profile.webp' %}" width="38" alt="Placeholder avatar">
+                            {% else %}
+                            <img class="img-responsive flex-shrink-0 rounded-circle mt-4 mb-4 avatar-md"
+                                src="{{ user.profile.pic.url }}" width="38" alt="User profile picture">
+                            {% endif %}
+
+                            <div class="flex-fill align-self-center mt-2 mt-md-4 mb-2 mb-md-4">
+                                {% csrf_token %}
+                                <span class="visually-hidden">{{ comment_form.label }}</span>
+                                {{ comment_form.content }}
+                            </div>
+                        </div>
+
+                        <div class="mt-sm-4 mb-sm-4">
+                            <button class="btn btn-comment hover-highlight" id="submitButton" name="addNew"
+                                type="submit">Comment</button>
+                        </div>
+
+                    </form>
+
+
+                    {% else %}
+                    <div class="m-2 text-muted">Log in to leave a comment</div>
+                    {% endif %}
+
+                    <!-- All comments -->
+                    {% for comment in comments %}
+                    <div class="commented-section mt-2">
+                        <hr>
+                        <div class="d-flex flex-row align-items-center">
+                            {% if "placeholder" in comment.author.profile.pic.url %}
+                            <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
+                                src="{% static 'images/default_profile.webp' %}" width="30" alt="Placeholder avatar">
+                            {% else %}
+                            <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
+                                src="{{ comment.author.profile.pic.url }}" width="30" alt="User profile picture">
+                            {% endif %}
+                            <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1"
+                                aria-label="Open user profile page">
+                                <h5>{{ comment.author }}</h5>
+                            </a>
+                            <p class="flex-fill"></p>
+                            <p class="mt-1 ms-2 text-muted text-end">{{ comment.created_on|naturalday }}</p>
+                        </div>
+
+                        <div id="comment{{ comment.id }}" class="comment-text-sm my-2">
+                            <span>{{ comment.content|linebreaks }}</span>
+                        </div>
+
+                        {% if user.is_authenticated and comment.author == user %}
+                        <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 d-none">
+                            <form method="POST" action="" id="editCommentForm{{ comment.id }}"
+                                class="d-flex flex-column flex-sm-row flex-fill gap-3 mt-4 mb-4">
+                                {% csrf_token %}
+
+                                <label for="updatedComment{{ comment.id }}" class="visually-hidden">Your
+                                    Comment:</label>
+                                <textarea type="text" class="form-control" name="content"
+                                    id="updatedComment{{ comment.id }}"></textarea>
+                                <!-- <input type="hidden" name="next" value="{{ request.path }}"> -->
+                                <div class="d-flex flex-column flex-shrink-0 ms-2">
+                                    <button class="btn btn-update align-self-start hover-highlight" name="updateOld"
+                                        type="submit">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-edit hover-highlight"
+                                data-comment_id="{{ comment.id }}" aria-label="Edit comment"><i
+                                    class="fa-solid fa-pen"></i></button>
+                            <button type="button" class="btn btn-delete hover-highlight"
+                                data-comment_id="{{ comment.id }}" data-bs-toggle="modal"
+                                data-bs-target="#modalDeleteComment" aria-label="Delete comment"><i
+                                    class="fa-solid fa-trash"></i></button>
+                            <!--  -->
+
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal for comment deletion -->
+{% with modal_text="Are you sure you want to delete your comment? This action cannot be undone!" modal_id="modalDeleteComment" modal_title_id="modalTitleIdDeleteComment" modal_title_text="Delete comment?" delete_button_id="deleteCommentConfirm" %}
+{% include 'mainpage/snippets/modal.html' %}
+{% endwith %}
+
+
+{% block extras %}
+<script src="{% static 'js/comments.js' %}"></script>
+{% endblock %}

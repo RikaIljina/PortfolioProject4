@@ -1,61 +1,58 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}">
+
 {% endblock %}
 
 
 {% block content %}
 
-<section style="background-color: #f4f5f7;">
-    
-    {% include 'profile_card.html' %}
+<div class="row g-0 sidebar-margin">
+    <div class="col-12">
+        {% include 'users/snippets/profile_card.html' %}
+    </div>
 
-    <div class="container">
-        <h1>My Entries</h1>
+    <div class="col-12 col-md-10 m-auto">
 
-        <form method="GET">
-            <p>Sort entries:</p>
-            <button name="sorted" id="by_likes" value="by_likes" class="btn btn-primary" href="#" type="submit">Most
-                popular</button>
-            <button name="sorted" id="by_date" value="by_date" class="btn btn-primary" href="#" type="submit">Newest
-                first</button>
-        </form>
-
-        <!-- Maybe load entry details for this user on the profile page? -->
-        
-        {% for entry in page_obj %}
-        <div class="card">
-            <div class="card-header">
-                <a href="{% url 'entry_details' entry.slug %}">
-                    <h3>{{ entry.title }}</h3>
-                </a>
-                <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
-            </div>
-            <div class="card-body">
-                <audio controls class="w-100">
-                    <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
-                    Your browser does not support the audio tag.
-                </audio>
-                <p>
-                    {{ entry.tags.all|join:", " }}
-                </p>
-
-                {% include 'like_comment_summary.html' %}
-
+        <hr>
+        <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center filter-results">
+            <div class="col-12 py-auto">
+                {% if sorted_param == '?sorted=by_date' %}
+                <h3 class="">Most <b>recent</b> entries</h3>
+                {% elif sorted_param == '?sorted=by_likes' %}
+                <h3 class="">Most <b>liked</b> entries</h3>
+                {% else %}
+                <h3 class="">All entries</h3>
+                {% endif %}
             </div>
         </div>
-        {% empty %}
-        <div>
-            <p>This user has not uploaded any songs yet.</p>
-        </div>
-        {% endfor %}
+        <hr>
 
-        {% include 'pagination.html' %}
+        <div class="row g-0">
+            <div class="m-auto col">
+
+                <div
+                    class="d-flex flex-wrap w-100 m-auto card-container justify-content-center justify-content-md-start ">
+
+                    {% for entry in page_obj %}
+          {% include 'entries/snippets/entry_cards.html' %}
+          {% endfor %}
+
+                </div>
+            </div>
+        </div>
 
     </div>
-</section>
+
+    {% include 'pagination.html' %}
+
+</div>
+<div class="mb-4"></div>
+
 
 {% endblock %}
 

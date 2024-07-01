@@ -1,88 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/entries-styles.css' %}" />
+{% endblock %}
 
 {% block content %}
-
-<div class="container">
-    <h1>MusicLab</h1>
-    <hr />
-    <a href="{% url 'edit_entry' user.username entry.slug %}" class="btn btn-success" role="button">Edit Entry</a>
-
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete">Delete Entry</button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">
-                        Delete {{ entry.title }}?
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">Are you sure you want to delete {{ entry.title }}? This action cannot be undone!</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        No, abort
-                    </button>
-                    <a id="deleteConfirm" href="{% url 'delete_entry' user.username entry.slug %}"
-                        class="btn btn-danger" role="button">Yes, delete</a>
-                </div>
+<div class="row g-0 h-100 sidebar-margin">
+    <div class="m-auto col-12 col-md-10">
+        <div class="row g-0 justify-content-center">
+            <div class="entry-button-container mt-1 mt-md-2 mb-md-2 p-1">
+                <a href="{% url 'edit_entry' user.username entry.slug %}" class="btn btn-edit-entry hover-highlight"
+                    role="button"><i class="fa-solid fa-pen"></i><span class="ms-2">Edit Entry</span></a>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-delete-entry hover-highlight" data-bs-toggle="modal"
+                    data-bs-target="#modalDeleteEntry"><i class="fa-solid fa-trash"></i><span class="ms-2">Delete
+                        Entry</span></button>
             </div>
+
         </div>
+
+        <div class="row g-0 justify-content-center">
+
+            {% include 'entries/snippets/entry_fullpage.html' %}
+             
+        </div>
+
+        {% include 'comments/snippets/comment_section.html' %}
+
     </div>
 
+    <!-- Modal for entry deletion -->
+    {% url 'delete_entry' user.username entry.slug as delete_url %}
+    {% with modal_text=modal_text modal_id="modalDeleteEntry" modal_title_id="modalTitleIdDeleteEntry" modal_title_text=modal_title delete_button_id="deleteEntryConfirm" new_url=delete_url %}
+    {% include 'mainpage/snippets/modal.html' %}
+    {% endwith %}
 
-
-    <!-- <form action="" method="GET">
-        <button class="btn btn-success" name="edit" value="{{ entry.id }}" type="submit">Edit Entry</button>
-    </form> -->
-    <div class="card">
-        <div class="card-header">
-            <h3>
-                {% if entry.publish == 0 %}
-                <i class="fa-solid fa-lock"></i>
-                {% else %}
-                <i class="fa-solid fa-globe"></i>
-                {% endif %}
-                {{ entry.title }}
-            </h3>
-            <p>Created: {{ entry.created_on|date:"Y, M d" }}</p>
-        </div>
-        <div class="card-body">
-            <div>{{ entry.description | safe}}</div>
-            <audio controls>
-                <source src="{{ entry.audio_file.url }}" type="audio/mpeg" />
-                Your browser does not support the audio tag.
-            </audio>
-            <p>{{ entry.tags.all|join:", " }}</p>
-
-            {% include 'like_comment_summary.html' %}
-        </div>
-        <div></div>
-
-        {% include 'comment_section.html' %}
-    </div>
 </div>
 
 {% endblock %}
 
+
+
 {% block extras %}
-
-<script>
-    var modalId = document.getElementById('modalId');
-
-    modalId.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        let button = event.relatedTarget;
-        // Extract info from data-bs-* attributes
-        let recipient = button.getAttribute('data-bs-whatever');
-
-        // Use above variables to manipulate the DOM
-    });
-</script>
-
+<script src="{% static 'js/likes.js' %}"></script>
 {% endblock %}
