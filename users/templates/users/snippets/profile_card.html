@@ -18,7 +18,7 @@
 
                     <h3>{{ profile.user.username }}</h3>
                     <p>Joined {{ profile.joined|naturalday }}</p>
-                    
+
                     <!-- 'Edit profile' button -->
                     {% if user.is_authenticated and profile == user.profile %}
                     <a href="{% url 'edit_profile' user.username %}" aria-label="Opens the user profile for editing"><i class="far fa-edit mb-1"></i></a>
@@ -33,7 +33,7 @@
                         <div class="row pt-1">
                             <div class="col-12 mb-3">
                                 {% if profile.bio %}
-                                <div class="text-muted">{{ profile.bio|safe }}</div>
+                                <div>{{ profile.bio|safe }}</div>
                                 {% else %}
                                 <p class="text-muted"> --- </p>
                                 {% endif %}
