@@ -21,7 +21,7 @@ h3 {
   font-weight: 700;
 }
 
-/* .filter-results {
+/* .content-header {
   background-color: #95d2b3;
 } */
 
@@ -64,6 +64,11 @@ h3 {
 .card-desc {
   min-height: fit-content;
   border-top: none;
+}
+
+.card-desc a {
+  text-decoration: underline;
+  color: #55ad9b;
 }
 
 /* Remove margin bottom from p elements to reduce line height in the HTML description area;

@@ -5,6 +5,7 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'css/user-profile-styles.css' %}">
 <link rel="stylesheet" href="{% static 'css/entries-styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/mainpage-styles.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -16,7 +17,7 @@
 
   <div class="col-12 col-md-10 m-auto px-1">
     <hr>
-        <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center filter-results">
+        <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center content-header">
             <div class="col-12 py-auto">
                 {% if sorted_param == '?sorted=by_date' %}
                 <h1 class="">Most <b>recent</b> entries</h1>

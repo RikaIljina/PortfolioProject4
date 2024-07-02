@@ -33,7 +33,7 @@
                         <h6>About me</h6>
                         <hr class="mt-0 mb-2">
                         <div class="row pt-1">
-                            <div class="col-12 mb-3">
+                            <div class="col-12 mb-3 bio">
                                 {% if profile.bio %}
                                 <div>{{ profile.bio|safe }}</div>
                                 {% else %}
@@ -54,22 +54,22 @@
                             <a href="mailto:{{ profile.email }}" aria-label="Opens email app in a new tab to send email" target="_blank"><i class="fa fa-envelope fa-lg"></i></a>
                             {% endif %}
                             {% if profile.website %}
-                            <a href="{{ profile.website }}" aria-label="Opens website link in a new tab" target="_blank"><i class="fa-solid fa-globe"></i></a>
+                            <a href="{{ profile.website }}" aria-label="Opens website link in a new tab" target="_blank"><i class="fa-solid fa-globe fa-lg"></i></a>
                             {% endif %}
                             {% if profile.facebook %}
-                            <a href="{{ profile.facebook }}" aria-label="Opens facebook link in a new tab" target="_blank"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                            <a href="{{ profile.facebook }}" aria-label="Opens facebook link in a new tab" target="_blank"><i class="fab fa-facebook-f fa-lg"></i></a>
                             {% endif %}
                             {% if profile.twitter %}
-                            <a href="{{ profile.twitter }}" aria-label="Opens twitter (X) link in a new tab" target="_blank"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                            <a href="{{ profile.twitter }}" aria-label="Opens twitter (X) link in a new tab" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>
                             {% endif %}
                             {% if profile.instagram %}
-                            <a href="{{ profile.instagram }}" aria-label="Opens instagram link in a new tab" target="_blank"><i class="fab fa-instagram fa-lg me-3"></i></a>
+                            <a href="{{ profile.instagram }}" aria-label="Opens instagram link in a new tab" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>
                             {% endif %}
                             {% if profile.youtube %}
-                            <a href="{{ profile.youtube }}" aria-label="Opens youtube link in a new tab" target="_blank"><i class="fab fa-youtube fa-lg me-3"></i></a>
+                            <a href="{{ profile.youtube }}" aria-label="Opens youtube link in a new tab" target="_blank"><i class="fab fa-youtube fa-lg"></i></a>
                             {% endif %}
                             {% if profile.spotify %}
-                            <a href="{{ profile.spotify }}" aria-label="Opens spotify link in a new tab" target="_blank"><i class="fab fa-spotify fa-lg me-3"></i></a>
+                            <a href="{{ profile.spotify }}" aria-label="Opens spotify link in a new tab" target="_blank"><i class="fab fa-spotify fa-lg"></i></a>
                             {% endif %}
                         </div>
                     </div>

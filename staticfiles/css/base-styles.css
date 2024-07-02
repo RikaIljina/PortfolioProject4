@@ -30,6 +30,11 @@ a:focus-visible {
   color: rgb(39, 36, 36);
 }
 
+.content-header h1 {
+  background-color: #95d2b3;
+  font-size: 1.2rem;
+}
+
 .font-light {
   font-weight: 400;
   opacity: 0.4;
@@ -50,16 +55,6 @@ a:focus-visible {
   color: rgb(0, 0, 0);
 }
 
-.nav-link {
-  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition */
-  /* outline: 1px solid transparent;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform;
-  perspective: 1000;
-  -webkit-perspective: 1000; */
-}
 
 .nav-link-box.active,
 .hover-highlight.active {
@@ -72,21 +67,6 @@ a:focus-visible {
   color: rgb(36, 43, 33);
 }
 
-/* .hvr-grow-rotate:before {
-  background-color: rgb(0, 0, 0);
-} */
-
-.hvr-grow-rotate {
-  display: inline-block;
-  vertical-align: middle;
-  -webkit-transform: perspective(0.5px) translateZ(0);
-  transform: perspective(0.5px) translateZ(0);
-  box-shadow: 0 0 1px transparent;
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -webkit-transition-property: transform;
-  transition-property: transform;
-}
 
 #toggler-btn {
   padding: 0.1rem;

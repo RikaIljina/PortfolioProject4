@@ -10,11 +10,15 @@
 {% block content %}
 <div class="row g-0 sidebar-margin">
     <div class="m-auto col-12 col-md-10">
-        <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center justify-content-md-start card-full-page">
-            <hr>
-            <p class="px-3 px-md-0">Your favorites</p>
-            <hr>
+        <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center justify-content-md-start content-header">
+            <div class="col-12 py-auto">
+                <hr>
+                <h1 class="px-3 px-md-0">Your favorites</h1>
+                <hr>
+            </div>
+        </div>
 
+        <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center justify-content-md-start card-full-page">
             {% for like in page_obj %}
             {% with entry=like.entry %}
             {% include 'entries/snippets/entry_cards.html' %}

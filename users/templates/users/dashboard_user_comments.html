@@ -10,12 +10,16 @@
 {% block content %}
 <div class="row g-0 sidebar-margin">
     <div class="m-auto col-12 col-md-10">
+        <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center justify-content-md-start content-header">
+            <div class="col-12 py-auto">
+                <hr>
+                <h1 class="px-3 px-md-0">Your comments</h1>
+                <hr>
+            </div>
+        </div>
 
         <div class="row g-0 px-md-4 px-1 mt-3 justify-content-center card-full-page card-comments">
-            <hr>
-            <p class="px-3 px-md-0">Your comments</p>
-            <hr>
-
+            
             {% for comment in page_obj %}
             <!-- Entry author and title -->
             <div class="card card-header d-flex flex-row gap-2">
