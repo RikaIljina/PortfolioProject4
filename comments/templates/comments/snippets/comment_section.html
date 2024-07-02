@@ -23,14 +23,15 @@
                             {% endif %}
 
                             <div class="flex-fill align-self-center mt-2 mt-md-4 mb-2 mb-md-4">
-                                <span class="visually-hidden">{{ comment_form.label }}</span>
+                                <label for="{{ comment_form.content.auto_id }}"
+                                class="sr-only">{{ comment_form.content.label }}</label>
                                 {{ comment_form.content }}
                             </div>
                         </div>
 
                         <div class="mt-sm-4 mb-sm-4">
                             <button class="btn btn-comment hover-highlight" id="submitButton" name="addNew"
-                                type="submit">Comment</button>
+                                type="submit">Submit</button>
                         </div>
                     </form>
 
@@ -52,7 +53,7 @@
                                 src="{{ comment.author.profile.pic.url }}" width="30" alt="User profile picture">
                             {% endif %}
                             <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1"
-                                aria-label="Open user profile page">
+                                aria-label="Open profile page of {{ comment.author }}">
                                 <h5>{{ comment.author }}</h5>
                             </a>
                             <p class="flex-fill"></p>
@@ -64,13 +65,13 @@
                             <span>{{ comment.content|linebreaks }}</span>
                         </div>
 
-                        <!-- Comment edit form; hidden on default, revealed after user clicks the 'Edit comment' button -->
+                        <!-- Comment edit form; hidden by default, revealed after user clicks the 'Edit comment' button -->
                         {% if user.is_authenticated and comment.author == user %}
                         <div id="commentform{{ comment.id }}" class="comment-text-sm my-2 d-none">
                             <form method="POST" action="" id="editCommentForm{{ comment.id }}"
                                 class="d-flex flex-column flex-sm-row flex-fill gap-3 mt-4 mb-4">
                                 {% csrf_token %}
-                                <label for="updatedComment{{ comment.id }}" class="visually-hidden">
+                                <label for="updatedComment{{ comment.id }}" class="sr-only">
                                     Your Comment:
                                 </label>
                                 <textarea type="text" class="form-control" name="content"

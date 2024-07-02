@@ -33,9 +33,12 @@ window.addEventListener("DOMContentLoaded", function () {
     // mobile device and if they already clicked on a filter and the view
     // shows a filtered selection of entries
     for (let filterCat of filterCategories) {
-      if (!sidebarAutoCollapse && filterCat.classList.contains("force-show") &&
-        localStorage.getItem("sidebarCollapsed") === "false") {
-        $(filterCat).collapse('show');
+      if (
+        !sidebarAutoCollapse &&
+        filterCat.classList.contains("force-show") &&
+        localStorage.getItem("sidebarCollapsed") === "false"
+      ) {
+        $(filterCat).collapse("show");
         break;
       } else if (
         sidebarAutoCollapse &&

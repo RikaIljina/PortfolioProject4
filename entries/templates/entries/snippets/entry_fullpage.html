@@ -9,7 +9,7 @@
             {% if not dashboard_view %}
             <p>
                 <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
-                    aria-label="Opens the user profile page">
+                    aria-label="Opens the profile page of {{ entry.author }}">
                 {% if "placeholder" in entry.author.profile.pic.url %}
                 <img src="{% static 'images/default_profile.webp' %}" alt="Placeholder avatar" 
                     width="30" height="30" class="rounded-circle avatar-sm">
@@ -29,8 +29,10 @@
                 <!-- The dashboard page adds a private/public icon to each entry -->
                 {% if entry.publish == 0 %}
                 <i class="fa-solid fa-lock"></i>
+                <span class="sr-only">Private</span>
                 {% else %}
                 <i class="fa-solid fa-globe"></i>
+                <span class="sr-only">Public</span>
                 {% endif %}
                 {{ entry.title }}
             </h3>
@@ -50,7 +52,7 @@
             <div class="d-flex flex-column p-2 p-md-3">
                 <p>Previous versions:</p>
                 {% for file in old_files.values %}
-                <audio controls class="my-1">
+                <audio controls preload="none" class="my-1">
                     <source src="{{ file.0 }}" type="audio/mpeg">
                     Your browser does not support the audio tag.
                 </audio>

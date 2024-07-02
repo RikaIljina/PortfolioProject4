@@ -7,11 +7,16 @@
 
     <!-- Toggle button to expand/collapse sidebar -->
     <div class="row g-0 sidebar-toggle-div pos-relative">
-        <button class="btn sidebar-toggle-btn hover-highlight" id="sidebar-toggle-btn">
-            <span class="toggle-icon-collapse d-none" id="toggle-icon-collapse"><i
-                    class="fa-solid fa-angles-left"></i></span>
-            <span class="toggle-icon-expand d-inline" id="toggle-icon-expand"><i
-                    class="fa-solid fa-angles-right"></i></span>
+        <button class="btn sidebar-toggle-btn hover-highlight" id="sidebar-toggle-btn"
+            aria-labelledby="toggle-icon-collapse toggle-icon-expand">
+            <span class="toggle-icon-collapse d-none" id="toggle-icon-collapse">
+                <i class="fa-solid fa-angles-left"></i>
+                <span class="sr-only">Collapse sidebar</span>
+            </span>
+            <span class="toggle-icon-expand d-inline" id="toggle-icon-expand">
+                <i class="fa-solid fa-angles-right"></i>
+                <span class="sr-only">Expand sidebar</span>
+            </span>
         </button>
     </div>
 
@@ -22,20 +27,23 @@
                 <!-- Sidebar content for the dashboard view -->
                 {% if request.path|slice:'11' == '/dashboard/' and request.user.is_authenticated %}
                 <li class="nav-item hover-highlight">
-                    <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
+                    <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="Back home">
                         <i class="fa-solid fa-house"></i>
                         <span class="ms-1 d-none filter-title">Back Home</span></a>
                 </li>
                 <li><hr class="mx-2"></li>
                 <li class="nav-item hover-highlight active">
                     <a href="{% url 'dashboard' user.username %}"
-                        class="nav-link mx-md-2 px-3 align-middle">
+                        class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="Dashboard">
                         <i class="fa-solid fa-folder-open"></i>
                         <span class="ms-1 d-none filter-title">Dashboard</span></a>
                 </li>
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'new_entry' user.username %}"
-                        class="nav-link mx-md-2 px-3 align-middle">
+                        class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="Add new entry">
                         <i class="fa-solid fa-square-plus"></i>
                         <span class="ms-1 d-none filter-title">New Entry</span></a>
                 </li>
@@ -51,7 +59,8 @@
                 <li class="nav-item hover-highlight 
                     {% if not enable_sorting %}disabled{% endif %}">
                     <a href="{{ request.path }}" class="nav-link mx-md-2 px-3 align-middle 
-                        {% if not enable_sorting %}disabled{% endif %}">
+                        {% if not enable_sorting %}disabled{% endif %}"
+                        aria-label="Reset all sorting">
                         <i class="fa-solid fa-xmark"></i>
                         <span class="ms-1 d-none filter-title">Reset</span>
                     </a>
@@ -60,7 +69,8 @@
                     {% if not enable_sorting %}disabled{% endif %}">
                     <a class="nav-link mx-md-2 px-3 align-middle filter-link 
                         {% if not enable_sorting %}disabled{% endif %}"
-                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_published" {% endif %}>
+                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_published"
+                        aria-label="Show unpublished first" {% endif %}>
                         <i class="fa-solid fa-lock"></i>
                         <span class="ms-1 d-none filter-title">unpublished</span>
                     </a>
@@ -69,16 +79,18 @@
                     {% if not enable_sorting %}disabled{% endif %}">
                     <a class="nav-link mx-md-2 px-3 align-middle filter-link 
                         {% if not enable_sorting %}disabled{% endif %}"
-                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_updated" {% endif %}>
+                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_updated"
+                        aria-label="Show last updated first" {% endif %}>
                         <i class="fa-solid fa-pen"></i>
                         <span class="ms-1 d-none filter-title">last updated</span>
                     </a>
                 </li>
                 <li class="nav-item hover-highlight 
                     {% if not enable_sorting %}disabled{% endif %}">
-                    <a class="nav-link mx-md-2 px-3 align-middle filter-link 
+                    <a class="nav-link mx-md-2 px-3 align-middle filter-link
                         {% if not enable_sorting %}disabled{% endif %}"
-                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_likes" {% endif %}>
+                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_likes" 
+                        aria-label="Show most liked first" {% endif %}>
                         <i class="fa-solid fa-heart"></i>
                         <span class="ms-1 d-none filter-title">likes</span>
                     </a>
@@ -87,7 +99,8 @@
                     {% if not enable_sorting %}disabled{% endif %}">
                     <a class="nav-link mx-md-2 px-3 align-middle filter-link 
                         {% if not enable_sorting %}disabled{% endif %}"
-                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_date" {% endif %}>
+                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_date" 
+                        aria-label="Show recent first" {% endif %}>
                         <i class="fa-solid fa-clock"></i>
                         <span class="ms-1 d-none filter-title">recent</span>
                     </a>
@@ -95,13 +108,15 @@
                 <li><hr class="mx-2"></li>
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'user_favorites' user.username %}"
-                        class="nav-link mx-md-2 px-3 align-middle">
+                        class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="My favorites">
                         <i class="fa-solid fa-star"></i>
                         <span class="ms-1 d-none filter-title">My Favorites</span></a>
                 </li>
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'user_comments' user.username %}"
-                        class="nav-link mx-md-2 px-3 align-middle">
+                        class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="My comments">
                         <i class="fa-solid fa-comment"></i>
                         <span class="ms-1 d-none filter-title">My Comments</span></a>
                 </li>
@@ -111,7 +126,8 @@
                 {% if request.user.is_authenticated %}
                 <li class="nav-item hover-highlight">
                     <a href="{% url 'dashboard' user.username %}"
-                        class="nav-link mx-md-2 px-3 align-middle">
+                        class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="To dashboard">
                         <i class="fa-solid fa-folder-open"></i>
                         <span class="ms-1 d-none filter-title">To Dashboard</span></a>
                 </li>
@@ -119,7 +135,8 @@
                 {% endif %}
 
                 <li class="nav-item hover-highlight active">
-                    <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle">
+                    <a href="{% url 'home' %}" class="nav-link mx-md-2 px-3 align-middle"
+                        aria-label="Home">
                         <i class="fa-solid fa-house"></i>
                         <span class="ms-1 d-none filter-title">Home</span></a>
                 </li>
@@ -128,7 +145,8 @@
                     {% if not enable_sorting %}disabled{% endif %}">
                     <a href="{% if profile_view %}{{ request.path }}{% else %}{% url 'home' %}{% endif %}"
                         class="nav-link mx-md-2 px-3 align-middle 
-                            {% if not enable_sorting %}disabled{% endif %}">
+                        {% if not enable_sorting %}disabled{% endif %}"
+                        aria-label="Reset filters and sorting">
                         <i class="fa-solid fa-xmark"></i>
                         <span class="ms-1 d-none filter-title">Reset all</span>
                     </a>
@@ -143,7 +161,8 @@
                 <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
                     <a class="nav-link mx-md-2 px-3 align-middle filter-link 
                         {% if not enable_sorting %}disabled{% endif %}"
-                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_likes" {% endif %}>
+                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_likes" {% endif %}
+                        aria-label="Show most liked entries first">
                         <i class="fa-solid fa-heart"></i>
                         <span class="ms-1 d-none filter-title">likes</span>
                     </a>
@@ -151,7 +170,8 @@
                 <li class="nav-item hover-highlight {% if not enable_sorting %}disabled{% endif %}">
                     <a class="nav-link mx-md-2 px-3 align-middle filter-link 
                         {% if not enable_sorting %}disabled{% endif %}"
-                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_date" {% endif %}>
+                        {% if enable_sorting %} href="{{ request.path }}?sorted=by_date" {% endif %}
+                        aria-label="Show recent entries first">
                         <i class="fa-solid fa-clock"></i>
                         <span class="ms-1 d-none filter-title">recent</span>
                     </a>
@@ -167,7 +187,8 @@
                 <li class="nav-item">
                     <!-- Link that opens the username collapsible -->
                     <a href="#submenu2" data-bs-toggle="collapse"
-                        class="nav-link hover-highlight align-middle filter-link" aria-expanded="false">
+                        class="nav-link hover-highlight align-middle filter-link" aria-expanded="false" 
+                        aria-label="Open list with all users">
                         <i class="fa-solid fa-user ms-md-2 ps-3"></i>
                         <span class="ms-1 d-none filter-title">user</span>
                     </a>
@@ -177,10 +198,10 @@
                         {% for user, pic in users.items %}
                         <li class="nav-item hover-highlight">
                             <a href="{% url 'filter_user' user %}"
-                                class="nav-link px-md-4 px-3 d-block filter-name">
+                                class="nav-link px-md-4 px-3 d-block filter-name" aria-label="{{ user }}">
                                 {% if "placeholder" in pic %}
                                 <img loading="lazy" src="{% static 'images/default_profile.webp' %}"
-                                    alt="user profile picture" width="30" height="30"
+                                    alt="placeholder avatar" width="30" height="30"
                                     class="rounded-circle avatar-sm">
                                 {% else %}
                                 <img loading="lazy" src="{{ pic }}" alt="user profile picture"
@@ -195,7 +216,8 @@
                 <li class="nav-item menu-margin">
                     <!-- Link that opens the tag name collapsible -->
                     <a href="#submenu3" data-bs-toggle="collapse"
-                        class="nav-link hover-highlight align-middle filter-link" aria-expanded="false">
+                        class="nav-link hover-highlight align-middle filter-link" aria-expanded="false" 
+                        aria-label="Open list with all tags">
                         <i class="fa-solid fa-tag ms-md-2 ps-3"></i>
                         <span class="ms-1 d-none filter-title">tag</span>
                     </a>
@@ -205,7 +227,7 @@
                         {% for tag, amount in tags.items %}
                         <li class="nav-item hover-highlight">
                             <a href="{% url 'filter_tag' tag %}"
-                                class="nav-link mx-md-4 ps-3 pe-5 filter-name">
+                                class="nav-link mx-md-4 ps-3 pe-5 filter-name" aria-label="{{ tag }}: {{ amount }}">
                                 <span class="ms-1 d-inline tag-name">{{ tag }}</span><i
                                     class="fa-solid fa-equals text-muted tag-decor"></i>
                                 <div class="text-muted tag-amount d-inline-block">{{ amount }}</div>
@@ -223,7 +245,7 @@
     <div class="nav-item about-link-container" id="about-link-container">
         <hr class="mx-2 mb-1">
         <div class="hover-highlight">
-            <a href="{% url 'about' %}" class="nav-link mx-md-2 px-3 d-block">
+            <a href="{% url 'about' %}" class="nav-link mx-md-2 px-3 d-block" aria-label="Open the about page">
                 <i class="fa-solid fa-circle-question"></i>
                 <span class="ms-1 d-none filter-title">About</span></a>
         </div>

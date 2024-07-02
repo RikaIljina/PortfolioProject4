@@ -26,11 +26,9 @@ For creators to quickly upload their music with a description and to browse and 
 For visitors to get immediate access to all published musical creations and to feel intrigued about joining and uploading their own work.
 
 ### Future Goals:
-- Collaboration page that allows creators to start joint projects
-- Flagging option to allow users to report inappropriate content
-- Direct messaging system for private user communication
-- Notifications that inform creators about new comments or likes
-- Follower feature
+An important feature that I did not had the time to implement yet is "Collaboration projects". This feature would greatly help promote the core principle of the page - bringing creators together on joint projects - by streamlining the work on a project and reducing some of the social hurdles of teamwork.
+In short, creators could start a collab project and invite specific users to join or allow all interested users to request admission to the project. All members would be able upload their demos and mixes to the project and discuss them, before releasing the final master to the public.
+
 
 ## User Stories
 
@@ -70,10 +68,19 @@ For visitors to get immediate access to all published musical creations and to f
 
 ## Design
 
+Being someone who gets easily distracted by popups, banners, notifications, and other elements demanding immediate attention, and having watched others struggle with an overwhelming flood of information and hard-to-find functions, I tried to focus on readability and ease-of-use when choosing link placement, fonts, and icons. I strived to build an accessible page that is easy to navigate and puts the content - the audio files - first.
+To achieve this, I ...
+- used a simple, readable font
+- used commonly known icons
+- refrained from using too many colors, too dark or too bright backgrounds
+- made sure the audio elements would not autoplay on load
+- made sure that links and buttons were selectable with the ```TAB``` key
+- made sure to hide or disable elements irrelevant to the current page
+
 ### Planning
 As part of the planning process, I made a list of all basic functions that an MVP should have and drafted the basic page layout.
 
-The project's kanban board can be found here: [MusicLab Kanban board](https://github.com/users/RikaIljina/projects/2/views/1)
+The project's kanban board with the core user stories can be found here: [MusicLab Kanban board](https://github.com/users/RikaIljina/projects/2/views/1)
 
 ### Wireframes:
 
@@ -174,15 +181,18 @@ Users can use the 'Login'/'Signup' buttons on the upper navbar to create an acco
 
 They can sign out via the link in the dropdown with their avatar and name in the navbar:
 
+#### Accessibility
+!!!
+
 #### Error pages
 
 The website has four custom  error pages:
-- 404 for pages that don't exist
-- 403 for cases where users try to access a page or perform an action they are not authorized to
 - 400 for bad requests
+- 403 for cases where users try to access a page or perform an action they are not authorized to
+- 404 for pages that don't exist
 - 500 for server errors
 
-All error pages provide a description of the error and a link to get back to the main page. 
+All error pages provide a short description of the error and a link to get back to the main page. 
 
 ### Future Features:
 
@@ -388,7 +398,34 @@ PortfolioProject4
 - couldn't save form without ```enctype="multipart/form-data"```
 - relied on changed_data and tried to get file attribute; file field was changed but 'file' was empty
 
-### Unfixed bug
+Issues:
+
+Link focus when tabbing
+
+Filtering by user only makes sense with a rather small user base. Should the site have thousands of users, retrieving them all to scroll through makes no sense from a UX perspective.
+The same goes for tags: since I allow users to enter their own tags, theoretically there is no limit to how many tags could accumulate in the database in the future. Thus, my filtering feature can only be seen as a temporary measure.
+It should be replaced by a free text search to allow users to find tags, usernames, and titles. To this end, indexing and search vectors must be implemented.
+Also, a handful of meaningful categories should be added as top-level tagging to help users with labelling their work and to allow for quick and useful filtering.
+
+Since my website queries the database on almost every page load and every query costs time and resources, I tried to optimize the queries to the extent of my capabilites. Using the methods ```select_related()``` and ```prefetch_related()```, I was able to reduce the amount of queries to an average of 10 per page, regardless of the amount of entries, users, or comments retrieved.
+I was unable to achieve the same result on the admin page though, where retrieving a list of comments took over 40 queries. Maybe removing items from the list view would help ...
+
+I allow users to keep uploaded files as a kind of "version history" when adding a new file to their existing entry. To make sure they see all their uploaded files and can delete them selectively while editing the entry, I added audio elements and delete buttons to the entry form view and wired up the buttons via forms.js. I was yet unable to properly override the Django admin form view to achieve the same result in the admin panel. Thus, in order to delete a specific file from the version history, the admin has to manually copy the ID of the Cloudinary file from the text area containing the json dictionary ```old_files```, log in to Cloudinary, delete the file there, and delete the key-value pair for the file from the text area. This is a tedious and error-prone process and must be fixed in the future.
+
+Whenever an attempt is made to destroy a Cloudinary file via the method ```...```, the server returns a response containing a dictionary: ```{'result': 'ok'}``` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
+
+Caching:
+
+
+Security considerations
+
+HTML in summernote
+
+Storage:
+
+Cloudinary
+
+### Unfixed bugs
 
 ## Technologies Used
 ### Main Languages Used
