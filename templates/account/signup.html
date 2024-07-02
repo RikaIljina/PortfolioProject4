@@ -35,7 +35,8 @@
             </div>
             <div class="col-12 col-sm-6 active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="{% if form.password1.errors %}{{ form.password1.errors.0|escape}}{% endif %}">
-                {{ form.password1 }}
+                <!-- Creating the form element directly here to remove the redundant aria-describedby, since password reset is not implemented yet -->
+                <input type="password" name="password1" placeholder="Password" autocomplete="new-password" required="" id="id_password1">
             </div>
           </div>
           <div class="row my-3">

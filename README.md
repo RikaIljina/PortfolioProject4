@@ -177,12 +177,14 @@ Authenticated users can send a message to the admins on the 'About' page:
 
 #### Logging in
 
-Users can use the 'Login'/'Signup' buttons on the upper navbar to create an account or log in:
+Users can use the 'Login'/'Sign up' buttons on the upper navbar to create an account or log in:
 
 They can sign out via the link in the dropdown with their avatar and name in the navbar:
 
 #### Accessibility
 !!!
+Adding labels to icons made site more jumpy, elements showing and then disappearing
+next time use aria-label instead of fa-tags und bootstrap tags
 
 #### Error pages
 
@@ -388,9 +390,50 @@ PortfolioProject4
 ## Testing
 
 ### Validator Testing
+
 ### Responsiveness testing
+
 ### C.R.U.D. testing
-### FEATURES
+| Goal | Result |
+|---|---|
+|**Create:**|
+| A new user account can be created by the admin or a website visitor | Pass |
+| Creating a new account automatically creates exactly one associated user profile | Pass |
+| An authenticated user can create one or several entries by filling out all required fields | Pass |
+| An authenticated user can create one or several comments associated with exactly one entry for any accessible entry | Pass |
+| An authenticated user can create exactly one like associated with one entry for any accessible entry except their own | Pass |
+| An authenticated user can create one or several messages to the admin by filling out all required fields | Pass |
+|**Read:**|
+| When a website visitor accesses a page showing user entries, the data for each accessible entry is read from the database and parsed correctly | Pass |
+| For each entry, all associated likes and comments are counted and the amounts are displayed correctly  | Pass |
+| For each entry, all associated tags are retrieved and displayed | Pass |
+| When a website visitor accesses the comment section of an entry, all comments associated with the entry are retrieved and their author and content displayed | Pass |
+| When a website visitor accesses a user profile page, the profile data as well as the user's public entries are retrieved and displayed | Pass |
+| When a website visitor clicks on a tag anywhere on the site, all entries associated with that tag are retrieved and displayed | Pass |
+| When an authenticated user opens their own dashboard, their profile data as well as all private and public entries are displayed | Pass |
+| When an authenticated user clicks on the 'My Favorites' link, all entries liked by that user are retrieved and displayed | Pass |
+| When an authenticated user clicks on the 'My comments' link, all comments written by that user are retrieved and shown with the author and title of the commented entry | Pass |
+|**Update:**|
+| When an authenticated user opens their 'Update profile' form, removes or adds data and submits the changed form, the profile is updated in the database | Pass |
+| When an authenticated user uploads a new profile picture, the old picture is permanently deleted from the cloud storage that it was uploaded to and is no longer accessible | Pass |
+| When an authenticated user opens their 'Update profile' form, removes or adds data and submits the changed form, the profile is updated in the database | Pass |
+| When an authenticated user opens their 'Edit entry' form, removes or adds data and submits the changed form, the entry is updated in the database | Pass |
+| When an authenticated user uploads a new audio file and unchecks the 'Keep file' box, the old file is permanently deleted from the cloud storage that it was uploaded to and is no longer accessible | Pass |
+| When an authenticated user uploads a new audio file and checks the 'Keep file' box, the old file is kept in the cloud storage and its link is added to the appropriate entry field | Pass |
+| When an authenticated user clicks on a 'Delete file' button in the 'Edit entry' view, the associated file is permanently deleted from the appropriate entry field and from the cloud storage that it was uploaded to and is no longer accessible | Pass |
+|  | Pass |
+|  | Pass |
+|  | Pass |
+|  | Pass |
+|  | Pass |
+|  | Pass |
+|  | Pass |
+| When an authenticated user clicks on the 'Like' button on a liked entry, the like is deleted from the database | Pass |
+
+
+### Features
+
+
 
 ### Fixed bugs
 - admin slug, created new ModelForm with clean() method and linked it as form to admin
