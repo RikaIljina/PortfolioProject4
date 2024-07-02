@@ -21,7 +21,9 @@
 
                     <!-- 'Edit profile' button -->
                     {% if user.is_authenticated and profile == user.profile %}
-                    <a href="{% url 'edit_profile' user.username %}" aria-label="Opens the user profile for editing"><i class="far fa-edit mb-1"></i></a>
+                    <a href="{% url 'edit_profile' user.username %}">
+                        <i class="far fa-edit mb-1" title="Edit user profile"></i>
+                    </a>
                     {% endif %}
                 </div>
 

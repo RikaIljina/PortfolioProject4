@@ -1,26 +1,29 @@
 {% load static %}
 
     <p class="ms-2 mb-0">
+
         {% if user.is_authenticated and entry.author != user %}
-            
             <a class="btn-like like" data-entry_id="{{ entry.id }}"
             {% if entry.already_liked == 1 %}data-liked=True{% endif %}
             {% if is_favorite == 1 %}data-favorite-view=True{% endif %}
             href="{{ request.path }}">
-
                 {% if entry.already_liked == 1 or is_favorite == 1 %}
-                <i class="fa-solid fa-heart like-red hover-scale"></i>
+                <i class="fa-solid fa-heart like-red hover-scale" title="Unlike"></i>
                 {% else %}
-                <i class="fa-regular fa-heart hover-scale"></i>
+                <i class="fa-regular fa-heart hover-scale" title="Like"></i>
                 {% endif %}
             </a>
+
         {% elif user.is_authenticated and entry.author == user %}
-        <i class="fa-regular fa-heart text-muted"></i>
+        <i class="fa-regular fa-heart text-muted" title="Likes received"></i>
+
         {% else %}
         <i class="fa-regular fa-heart text-muted hover-tooltip" 
         data-bs-toggle="tooltip" data-bs-placement="top"
         title="Log in to like and comment"></i>
+        <span class="sr-only">Likes received</span>
         {% endif %}
-        {{ entry.likes_received }} | <i class="fa-regular fa-comment hover-scale"></i> 
+        
+        {{ entry.likes_received }} | <i class="fa-regular fa-comment hover-scale" title="Comments received"></i> 
         {{entry.comments_received }}
     </p>

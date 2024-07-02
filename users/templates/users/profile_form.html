@@ -20,7 +20,7 @@
                 {% csrf_token %}
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.bio.label }}</p>
+                        <p><label for="{{ profile_form.bio.auto_id }}">{{ profile_form.bio.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -31,7 +31,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.pic.label }}</p>
+                        <p><label for="{{ profile_form.pic.auto_id }}">{{ profile_form.pic.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9 d-flex flex-row active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="{% if profile_form.pic.errors %}{{ profile_form.pic.errors.0|escape}}{% endif %}">
@@ -47,7 +47,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.website.label }}</p>
+                        <p><label for="{{ profile_form.website.auto_id }}">{{ profile_form.website.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -58,7 +58,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.email.label }}</p>
+                        <p><label for="{{ profile_form.email.auto_id }}">{{ profile_form.email.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -69,7 +69,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.facebook.label }}</p>
+                        <p><label for="{{ profile_form.facebook.auto_id }}">{{ profile_form.facebook.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -80,7 +80,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.twitter.label }}</p>
+                        <p><label for="{{ profile_form.twitter.auto_id }}">{{ profile_form.twitter.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -91,7 +91,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.instagram.label }}</p>
+                        <p><label for="{{ profile_form.instagram.auto_id }}">{{ profile_form.instagram.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -102,7 +102,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.youtube.label }}</p>
+                        <p><label for="{{ profile_form.youtube.auto_id }}">{{ profile_form.youtube.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -113,7 +113,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ profile_form.spotify.label }}</p>
+                        <p><label for="{{ profile_form.spotify.auto_id }}">{{ profile_form.spotify.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <div class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"

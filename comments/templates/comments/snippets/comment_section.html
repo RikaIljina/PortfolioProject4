@@ -52,8 +52,7 @@
                             <img class="img-fluid img-responsive rounded-circle me-2 avatar-sm"
                                 src="{{ comment.author.profile.pic.url }}" width="30" alt="User profile picture">
                             {% endif %}
-                            <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1"
-                                aria-label="Open profile page of {{ comment.author }}">
+                            <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1">
                                 <h5>{{ comment.author }}</h5>
                             </a>
                             <p class="flex-fill"></p>
@@ -88,12 +87,14 @@
                         <!-- Edit/delete buttons for comments -->
                         <div>
                             <button type="button" class="btn btn-edit hover-highlight"
-                                data-comment_id="{{ comment.id }}" aria-label="Edit comment"><i
-                                    class="fa-solid fa-pen"></i></button>
+                                data-comment_id="{{ comment.id }}">
+                                <i class="fa-solid fa-pen" title="Edit comment"></i>
+                            </button>
                             <button type="button" class="btn btn-delete hover-highlight"
                                 data-comment_id="{{ comment.id }}" data-bs-toggle="modal"
-                                data-bs-target="#modalDeleteComment" aria-label="Delete comment"><i
-                                    class="fa-solid fa-trash"></i></button>
+                                data-bs-target="#modalDeleteComment">
+                                <i class="fa-solid fa-trash" title="Delete comment"></i>
+                            </button>
                         </div>
                         {% endif %}
                     </div>

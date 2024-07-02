@@ -1,10 +1,10 @@
 {% load static %}
 {% load humanize %}
 
-<nav class="navbar navbar-expand-md nav nav-upper p-0 p-md-1 justify-content-center">
+<nav class="navbar navbar-expand-md nav nav-upper p-0 p-md-1 justify-content-center" aria-label="Account links">
     <div class="container-fluid">
         <!-- Site logo -->
-        <a class="navbar-brand ps-0 ms-0" href="{% url 'home' %}">
+        <a class="navbar-brand ps-0 ms-0" href="{% url 'home' %}" aria-label="Home">
             <div class="logo-image my-auto ps-md-4 ps-sm-2">
                 <img class="img-fluid" src="{% static 'images/logo-inst-l.webp' %}"
                     alt="Logo showing stylized musical instruments" height="80">

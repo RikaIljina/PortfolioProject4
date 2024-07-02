@@ -28,7 +28,7 @@
                 {% csrf_token %}
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.title.label }}</p>
+                        <p><label for="{{ entry_form.title.auto_id }}">{{ entry_form.title.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <p {% if entry_form.title.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -39,7 +39,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.description.label }}</p>
+                        <p><label for="{{ entry_form.description.auto_id }}">{{ entry_form.description.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <p {% if entry_form.description.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -55,7 +55,7 @@
                         <p>Your current audio file:</p>
                     </div>
                     <div class="col-12 col-md-9">
-                        <audio controls preload="none" class="w-100">
+                        <audio controls preload="none" class="w-100" role="region" aria-label="Current audio file">
                             <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                             Your browser does not support the audio tag.
                         </audio>
@@ -65,7 +65,7 @@
 
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.audio_file.label }}</p>
+                        <p><label for="{{ entry_form.audio_file.auto_id }}">{{ entry_form.audio_file.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <p {% if entry_form.audio_file.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -77,7 +77,7 @@
                 {% if entry %}
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.keep_file.label }}</p>
+                        <p><label for="{{ entry_form.keep_file.auto_id }}">{{ entry_form.keep_file.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <p {% if entry_form.keep_file.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -88,21 +88,21 @@
 
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.old_files.label }}</p>
+                        <p><label for="{{ entry_form.old_files.auto_id }}">{{ entry_form.old_files.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         {% for key, value in old_files.items %}
                         <!-- Date the file was added -->
                         <p class="text-muted">added {{ value.1 }}</p>
                         <div class="d-flex flex-row flex-wrap">
-                            <audio controls preload="none" class="old-audio">
+                            <audio controls preload="none" class="old-audio" role="region" aria-label="Old file from {{ value.1 }}">
                                 <source src="{{ value.0 }}" type="audio/mpeg">
                                 Your browser does not support the audio tag.
                             </audio>
                             <!-- Button to delete previous file versions -->
                             <button type="button" class="btn btn-delete hover-highlight ms-1" data-file_id="{{ key }}"
                                 data-bs-toggle="modal" data-bs-target="#modalDeleteOldFile">
-                                <i class="fa-solid fa-trash"></i>
+                                <i class="fa-solid fa-trash" title="Delete file"></i>
                             </button>
                         </div>
                         {% empty %}
@@ -114,7 +114,7 @@
 
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.tags.label }}</p>
+                        <p><label for="{{ entry_form.tags.auto_id }}">{{ entry_form.tags.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <p {% if entry_form.tags.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -124,7 +124,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-12 col-md-3">
-                        <p>{{ entry_form.publish.label }}</p>
+                        <p><label for="{{ entry_form.publish.auto_id }}">{{ entry_form.publish.label }}</label></p>
                     </div>
                     <div class="col-12 col-md-9">
                         <p {% if entry_form.tags.errors %}class="active-tooltip" data-bs-toggle="tooltip" data-bs-placement="top"

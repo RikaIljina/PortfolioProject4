@@ -82,13 +82,17 @@
                     <form id="message-form" action="" method="POST">
                         {% csrf_token %}
                         <div class="p-1">
-                            {{ message_form.subject.label }}
+                            <label for="{{ message_form.subject.auto_id }}">
+                                {{ message_form.subject.label }}
+                            </label>
                         </div>
                         <div class="py-2">
                             {{ message_form.subject }}
                         </div>
                         <div class="p-1">
-                            {{ message_form.message.label }}
+                            <label for="{{ message_form.message.auto_id }}">
+                                {{ message_form.message.label }}
+                            </label>
                         </div>
                         <div class="py-2">
                             {{ message_form.message }}
