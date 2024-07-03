@@ -42,6 +42,8 @@
           <!-- Entry preview cards to be shown in a paginated form -->
           {% for entry in page_obj %}
           {% include 'entries/snippets/entry_cards.html' %}
+          {% empty%}
+          <h2>No entries submitted yet</h2>
           {% endfor %}
         </div>
       </div>

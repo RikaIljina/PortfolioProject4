@@ -41,6 +41,8 @@
           <!-- All entries by the authenticated user -->
           {% for entry in page_obj %}
           {% include 'entries/snippets/entry_cards.html' %}
+          {% empty%}
+          <h2 class="text-muted">Nothing created yet</h2>
           {% endfor %}
 
         </div>

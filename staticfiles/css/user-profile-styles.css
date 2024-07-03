@@ -2,6 +2,10 @@
   background-color: #55ad9b;
 }
 
+h2 {
+ font-size: 1.5rem;
+}
+
 .profile-card {
   background-color: transparent;
   /* border: 1px solid black; */
