@@ -1,4 +1,4 @@
-var sidebarCollapsed = true;
+var sidebarCollapsed = false;
 var sidebarAutoCollapse = false;
 const sidebar = document.getElementById("sidebar");
 
@@ -22,10 +22,11 @@ window.addEventListener("DOMContentLoaded", function () {
       collapseSidebar();
     } else {
       sidebarAutoCollapse = false;
-    }
-
-    if (localStorage.getItem("sidebarCollapsed") === "false") {
-      expandSidebar();
+      if (localStorage.getItem("sidebarCollapsed") === "false") {
+        expandSidebar();
+      } else {
+        collapseSidebar();
+      }
     }
 
     // Prevent filter items from collapsing once opened (on large screens)

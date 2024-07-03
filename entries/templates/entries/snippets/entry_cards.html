@@ -45,7 +45,7 @@
 
         <!-- Playable audio file, date, short description preview and tags -->
         <div class="card-body d-flex flex-column">
-            <audio controls preload="none" class="w-100 my-3" role="region" aria-label="Audio file titled {{ entry.title }}">
+            <audio controls preload="none" class="w-100 my-3" aria-label="Audio file titled {{ entry.title }}">
                 <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                 Your browser does not support the audio tag.
             </audio>

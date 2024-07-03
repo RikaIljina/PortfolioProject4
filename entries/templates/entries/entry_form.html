@@ -55,7 +55,7 @@
                         <p>Your current audio file:</p>
                     </div>
                     <div class="col-12 col-md-9">
-                        <audio controls preload="none" class="w-100" role="region" aria-label="Current audio file">
+                        <audio controls preload="none" class="w-100" aria-label="Current audio file">
                             <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                             Your browser does not support the audio tag.
                         </audio>
@@ -95,7 +95,7 @@
                         <!-- Date the file was added -->
                         <p class="text-muted">added {{ value.1 }}</p>
                         <div class="d-flex flex-row flex-wrap">
-                            <audio controls preload="none" class="old-audio" role="region" aria-label="Old file from {{ value.1 }}">
+                            <audio controls preload="none" class="old-audio" aria-label="Old file from {{ value.1 }}">
                                 <source src="{{ value.0 }}" type="audio/mpeg">
                                 Your browser does not support the audio tag.
                             </audio>

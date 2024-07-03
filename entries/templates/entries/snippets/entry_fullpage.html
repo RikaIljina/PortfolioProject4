@@ -40,7 +40,7 @@
 
         <!-- Playable audio file, date, previous file versions, and tags -->
         <div class="card-body d-flex flex-column p-2 p-md-3">
-            <audio controls preload="none" class="w-100 my-3" role="region" aria-label="Audio file titled {{ entry.title }}">
+            <audio controls preload="none" class="w-100 my-3" aria-label="Audio file titled {{ entry.title }}">
                 <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                 Your browser does not support the audio tag.
             </audio>
@@ -50,7 +50,7 @@
             <div class="d-flex flex-column p-2 p-md-3">
                 <p>Previous versions:</p>
                 {% for file in old_files.values %}
-                <audio controls preload="none" class="my-1" role="region" aria-label="Previous audio file {{ forloop.counter }}">
+                <audio controls preload="none" class="my-1" aria-label="Previous audio file {{ forloop.counter }}">
                     <source src="{{ file.0 }}" type="audio/mpeg">
                     Your browser does not support the audio tag.
                 </audio>

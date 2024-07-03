@@ -169,8 +169,8 @@ a:focus-visible {
 .sidebar {
   position: relative;
   min-height: max-content;
-  min-width: 4rem;
-  /* max-width: 17%; */
+  /* min-width: 4rem; */
+  min-width: 17%;
   background-color: #d8efd3;
   box-shadow: rgba(0, 0, 0, 0.4) 1px -1px 2.2px;
   z-index: 99;

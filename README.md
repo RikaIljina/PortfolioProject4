@@ -204,6 +204,7 @@ All error pages provide a short description of the error and a link to get back 
 - [ ] Direct messaging system for private user communication
 - [ ] Notifications that inform creators about new comments or likes
 - [ ] Follower feature
+- [ ] Custom audio player
 
 
 ## Codebase
@@ -391,6 +392,7 @@ PortfolioProject4
 
 ### Validator Testing
 
+
 ### Responsiveness testing
 
 ### C.R.U.D. testing
@@ -413,23 +415,22 @@ PortfolioProject4
 | When an authenticated user opens their own dashboard, their profile data as well as all private and public entries are displayed | Pass |
 | When an authenticated user clicks on the 'My Favorites' link, all entries liked by that user are retrieved and displayed | Pass |
 | When an authenticated user clicks on the 'My comments' link, all comments written by that user are retrieved and shown with the author and title of the commented entry | Pass |
+| When the admin clicks on the 'Message to admin' link in the admin panel, all messages submitted by authenticated users are retrieved and shown along with the username and subject of the message | Pass |
 |**Update:**|
 | When an authenticated user opens their 'Update profile' form, removes or adds data and submits the changed form, the profile is updated in the database | Pass |
-| When an authenticated user uploads a new profile picture, the old picture is permanently deleted from the cloud storage that it was uploaded to and is no longer accessible | Pass |
-| When an authenticated user opens their 'Update profile' form, removes or adds data and submits the changed form, the profile is updated in the database | Pass |
+| When an authenticated user uploads a new profile picture, the old picture is permanently deleted from the cloud storage it was uploaded to and is no longer accessible | Pass |
 | When an authenticated user opens their 'Edit entry' form, removes or adds data and submits the changed form, the entry is updated in the database | Pass |
-| When an authenticated user uploads a new audio file and unchecks the 'Keep file' box, the old file is permanently deleted from the cloud storage that it was uploaded to and is no longer accessible | Pass |
+| When an authenticated user uploads a new audio file and unchecks the 'Keep file' box, the old file is permanently deleted from the cloud storage it was uploaded to and is no longer accessible | Pass |
 | When an authenticated user uploads a new audio file and checks the 'Keep file' box, the old file is kept in the cloud storage and its link is added to the appropriate entry field | Pass |
-| When an authenticated user clicks on a 'Delete file' button in the 'Edit entry' view, the associated file is permanently deleted from the appropriate entry field and from the cloud storage that it was uploaded to and is no longer accessible | Pass |
-|  | Pass |
-|  | Pass |
-|  | Pass |
-|  | Pass |
-|  | Pass |
-|  | Pass |
-|  | Pass |
-| When an authenticated user clicks on the 'Like' button on a liked entry, the like is deleted from the database | Pass |
-
+| When an authenticated user clicks on a 'Delete file' button in the 'Edit entry' view, the associated file is permanently deleted from the appropriate entry field and from the cloud storage it was uploaded to and is no longer accessible | Pass |
+|**Delete:**|
+| When an authenticated user clicks on the 'Like' button on a liked entry in any view, the like is deleted from the database | Pass |
+| When an authenticated user clicks on the 'Delete comment' button next to their own comment, the comment is deleted from the database | Pass |
+| When an authenticated user clicks on the 'Delete entry' button on the 'Entry details' page in their dashboard, the entry is deleted and all associated audio files are destroyed in the cloud storage | Pass |
+| When the admin deletes a profile in the admin panel, the profile data is deleted from the database and the associated image file destroyed in the cloud storage | Pass |
+| When the admin deletes a user in the admin panel, all user data including the user's profile, entries, comments, and likes are deleted from the database and the associated uploaded files destroyed in the cloud storage | Pass |
+|**Admin access:**|
+| In the admin panel, the admin can perform create, read, update, and delete actions on any database object, including tags and likes | Pass |
 
 ### Features
 
@@ -457,6 +458,8 @@ I allow users to keep uploaded files as a kind of "version history" when adding 
 
 Whenever an attempt is made to destroy a Cloudinary file via the method ```...```, the server returns a response containing a dictionary: ```{'result': 'ok'}``` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
 
+no safeguard against admin deleting user profile
+
 Caching:
 
 
@@ -467,6 +470,8 @@ HTML in summernote
 Storage:
 
 Cloudinary
+
+some users can't upload
 
 ### Unfixed bugs
 
