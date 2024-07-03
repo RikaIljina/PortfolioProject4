@@ -41,7 +41,6 @@ class Entry(models.Model):
         ordering: Specifies the default order of entries.
 
     Methods:
-        save(): Override the superclass save method to handle tag cleanup.
         delete(): Override the delete method to handle file cleanup.
     """
 
@@ -66,17 +65,6 @@ class Entry(models.Model):
     def __str__(self):
         return f"{self.title} created by {self.author}"
 
-    def save(self, *args, **kwargs):
-        """
-        Override the save method to handle tag cleanup
-
-        This method deletes tags that are no longer used by any entry.
-        """
-
-        Tag.objects.filter(entry=None).delete()
-
-        return super().save(*args, **kwargs)
-
     def delete(self, *args, **kwargs):
         """
         Override the delete method to handle file cleanup
@@ -94,10 +82,8 @@ class Entry(models.Model):
             invalidate=True,
         )
         for id in self.old_files.keys():
-            print(
-                cloudinary.uploader.destroy(
+            cl_response = cloudinary.uploader.destroy(
                     id, resource_type="video", invalidate=True
                 )
-            )
 
         return super().delete(*args, **kwargs)

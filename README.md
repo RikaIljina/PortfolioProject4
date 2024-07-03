@@ -7,7 +7,6 @@ The live link for "MusicLab" can be found [HERE](https://music-lab-11c9945eb758.
 
 ## Table of Contents
 
-
 ## UX
 
 ### Site Purpose:
@@ -391,23 +390,55 @@ Home
 ```
 
 ### Database
+PostgreSQL is used as a database. The link to the postgres instance was kindly provided by CodeInstitute.
 
-- postgres was used
-- reduce queries, also in admin
-- automatically create user profile via signal
+In order to optimize database queries, I used the methods ```select_related()``` and ```prefetch_related()``` where applicable and was able to bring the amount of queries on the website down to 4-11 queries per page, regardless of the amount of content retrieved.
+
+I tried to automate certain DB tasks to make sure they would be triggered by users and admin alike. To this end, I used signals and method overriding in model, form, and admin classes.
+
+| Task | Module | Method |
+|---|---|---|
+| Create a user profile automatically after user registration | ```users/signal.py``` | ```post_save```, ```create_profile()``` |
+| Delete the profile picture from cloud storage when a profile is deleted | ```users/signal.py``` | ```pre_delete```, ```delete_profile_pic()``` |
+| Delete the old profile picture from cloud storage when a profile is updated with a new picture | ```users/forms.py``` | ```class ProfileForm```, override ```save()``` |
+| Delete the old profile picture from cloud storage when a profile is updated with a new picture in the admin panel | ```users/admin.py``` | ```class ProfileAdmin```, override ```save_model()```  |
+| Delete all tags with no associated entries whenever an entry is saved or deleted | ```mainpage/signal.py``` | ```post_save``` and ```post_delete```, ```delete_tags()``` |
+| Delete all associated audio files from cloud storage when an entry is deleted  | ```entries/models.py``` | ```class Entry```, override ```delete()``` |
+| Delete all associated audio files from cloud storage when entries are deleted in bulk by admin | ```entries/admin.py``` | ```class EntryAdmin```, override ```delete_queryset()``` |
+| Depending on user choice: save the URL and ID of the old audio file as a previous version in the entry object OR delete the old audio file from cloud storage | ```entries/forms.py``` | ```class EntryForm```, override ```save()``` |
+| Depending on admin choice: save the URL and ID of the old audio file as a previous version in the entry object OR delete the old audio file from cloud storage | ```entries/admin.py``` | ```class EntryAdmin```, override ```save_model()``` |
+| Pre-validate audio file before uploading it to the cloud storage  | ```entries/forms.py``` | ```class EntryForm```, override ```clean_audio_file()``` |
+| Pre-validate image file before uploading it to the cloud storage | ```users/forms.py``` | ```class ProfileForm```, override ```clean_pic()``` |
+| Prevent a Like object from being saved if the request user is also the entry author | ```likes/models.py``` | ```class Like```, overriding ```save()``` |
+| Raise ValidationError if the username chosen by the user exceeds 20 characters | ```musiclab/adapter.py``` | ```class UsernameMaxAdapter```, override ```clean_username()``` |
+| Raise ValidationError if the user has already used the same title for another entry and the slug consisting of {title}-{username} is not unique, and save slug in the Entry object if it is unique | ```entries/forms.py``` | ```class EntryForm```, override ```clean_title()``` |
+| Raise ValidationError in the admin panel if the user has already used the same title for another entry and the slug consisting of {title}-{username} is not unique | ```entries/admin.py``` | ```class EntryFormExtension```, override ```clean()``` |
+| After the custom slug has been validated with clean(), save the slug in the Entry object | ```entries/admin.py``` | ```class EntryAdmin```, override ```save_model()``` |
+
 
 #### Custom validation
-- user name length via adapter
-- create custom slug and validate
-- file pre-validation
+I use custom validation for the following data:
+- The length of the username may not exceed 20 characters
+- The uploaded images must have the content type 'image/jpeg' or 'image/png' and may not exceed 1MB
+- The uploaded audio files must have the content type 'audio/mpeg' and may not exceed 10MB
+- The slugs are constructed from {title}-{author} to allow different users to use the same titles for their entries. Special consideration went into non-latin titles that I wanted to allow for the entries. To make sure that all entries receive easily readable, unique slugs, I used ```slugify(unidecode(slug_string))```. ```slugify``` converts all whitespace into single dashes, while ```unidecode``` takes care of the transliteration of non-latin into latin characters. Thus, the titles 'Amerika' and 'америка' will produce the same slug and will raise a ValidationError in the entry form. 
 
 #### Taggit integration
-- automatically delete empty tags
+```django-taggit```is used for tag management. Since the Tag model creates a many-to-many relationship with the Entry model, the following code is needed to properly save the tags entered into the form field and link them to the entry:
+```
+entry = entry_form.save(commit=False)
+entry.save()
+entry_form.save_m2m()
+```
+However, I ran into a problem when overriding the ```save()``` method of my ```EntryForm``` class:
+When I tried initializing the instance with ```instance = self.instance``` for further modification and then returned the instance back to the view, the m2m field was not saved. Instead, I had to initialize the instance with ```instance = super().save(commit=False)``` to make it work. I am not sure what is happening behind the scenes here.
 
 #### Cloudinary integration
-- handle file destruction
+I use the Cloudinary cloud service for user file storage and handle the file upload directly via the ```CloudinaryField``` model field. However, since deleting an object associated with a Cloudinary file does not automatically remove the file in the cloud storage, I have implemented the mechanism of file destruction via ```cloudinary.uploader.destroy(file.public_id, invalidate=True)``` where it is relevant.
 
 #### Summernote integration
+Since I decided to allow users to use custom formatting in their 'About me' and 'Entry description' sections, I had to implement a richtext editor and adjust it for scope and safety reasons. I integrated Summernote by using ```SummernoteWidget``` as a widget in the ```Meta``` section of the form classes and made sure to adjust its settings via ```SUMMERNOTE_CONFIG``` in settings.py, 
+
 - handle html safely
 - disable code/file embed in settings
 

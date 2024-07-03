@@ -24,8 +24,6 @@ class ProfileAdmin(SummernoteModelAdmin):
     Methods:
         save_model(): Overrides superclass method to delete replaced Cloudinary
             image file.
-        delete_queryset(): Overrides superclass method to delete Cloudinary
-            files in bulk.
     """
 
     list_display = (
@@ -74,25 +72,3 @@ class ProfileAdmin(SummernoteModelAdmin):
                 messages.info(request, result)
 
         super().save_model(request, obj, form, change)
-
-    def delete_queryset(self, request, queryset):
-        """
-        Override superclass method to delete Cloudinary files in bulk
-
-        This method deletes the Cloudinary file in each of the queryset objects
-        and logs the result as an info message. After deleting the Cloudinary
-        files, it calls the superclass method to delete the queryset from
-        the database.
-
-        Args:
-            request (HttpRequest): The HTTP request object that contains
-                metadata about the request.
-            queryset (QuerySet): The queryset of model instances to be deleted.
-        """
-
-        for obj in queryset:
-            result = cloudinary.uploader.destroy(
-                obj.pic.public_id, invalidate=True
-            )
-            messages.info(request, result)
-        super().delete_model(request, queryset)

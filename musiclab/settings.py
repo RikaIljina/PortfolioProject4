@@ -91,12 +91,8 @@ CSRF_TRUSTED_ORIGINS = {
     "https://*.herokuapp.com",
 }
 
-# TODO: Check if this line is necessary
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 load_dotenv()
 config = cloudinary.config(secure=True)
-# print("****1. Set up and configure the SDK:****\nCredentials: ",
-#       config.cloud_name, config.api_key, "\n")
 
 TAGGIT_CASE_INSENSITIVE = True
 
@@ -213,10 +209,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# MEDIA_URL = 'media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

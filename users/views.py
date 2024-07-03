@@ -86,7 +86,7 @@ def user_profile(request, username):
         "enable_sorting": enable_sorting,
         "profile_view": profile_view,
     }
-    
+
     return render(request, "users/profile.html", context)
 
 
@@ -140,15 +140,17 @@ def dashboard(request, username):
     enable_sorting = True
 
     entries = get_all_entries(request, user.all_entries, get_comments=False)
-    
+
     # get_page_context() takes care of checking whether entries is empty
-    entries, sorted_param, page_obj = get_page_context(request, entries, mainpage=False)
+    entries, sorted_param, page_obj = get_page_context(
+        request, entries, mainpage=False
+    )
     context = {
-            "profile": profile,
-            "page_obj": page_obj,
-            "sorted_param": sorted_param,
-            "dashboard_view": dashboard_view,
-            "enable_sorting": enable_sorting,
+        "profile": profile,
+        "page_obj": page_obj,
+        "sorted_param": sorted_param,
+        "dashboard_view": dashboard_view,
+        "enable_sorting": enable_sorting,
     }
 
     return render(request, "users/dashboard.html", context)
@@ -319,9 +321,13 @@ def user_favorites(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
-    likes = request.user.liked.select_related("entry").annotate(
-        likes_received=Count("entry__all_likes", distinct=True),
-        comments_received=Count("entry__all_comments", distinct=True),
+    likes = (
+        request.user.liked.select_related("entry__author__profile")
+        .prefetch_related("entry__tags")
+        .annotate(
+            likes_received=Count("entry__all_likes", distinct=True),
+            comments_received=Count("entry__all_comments", distinct=True),
+        )
     )
     is_favorite = 1
 
@@ -359,7 +365,7 @@ def user_comments(request, username):
     if not request.user.is_authenticated or username != request.user.username:
         raise PermissionDenied
 
-    comments = request.user.commenter.select_related("entry")
+    comments = request.user.commenter.select_related("entry__author__profile")
 
     page_obj = get_page_obj(request, comments, 10)
 

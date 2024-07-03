@@ -45,7 +45,6 @@ class Like(models.Model):
         if self.entry.author == self.user:
             return
         else:
-            self.entry.save()
             super(Like, self).save(*args, **kwargs)
 
     def __str__(self):

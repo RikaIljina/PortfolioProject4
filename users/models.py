@@ -7,7 +7,6 @@ for a specific registered user in the database.
 
 from django.db import models
 from django.contrib.auth.models import User
-import cloudinary
 from cloudinary.models import CloudinaryField
 
 
@@ -24,9 +23,6 @@ class Profile(models.Model):
         spotify (str): URLs to the social network pages the user provided.
         website (str): URL to a website the user provided.
         email (str): Email address the user provided.
-
-    Methods:
-        delete(): Override the delete method to handle file cleanup.
     """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -43,20 +39,3 @@ class Profile(models.Model):
 
     def __str__(self) -> str:
         return f"User profile of {self.user.username}"
-
-    def delete(self, *args, **kwargs):
-        """
-        Override the delete method to handle tag and file cleanup
-
-        This method deletes tags that are no longer used by any entry.
-        The method also ensures that the main audio file as well as all
-        previous versions of the file are deleted from Cloudinary storage.
-        """
-
-        # The response could be used to send an error message to the admin
-        # if the file couldn't be destroyed
-        cl_response = cloudinary.uploader.destroy(
-            self.pic.public_id, invalidate=True
-        )
-
-        return super().delete(*args, **kwargs)

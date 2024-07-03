@@ -56,7 +56,10 @@ def add_like(request, entry_id, current_path=""):
 
     entry = get_object_or_404(Entry.objects.filter(publish=1), id=entry_id)
 
-    if not request.user.liked.filter(entry__pk=entry_id).exists():
+    if (
+        not request.user.liked.filter(entry__pk=entry_id).exists() 
+        and request.user != entry.author
+        ):
         Like.objects.create(user=request.user, entry=entry)
 
     # Needed to preserve sorting and page parameters
