@@ -72,30 +72,21 @@ def user_profile(request, username):
     entries = get_published_entries(
         request, user.all_entries, get_comments=False
     )
-    # Only get entries if the user has added at least one entry
-    if entries.count() != 0:
-        entries, sorted_param, page_obj, users, tags = get_page_context(
-            request, entries
-        )
+    # get_page_context() takes care of checking whether entries is empty
+    entries, sorted_param, page_obj, users, tags = get_page_context(
+        request, entries
+    )
 
-        context = {
-            "profile": profile,
-            "users": users,
-            "tags": tags,
-            "page_obj": page_obj,
-            "sorted_param": sorted_param,
-            "enable_sorting": enable_sorting,
-            "profile_view": profile_view,
-        }
-    else:
-        users, tags = get_page_context(request, None)
-        context = {
-            "profile": profile,
-            "users": users,
-            "tags": tags,
-            "profile_view": profile_view,
-        }
-
+    context = {
+        "profile": profile,
+        "users": users,
+        "tags": tags,
+        "page_obj": page_obj,
+        "sorted_param": sorted_param,
+        "enable_sorting": enable_sorting,
+        "profile_view": profile_view,
+    }
+    
     return render(request, "users/profile.html", context)
 
 
@@ -149,23 +140,32 @@ def dashboard(request, username):
     enable_sorting = True
 
     entries = get_all_entries(request, user.all_entries, get_comments=False)
-
-    if entries.count() != 0:
-        entries, sorted_param = sort_by(request, entries)
-        page_obj = get_page_obj(request, entries)
-        context = {
+    
+    # get_page_context() takes care of checking whether entries is empty
+    entries, sorted_param, page_obj = get_page_context(request, entries, mainpage=False)
+    context = {
             "profile": profile,
             "page_obj": page_obj,
             "sorted_param": sorted_param,
             "dashboard_view": dashboard_view,
             "enable_sorting": enable_sorting,
-        }
-    else:
-        context = {
-            "profile": profile,
-            "dashboard_view": dashboard_view,
-            "enable_sorting": enable_sorting,
-        }
+    }
+    # if entries.count() != 0:
+    #     entries, sorted_param = sort_by(request, entries)
+    #     page_obj = get_page_obj(request, entries)
+    #     context = {
+    #         "profile": profile,
+    #         "page_obj": page_obj,
+    #         "sorted_param": sorted_param,
+    #         "dashboard_view": dashboard_view,
+    #         "enable_sorting": enable_sorting,
+    #     }
+    # else:
+    #     context = {
+    #         "profile": profile,
+    #         "dashboard_view": dashboard_view,
+    #         "enable_sorting": enable_sorting,
+    #     }
 
     return render(request, "users/dashboard.html", context)
 

@@ -51,7 +51,8 @@ def index(request):
     """
 
     entries = get_published_entries(request, Entry.objects, get_comments=False)
-
+    
+    # get_page_context() takes care of checking whether entries is empty
     entries, sorted_param, page_obj, users, tags = get_page_context(
         request, entries
     )
@@ -94,17 +95,13 @@ def filter_user(request, username):
     """
 
     user = get_object_or_404(User.objects.all(), username=username)
-    # Only get entries if the user has added at least one entry
-
     entries = get_published_entries(
         request, user.all_entries, get_comments=False
     )
-    if entries.count() != 0:
-        entries, sorted_param, page_obj, users, tags = get_page_context(
-            request, entries
-        )
-    else:
-        users, tags = get_page_context(request, None)
+    # get_page_context() takes care of checking whether entries is empty
+    entries, sorted_param, page_obj, users, tags = get_page_context(
+        request, entries
+    )
 
     # Tells the sidebar to keep clicked-on filter section open
     filter_user = True
@@ -148,6 +145,7 @@ def filter_tag(request, tag):
         request, Entry.objects, get_comments=False
     ).filter(tags__name__in=[tag])
 
+    # get_page_context() takes care of checking whether entries is empty
     entries, sorted_param, page_obj, users, tags = get_page_context(
         request, entries
     )

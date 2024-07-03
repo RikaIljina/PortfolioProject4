@@ -17,7 +17,7 @@ from taggit.models import Tag
 from users.utils import get_all_usernames
 
 
-def get_page_context(request, entries=None):
+def get_page_context(request, entries=None, mainpage=True):
     """
     Prepare and provide context data for views
 
@@ -35,6 +35,9 @@ def get_page_context(request, entries=None):
 
     Returns:
         tuple: If 'entries' is None, returns a tuple containing:
+               - None: No entry queryset to parse.
+               - str: Empty sorting string.
+               - None: No page object to parse.
                - dict: A dictionary of all usernames and their profile images.
                - dict: A dictionary of all tags and their respective amounts.
 
@@ -46,15 +49,23 @@ def get_page_context(request, entries=None):
                - dict: A dictionary of all tags and their respective amounts.
     """
 
-    if entries == None:
-        return get_all_usernames(), get_all_tags()
+    if entries == None and mainpage:
+        return None, '', None, get_all_usernames(), get_all_tags()
+    elif entries == None:
+        # Relevant for the dashboard view
+        return None, '', None
 
     entries, sorted_param = sort_by(request, entries)
     page_obj = get_page_obj(request, entries)
-    users = get_all_usernames()
-    tags = get_all_tags()
+    
+    if mainpage:
+        users = get_all_usernames()
+        tags = get_all_tags()
 
-    return entries, sorted_param, page_obj, users, tags
+        return entries, sorted_param, page_obj, users, tags
+    else:
+        # Relevant for the dashboard view
+        return entries, sorted_param, page_obj
 
 
 def get_page_obj(request, entries, amount=12):
@@ -75,6 +86,9 @@ def get_page_obj(request, entries, amount=12):
     Returns:
         Page: A Page object containing the entries for the current page.
     """
+
+    if not entries:
+        return None
 
     paginator = Paginator(entries, amount)
     page_number = request.GET.get("page")
@@ -125,21 +139,24 @@ def sort_by(request, entries):
                 - str: The GET parameter defining the sort order
     """
 
-    if request.GET.get("sorted") == "by_likes":
-        entries = entries.annotate(
-            count_likes=Count("all_likes", distinct=True)
-        ).order_by("-count_likes")
-        sorted_param = "?sorted=by_likes"
-    elif request.GET.get("sorted") == "by_date":
-        entries = entries.order_by("-created_on")
-        sorted_param = "?sorted=by_date"
-    elif request.GET.get("sorted") == "by_published":
-        entries = entries.order_by("publish")
-        sorted_param = "?sorted=by_published"
-    elif request.GET.get("sorted") == "by_updated":
-        entries = entries.order_by("-updated_on")
-        sorted_param = "?sorted=by_updated"
+    if entries:
+        if request.GET.get("sorted") == "by_likes":
+            entries = entries.annotate(
+                count_likes=Count("all_likes", distinct=True)
+            ).order_by("-count_likes")
+            sorted_param = "?sorted=by_likes"
+        elif request.GET.get("sorted") == "by_date":
+            entries = entries.order_by("-created_on")
+            sorted_param = "?sorted=by_date"
+        elif request.GET.get("sorted") == "by_published":
+            entries = entries.order_by("publish")
+            sorted_param = "?sorted=by_published"
+        elif request.GET.get("sorted") == "by_updated":
+            entries = entries.order_by("-updated_on")
+            sorted_param = "?sorted=by_updated"
 
+        else:
+            sorted_param = ""
     else:
         sorted_param = ""
 

@@ -473,6 +473,9 @@ Cloudinary
 
 some users can't upload
 
+code:
+HttpResponseRedirect, redirect
+
 ### Unfixed bugs
 
 ## Technologies Used
