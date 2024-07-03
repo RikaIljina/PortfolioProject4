@@ -7,14 +7,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="row g-0 sidebar-margin m-auto">
-
-    <h2 class="mt-2 mt-md-4 text-center">
-        Profile of <b>{{ profile.user.username }}</b>
-    </h2>
-
-    <div class="row g-0 px-1 justify-content-center">
+    <div class="row g-0 px-1 justify-content-center sidebar-margin m-auto">
         <div class="col-12 col-md-10 col-xl-6 d-flex flex-column p-4">
+            <hr>
+            <h1 class="mt-2 text-center">
+                Profile of <b>{{ profile.user.username }}</b>
+            </h1>
+            <hr>
             <!-- Form for editing user profile data -->
             <form method="POST" action="" id="profileForm" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -132,7 +131,6 @@
             </form>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block extras %}

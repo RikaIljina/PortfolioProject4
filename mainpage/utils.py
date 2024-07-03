@@ -50,19 +50,18 @@ def get_page_context(request, entries=None, mainpage=True):
     """
 
     if entries == None and mainpage:
-        return None, '', None, get_all_usernames(), get_all_tags()
+        return get_all_usernames(), get_all_tags(), None, '', None
     elif entries == None:
         # Relevant for the dashboard view
         return None, '', None
 
     entries, sorted_param = sort_by(request, entries)
     page_obj = get_page_obj(request, entries)
-    
+
     if mainpage:
         users = get_all_usernames()
         tags = get_all_tags()
-
-        return entries, sorted_param, page_obj, users, tags
+        return users, tags, entries, sorted_param, page_obj
     else:
         # Relevant for the dashboard view
         return entries, sorted_param, page_obj

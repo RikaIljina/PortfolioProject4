@@ -73,7 +73,7 @@ def user_profile(request, username):
         request, user.all_entries, get_comments=False
     )
     # get_page_context() takes care of checking whether entries is empty
-    entries, sorted_param, page_obj, users, tags = get_page_context(
+    users, tags, entries, sorted_param, page_obj = get_page_context(
         request, entries
     )
 
@@ -150,22 +150,6 @@ def dashboard(request, username):
             "dashboard_view": dashboard_view,
             "enable_sorting": enable_sorting,
     }
-    # if entries.count() != 0:
-    #     entries, sorted_param = sort_by(request, entries)
-    #     page_obj = get_page_obj(request, entries)
-    #     context = {
-    #         "profile": profile,
-    #         "page_obj": page_obj,
-    #         "sorted_param": sorted_param,
-    #         "dashboard_view": dashboard_view,
-    #         "enable_sorting": enable_sorting,
-    #     }
-    # else:
-    #     context = {
-    #         "profile": profile,
-    #         "dashboard_view": dashboard_view,
-    #         "enable_sorting": enable_sorting,
-    #     }
 
     return render(request, "users/dashboard.html", context)
 

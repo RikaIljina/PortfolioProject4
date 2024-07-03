@@ -392,6 +392,8 @@ PortfolioProject4
 
 ### Validator Testing
 
+
+
 ### Responsiveness testing
 
 | Goal | Screen width | Result |
@@ -406,6 +408,10 @@ PortfolioProject4
 | When expanded, the sidebar overlaps the content and fills the full width of the screen. | max 768px | Pass |
 | If the user clicks on the toggle button to expand or collapse the sidebar, it stays expanded or collapsed resp. on the next page the user navigates to. | min 768px | Pass |
 | The sidebar never stays extended but rather collapses as soon as a sidebar link is clicked. | max 768px | Pass |
+| Form labels and fields are stacked in a column rather than shown next to each other. | max 768px | Pass |
+| The elements of the user profile section are stacked in a column rather than shown in a row. | max 768px | Pass |
+| On all pages, all page elements are contained within their parent container and behave in a responsive way | 280px - 2560px | Pass |
+
 
 ### C.R.U.D. testing
 | Goal | Result |
@@ -560,6 +566,8 @@ comments are visible when entries are private
 
 1. Sometimes, when resizing the window too often and expanding elements in the main content container, the sidebar doesn't quite stretch to the bottom of the page. This issue seems rare but still needs investigating. The problem might be paddings/margins or wrong min-height values.
 ![alt text](static/readme-assets/bug-sidebar.PNG)
+
+2. If admin changes a user's username, all slugs must be updated
 
 ## Technologies Used
 ### Main Languages Used

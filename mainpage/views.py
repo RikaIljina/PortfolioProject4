@@ -53,7 +53,7 @@ def index(request):
     entries = get_published_entries(request, Entry.objects, get_comments=False)
     
     # get_page_context() takes care of checking whether entries is empty
-    entries, sorted_param, page_obj, users, tags = get_page_context(
+    users, tags, entries, sorted_param, page_obj = get_page_context(
         request, entries
     )
 
@@ -99,7 +99,7 @@ def filter_user(request, username):
         request, user.all_entries, get_comments=False
     )
     # get_page_context() takes care of checking whether entries is empty
-    entries, sorted_param, page_obj, users, tags = get_page_context(
+    users, tags, entries, sorted_param, page_obj = get_page_context(
         request, entries
     )
 
@@ -146,7 +146,7 @@ def filter_tag(request, tag):
     ).filter(tags__name__in=[tag])
 
     # get_page_context() takes care of checking whether entries is empty
-    entries, sorted_param, page_obj, users, tags = get_page_context(
+    users, tags, entries, sorted_param, page_obj = get_page_context(
         request, entries
     )
 
@@ -187,7 +187,7 @@ def about(request):
         and additional information for pagination, sorting, and filtering.
     """
 
-    users, tags = get_page_context(request, None)
+    users, tags, *args = get_page_context(request, None)
 
     if request.method == "POST":
         message_form = MessageToAdminForm(request.POST)
