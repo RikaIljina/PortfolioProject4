@@ -100,9 +100,10 @@ class ProfileForm(forms.ModelForm):
 
         if "pic" in self.changed_data:
             old_id = self.initial["pic"].public_id
-            # The response could be used to send an error message to the admin
-            # if the file couldn't be destroyed
-            cl_response = cloudinary.uploader.destroy(old_id, invalidate=True)
+            if old_id != "placeholder":
+                # The response could be used to send an error message to the admin
+                # if the file couldn't be destroyed
+                cl_response = cloudinary.uploader.destroy(old_id, invalidate=True)
 
         if commit:
             super().save()

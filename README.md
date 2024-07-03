@@ -117,11 +117,10 @@ When users add a profile bio or a song description, they can use the Summernote 
 ### Imagery:
 The website uses images sparingly to not distract from the main purpose of the site.
 The logo was adapted from an icon found on Flaticon.
-The background images on the Login, Signup and Signout pages are taken from Freepik. They create a pleasant backdrop for the otherwise plain pages, while their musical theme prepares the user for a hopefully amazing musical experience.
+The background images on the 'Login' and 'Sign up' pages are taken from Freepik. They create a pleasant backdrop for the otherwise plain pages, while their musical theme prepares the user for a hopefully amazing musical experience.
 See credits for source attribution.
 <img src="static\images\logo-inst-l.webp" width="300" alt="Logo with stylized instruments next to the name MusicLab">
 <img src="static\images\hands-holding-music-instruments_53876-148189.webp" width="300" alt="Hands holding music instruments">
-<img src="static\images\musical-background-with-musical-keys-white-flat-lay-copy-space.webp" width="300" alt="Keyboard in the lower right corner">
 
 ## Features
 
@@ -181,11 +180,6 @@ Users can use the 'Login'/'Sign up' buttons on the upper navbar to create an acc
 
 They can sign out via the link in the dropdown with their avatar and name in the navbar:
 
-#### Accessibility
-!!!
-Adding labels to icons made site more jumpy, elements showing and then disappearing
-next time use aria-label instead of fa-tags und bootstrap tags
-
 #### Error pages
 
 The website has four custom  error pages:
@@ -206,8 +200,23 @@ All error pages provide a short description of the error and a link to get back 
 - [ ] Follower feature
 - [ ] Custom audio player
 
-
 ## Codebase
+
+The project is based on the Django web framework. It consists of five apps - 
+- ```Comments```
+- ```Entries```
+- ```Likes``` 
+- ```Users```
+- ```Mainpage```
+
+...  and uses eight models, of which 
+- ```Entry```
+- ```Comment```
+- ```Like```
+- ```Profile```
+- ```MessageToAdmin``` 
+
+were created by me, ```User``` is the standard Django ```models.User``` class from ```django.contrib.auth``` managed by the ```django-allauth``` package, and ```tag``` and ```taggedItem``` are part of the ```django-taggit``` package.
 
 ### Project tree
 
@@ -309,8 +318,7 @@ PortfolioProject4
 │  ├─ images
 │  │  ├─ default_profile.webp
 │  │  ├─ hands-holding-music-instruments_53876-148189.webp
-│  │  ├─ logo-inst-l.webp
-│  │  └─ saxophone-white-background_lg.webp
+│  │  └─ logo-inst-l.webp
 │  ├─ js
 │  │  ├─ base.js
 │  │  ├─ comments.js
@@ -322,14 +330,16 @@ PortfolioProject4
 │     └─ musiclab-erd.jpg
 ├─ staticfiles
 ├─ templates
+│  ├─ ...
 │  ├─ 400.html
 │  ├─ 403.html
 │  ├─ 404.html
 │  ├─ 500.html
 │  ├─ account
+│  │  ├─ ...
 │  │  ├─ login.html
 │  │  ├─ logout.html
-│  │  ├─ signup.html
+│  │  ├─...
 │  ├─ base.html
 │  ├─ navbar.html
 │  ├─ pagination.html
@@ -362,7 +372,26 @@ PortfolioProject4
 
 </details>
 
+### HTML files
+Due to the nature of the website, the same or similar elements have to be shown multiple times per page or on different pages filled with different data and rendered and styled for a different context. For this reason, I was striving for a modular structure that would help me avoid copy-pasting elements. As a result, I ended up with reusable snippets that are included in the main html pages which all extend the ```base.html``` template.
+
+For example:
+
+```
+Home
+├─ template base.html
+│  ├─ includes navbar.html
+│  ├─ includes sidebar.html
+│  ├─ extended by index.html
+│  │  │  ********** LOOP ***********
+│  │  ├─ includes entry_cards.html
+│  │  │  └─ includes like_comment_summary.html
+│  │  │  ********* ENDLOOP ***********
+└─ └─ └─ includes pagination.html
+```
+
 ### Database
+
 - postgres was used
 - reduce queries, also in admin
 - automatically create user profile via signal
@@ -382,8 +411,7 @@ PortfolioProject4
 - handle html safely
 - disable code/file embed in settings
 
-### HTML files
-- snippets for reusability
+
 
 ### Site functionality
 - JS for sidebar
@@ -500,6 +528,7 @@ PortfolioProject4
 | A preview of the entry description is shown on the small entry card in plain text. | Pass |
 | Clicking on any tag located on an entry card opens the filter view, showing all entries with the selected tag. | Pass |
 | Clicking on a social link or any other link in the 'About me' section on the user profile page opens the link in a new tab. | Pass |
+| Clicking on any 'Delete' button on the site opens a modal that requires the user to confirm the delete action before modifying the database. | Pass |
 
 ### Error testing
 
@@ -520,6 +549,8 @@ PortfolioProject4
 
 
 ### Fixed bugs
+During development, I encountered several bugs that I was largely able to fix on the spot. Some of the more prominent ones were:
+
 - admin slug, created new ModelForm with clean() method and linked it as form to admin
 - force-show user/tag section instead of using proper bootstrap call
 - couldn't save form without ```enctype="multipart/form-data"```
@@ -542,6 +573,7 @@ I allow users to keep uploaded files as a kind of "version history" when adding 
 Whenever an attempt is made to destroy a Cloudinary file via the method ```...```, the server returns a response containing a dictionary: ```{'result': 'ok'}``` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
 
 no safeguard against admin deleting user profile
+or changing user name
 
 Caching:
 
