@@ -91,8 +91,8 @@ CSRF_TRUSTED_ORIGINS = {
     "https://*.herokuapp.com",
 }
 
-load_dotenv()
-config = cloudinary.config(secure=True)
+# load_dotenv()
+# config = cloudinary.config(secure=True)
 
 TAGGIT_CASE_INSENSITIVE = True
 

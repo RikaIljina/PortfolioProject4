@@ -525,7 +525,9 @@ Summernote uses the ```django-bleach``` module to sanitize HTML input, so I deem
 | mainpage-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
 | user-profile-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
 | All public HTML pages | [Nu Html Checker](https://validator.w3.org/nu/) | Pass |
+| All public HTML pages | [WAVE Tool](https://wave.webaim.org/) | No errors* |
 
+(*) Contrast errors on some disabled elements; I didn't fix that because I don't want the elements to appear clickable and cause confusion
 
 ### Responsiveness testing
 
@@ -732,14 +734,42 @@ My sister, who was helping me with filling the database with data, encountered s
 ### Main Languages Used
 - HTML5
 - CSS3
-- Javascript
-- Python
-- Django
+- JavaScript (ES6)
+- Python 3.12.2
+- Django 5.0.6
 - PostgreSQL
 
-### Frameworks, Libraries & Programs Used
+### Frameworks, Libraries, Applications
+
+- [Django](https://www.djangoproject.com/): Python-based web framework
+- [Git](https://git-scm.com/): Version control via VS Code terminal
+- [GitHub](https://github.com/): Project source code storage
+- [Heroku](https://www.heroku.com/): Project deployment
+- [Cloudinary](https://cloudinary.com/): Cloud service for uploaded file storage
+- [PostgreSQL by CodeInstitute](https://codeinstitute.net/): database
+- [VS Code](https://code.visualstudio.com/): IDE
+- [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker): spell check extension for VS Code
+- [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance): Language server for Python in VS Code
+- [pycodestyle](https://pypi.org/project/pycodestyle/): Tool to check Python code against PEP8 conventions
+- [black](https://pypi.org/project/black/): Tool providing autoformatting for Python files
+- [miro](https://miro.com/): Online workspace I used to draw the DB ERD
+- [Draw.io Integration](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio): Tool for drawing diagrams directly in VS Code
 
 ### Installed Packages:
+
+Install with ```pip install [name]```. For version numbers see ```requirements.txt```.
+
+- ```cloudinary```: facilitates the interaction with the Cloudinary cloud storage service
+- ```dj-database-url```: enables the parsing of DATABASE_URL from the environment variable to use in the settings.py file
+- ```django-allauth```: manages the user authentication process
+- ```django-debug-toolbar```: helps debug Django applications locally
+- ```django-summernote```: provides a WYSIWYG editor for admin and user input text fields
+- ```django-taggit```: handles tag management
+- ```gunicorn```: server for Heroku deployment
+- ```psycopg2```: PostgreSQL database adapter for Python
+python-dotenv==1.0.1
+- ```Unidecode```: transcribes non-latin into latin characters
+- ```whitenoise```: handles static file serving
 
 ## Deployment
 
