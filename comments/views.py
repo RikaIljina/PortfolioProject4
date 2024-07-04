@@ -48,13 +48,11 @@ def edit_comment(request, current_path, comment_id):
 
     if request.method == "POST" and comment.author == request.user:
         if "updateOld" in request.POST:
-            # print(request.POST)
             comment_form = CommentForm(data=request.POST, instance=comment)
             if comment_form.is_valid():
                 comment_form.save()
                 messages.success(request, "Your comment has been saved.")
             else:
-                # print(comment_form.errors.as_data())
                 messages.error(request, "Your comment was not saved.")
 
         return redirect(f"{reverse('home')}{current_path}")

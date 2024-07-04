@@ -282,7 +282,9 @@ def delete_old_file(request, username, slug, file_id):
     if entry.old_files.get(file_id):
         del entry.old_files[file_id]
         entry.save()
-        print(
+        # The response could be used to send an error message to the admin
+        # if the file couldn't be destroyed
+        cl_response = (
             cloudinary.uploader.destroy(
                 file_id, resource_type="video", invalidate=True
             )

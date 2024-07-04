@@ -144,7 +144,7 @@ The logo was adapted from an icon found on Flaticon.
 The background images on the 'Login' and 'Sign up' pages are taken from Freepik. They create a pleasant backdrop for the otherwise plain pages, while their musical theme prepares the user for a hopefully amazing musical experience.
 See credits for source attribution.
 
-<img src="static\images\logo-inst-l.webp" width="300" alt="Logo with stylized instruments next to the name MusicLab">
+<img src="static\images\logo-inst-l.webp" width="300" alt="Logo with stylized instruments next to the name MusicLab" style="background-color: white;">
 
 <img src="static\images\hands-holding-music-instruments_53876-148189.webp" width="300" alt="Hands holding music instruments">
 
@@ -768,17 +768,20 @@ My sister, who was helping me with filling the database with data, encountered s
 ### Frameworks, Libraries, Applications
 
 - [Django](https://www.djangoproject.com/): Python-based web framework
+- [Bootstrap](https://getbootstrap.com/): Frontend toolkit providing responsive CSS styles and JS plugins
 - [Git](https://git-scm.com/): Version control via VS Code terminal
 - [GitHub](https://github.com/): Project source code storage
 - [Heroku](https://www.heroku.com/): Project deployment
 - [Cloudinary](https://cloudinary.com/): Cloud service for uploaded file storage
 - [PostgreSQL by CodeInstitute](https://codeinstitute.net/): database
+- [Font Awesome](https://fontawesome.com/): Icon library
 - [VS Code](https://code.visualstudio.com/): IDE
 - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker): spell check extension for VS Code
 - [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance): Language server for Python in VS Code
 - [pycodestyle](https://pypi.org/project/pycodestyle/): Tool to check Python code against PEP8 conventions
 - [black](https://pypi.org/project/black/): Tool providing autoformatting for Python files
 - [miro](https://miro.com/): Online workspace I used to draw the DB ERD
+- [coolors](https://coolors.co/): Palette creation tool
 - [Draw.io Integration](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio): Tool for drawing diagrams directly in VS Code
 
 ### Installed Packages:
@@ -1039,11 +1042,36 @@ By forking the GitHub Repository, you can make a copy of the original repository
 10. Deploy as described in the section [Deploying to Heroku](#deploying-to-heroku).
 
 
-
 ## Credits
 ### Code used
+
 All code was written by me unless clearly stated otherwise.
+
+In my research, I frequently used the following resources:
+
+- [Django Forums](https://forum.djangoproject.com/)
+- [Django Docs](https://docs.djangoproject.com/en/5.0/)
+- [PyPi](https://pypi.org/)
+- [Python Docs](https://docs.python.org/3/)
+- [W3Schools](https://www.w3schools.com/)
+- [Stack Overflow](https://stackoverflow.com/)
+
 ### Content
-...
+
+#### Images
+
+- [Band icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/band): icon seen in the logo image
+- [Image by rawpixel.com on Freepik](https://www.freepik.com/free-photo/hands-holding-music-instruments_19141352.htm): background image on some pages
+
+#### Music
+
+Most music files on the site were written and recorded by me, my sister, or my mother, and constitute original content. Files that are covers of other artists' work are labelled accordingly. All files were uploaded with the explicit permission of the authors.
+
+The music and song lyrics are used for educational purposes only and may not be distributed further without my permission. 
+
 ### Acknowledgments
-...
+
+- Many, many thanks to my sister for creating user profiles, writing descriptive user info, filling the site with entries, comments and interactions, continuously testing for and reporting bugs, creating screenshots, and being overall supportive and amazing.
+- Many thanks to my mentor Spence for constructive feedback, useful tips and kind encouragement.
+- Many thanks to my partner who patiently let me ignore him for five weeks while I was hyperfocused on this project.
+- Many thanks to the Code Institute slack community for constant and general support.

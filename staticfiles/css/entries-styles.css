@@ -1,4 +1,4 @@
-/* ---- Entry form -------- */
+/* -------------------- Entry form -------------------- */
 
 .tooltip-inner {
   max-width: 400px;
@@ -10,8 +10,9 @@
   font-weight: 400;
 }
 
-/* ---- Entry cards ----- */
+/* -------------------- Entry cards -------------------- */
 
+h2,
 h3 {
   font-size: 1.4rem;
 }
@@ -22,9 +23,9 @@ h3 {
 }
 
 .card-outer {
-  min-width: 300px;
-  max-width: 300px;
-  flex-grow: 0;
+  max-width: 410px;
+  width: 370px;
+  flex-grow: 1;
 }
 
 .card-full-page {
@@ -35,23 +36,12 @@ h3 {
   border: 1px solid black;
   border-radius: 0;
   min-height: 350px;
-  font-weight: 400;
-  word-break: break-word;
-}
-.card-desc {
-  border-radius: 0;
-  min-height: 350px;
-  font-weight: 400;
-  word-break: break-word;
-}
-
-.card-comments {
-  border-radius: 0;
-  font-weight: 400;
   word-break: break-word;
 }
 
 .card-desc {
+  border-radius: 0;
+  word-break: break-word;
   min-height: fit-content;
   border-top: none;
 }
@@ -65,6 +55,11 @@ h3 {
 looks better especially when displaying song lyrics */
 .card-desc p {
   margin-bottom: 0;
+}
+
+.card-comments {
+  border-radius: 0;
+  word-break: break-word;
 }
 
 .accordion-header {
@@ -135,12 +130,12 @@ looks better especially when displaying song lyrics */
 
 .inner-card a {
   text-decoration: none;
-  color: rgb(39, 36, 36);
+  color: rgb(0, 0, 0);
 }
 
 .card-header a.user-link {
   text-decoration: none;
-  color: rgb(39, 36, 36);
+  color: rgb(0, 0, 0);
 }
 
 .card-header span {
@@ -160,8 +155,16 @@ looks better especially when displaying song lyrics */
   padding: 0.5rem 0.3rem;
 }
 
-.title-link {
-  display: block;
+.title-link,
+.user-line {
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.title-link:hover,
+.user-line:hover {
+  opacity: 0.7;
+  transition: all 0.3s;
 }
 
 .tag {
@@ -173,24 +176,11 @@ looks better especially when displaying song lyrics */
   display: inline-block;
 }
 
-.tag-container a:focus-visible {
-  border-radius: 0;
-  border: none;
-  box-shadow: 0 0 0 white;
-  outline: none;
-}
-
-.tag-container a:focus-visible span {
-  box-shadow: 0 2px 2px rgb(107, 103, 103);
-}
-
 .publicity-icon {
   font-size: 0.9rem;
 }
 
-
-
-/* ---------- Comment section styles ----------- */
+/* -------------------- Comment section styles -------------------- */
 
 #submitButton {
   min-width: 8rem;
@@ -223,7 +213,7 @@ looks better especially when displaying song lyrics */
 }
 
 .form-control {
-  border: 1px solid gray;
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 0;
   width: 100% !important;
 }
@@ -237,7 +227,22 @@ looks better especially when displaying song lyrics */
   font-size: 1.5rem;
 }
 
-/* ---------- Media queries ----------- */
+/* -------------------- Media queries -------------------- */
+
+@media screen and (max-width: 1864px) {
+  .card-outer {
+    width: 330px;
+    max-width: 390px;
+  }
+}
+
+@media screen and (max-width: 1144px) {
+  .card-outer {
+    width: 310px;
+    max-width: 450px;
+    justify-self: center;
+  }
+}
 
 @media screen and (max-width: 768px) {
   h3 {
@@ -245,14 +250,13 @@ looks better especially when displaying song lyrics */
   }
 
   .card-outer {
+    width: 350px;
     max-width: 400px;
-    flex-grow: 1;
   }
 
   .larger-title {
     font-size: 1.5rem;
   }
-  
 }
 
 @media screen and (max-width: 576px) {

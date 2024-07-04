@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
 
+/* --------------  General styles --------------  */
+
 body {
   font-family: "Raleway", "Courier New", Courier, monospace;
   font-weight: 400;
@@ -17,18 +19,10 @@ h5 {
   font-size: 1.3rem;
 }
 
-.text-muted {
-  color: #484C4C;
-}
-
 a {
   cursor: pointer;
   color: rgb(0, 0, 0);
   text-decoration: none;
-}
-
-.link-underline {
-  text-decoration: underline;
 }
 
 a:hover,
@@ -37,11 +31,41 @@ a:focus-visible {
   color: rgb(0, 0, 0) !important;
 }
 
-.text-color {
-  color: rgb(39, 36, 36);
+a:focus,
+a:focus-visible {
+  /* Instead of the black outline, elements show a blue shadow by default */
+  outline: none !important;
 }
 
-.content-header h1 {
+.text-color {
+  color: rgb(0, 0, 0);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+audio {
+  border: 1px solid black;
+  border-radius: 25px;
+  max-width: 100%;
+  min-width: 200px;
+}
+
+.avatar-sm {
+  object-fit: cover;
+  width: 30px;
+  height: 30px;
+}
+
+.avatar-md {
+  object-fit: cover;
+  width: 38px;
+  height: 38px;
+}
+
+.content-header h1,
+.content-header h2 {
   background-color: #95d2b3;
   font-size: 1.2rem;
 }
@@ -51,7 +75,7 @@ a:focus-visible {
   opacity: 0.4;
 }
 
-/* Navbar styles */
+/* -------------- Navbar styles --------------  */
 
 .nav-upper {
   background-color: #55ad9b;
@@ -104,7 +128,7 @@ a:focus-visible {
   text-align: center;
 }
 
-/* ------------- Dropdown menu styles ---------------- */
+/* --------------  Dropdown menu styles --------------  */
 
 .dropdown-menu {
   border: 1px solid black;
@@ -121,7 +145,7 @@ a:focus-visible {
   background-color: #95d2b3;
 }
 
-/* ------------- Main containers styles ---------------- */
+/* --------------  Main containers styles --------------  */
 
 .main-bg {
   height: max-content;
@@ -132,7 +156,7 @@ a:focus-visible {
   min-height: 100vh;
 }
 
-/* ------------- Sidebar styles ---------------- */
+/* --------------  Sidebar styles --------------  */
 
 .sidebar {
   position: relative;
@@ -214,7 +238,7 @@ a:focus-visible {
   width: 100%;
 }
 
-/* ------ Sidebar item styles ------------- */
+/* --------------  Sidebar item styles --------------  */
 
 .hover-highlight:hover,
 .hover-highlight:focus {
@@ -255,46 +279,21 @@ a:focus-visible {
 .tag-name {
   border: 1px solid black;
   padding: 0.5rem;
+  margin-right: -3px;
   margin-bottom: auto;
 }
 
-/* ----------- Input field styles ------------ */
+/* --------------  Input field styles --------------  */
 
 .form-control {
   width: 100%;
 }
 
-/* ----------- General styles ------------ */
-
-.clickable {
-  cursor: pointer;
-}
-
-audio {
-  border: 1px solid black;
-  border-radius: 25px;
-  max-width: 100%;
-  min-width: 200px;
-}
-
-.avatar-sm {
-  object-fit: cover;
-  width: 30px;
-  height: 30px;
-}
-
-.avatar-md {
-  object-fit: cover;
-  width: 38px;
-  height: 38px;
-}
-
-/* ----------- Like button styles ------------ */
+/* --------------  Like button styles --------------  */
 
 .btn-like:focus-visible,
 .btn-like:active {
   outline: none !important;
-  box-shadow: none;
 }
 
 .like {
@@ -302,6 +301,7 @@ audio {
   text-decoration: none;
   color: black;
 }
+
 .fa-heart,
 .fa-comment {
   transition: all 0.3s;
@@ -336,7 +336,24 @@ audio {
   border-top-color: #55ad9b;
 }
 
-/* -------------------- Signup pages ------------- */
+/* -------------- Dashboard -------------- */
+
+.card-comments .card {
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+.card-comments .card-header {
+  padding: 0;
+}
+
+.card-comments .card-header a {
+  text-decoration: underline;
+  display: inline-block;
+}
+
+/* --------------  Sign up pages --------------  */
+
 .bg-1 {
   background-image: url("../images/hands-holding-music-instruments_53876-148189.webp");
   width: auto;
@@ -347,22 +364,11 @@ audio {
   background-size: cover;
 }
 
-.bg-2 {
-  background-image: url("../images/musical-background-with-musical-keys-white-flat-lay-copy-space.webp");
-  background-color: white;
-  width: auto;
-  height: 100%;
-  background-position: bottom 0% right 0%;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: contain;
-}
-
 .opaque-bg {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* ----------- Media queries -------------- */
+/* --------------  Media queries --------------  */
 
 @media screen and (max-width: 768px) {
   .logo-image {
@@ -393,22 +399,6 @@ audio {
   .dropdown-menu[data-bs-popper] {
     left: -6rem !important;
   }
-}
-
-/* Dashboard */
-
-.card-comments .card {
-  border: 1px solid black;
-  border-radius: 0;
-}
-
-.card-comments .card-header {
-  padding: 0;
-}
-
-.card-comments .card-header a {
-  text-decoration: underline;
-  display: inline-block;
 }
 
 @media screen and (max-width: 576px) {

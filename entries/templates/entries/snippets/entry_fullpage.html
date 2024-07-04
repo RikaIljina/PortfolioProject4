@@ -7,7 +7,7 @@
 
             <!-- Show author name and profile pic for entries not on the personal dashboard -->
             {% if not dashboard_view %}
-            <p>
+            <p class="user-line">
                 <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
                     aria-label="Opens the profile page of {{ entry.author }}">
                 {% if "placeholder" in entry.author.profile.pic.url %}

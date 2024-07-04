@@ -166,8 +166,6 @@ class EntryAdmin(SummernoteModelAdmin):
         if old_file:
             old_id = old_file.public_id
 
-            # Potential BUG: If for some reason the new_file has the same name
-            # as the old cloudinary id, the following logic won't work
             if old_file != new_file and not keep_file:
                 result = cloudinary.uploader.destroy(
                     old_id, resource_type="video", invalidate=True
