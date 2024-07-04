@@ -8,7 +8,6 @@ data in the database.
 from django.db import models
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
-from taggit.models import Tag
 import cloudinary
 from cloudinary.models import CloudinaryField
 

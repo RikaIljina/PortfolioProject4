@@ -1,5 +1,6 @@
 var sidebarCollapsed = false;
 var sidebarAutoCollapse = false;
+localStorage.setItem("sidebarCollapsed", "false");
 const sidebar = document.getElementById("sidebar");
 
 window.addEventListener("DOMContentLoaded", function () {

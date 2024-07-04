@@ -1,7 +1,6 @@
 # MusicLab
 MusicLab is a music blog - a place where artists can share their creations, give and receive constructive feedback, and explore fresh avenues of collaboration. It is a space for musicians of each and every skill level and all genres to show their music to the public and start conversations about music-related topics.
 
-![Site view across devices]()
 
 The live link for "MusicLab" can be found [HERE](https://music-lab-11c9945eb758.herokuapp.com/)
 
@@ -129,55 +128,122 @@ See credits for source attribution.
 
 The website has a navigation bar containing the logo and the account buttons at the top. This bar is shown on every page.
 
-- Navigation bar on desktops:
+Navigation bar on desktops:
 
-- Navigation bar on mobile devices:
+![alt text](static/readme-assets/screenshots/scr-navbar-desktop.png)
+
+Navigation bar on mobile devices (logged-in view):
+
+![alt text](static/readme-assets/screenshots/scr-navbar-mobile.png)
+
 
 The website also has a collapsible sidebar that is shown everywhere but on the Login/Signup pages and the error pages. The sidebar automatically collapses on mobile devices and can be left in an expanded or collapsed state by the user on larger screens.
 The sidebar icons differ depending on whether the user is on the main page or in their personal dashboard.
 
 - Sidebar on desktops, main page:
 
+![alt text](static/readme-assets/screenshots/scr-sidebar-desktop.png)
+
 - Sidebar on desktops, dashboard:
 
-- Sidebar on mobile devices, main page:
+![alt text](static/readme-assets/screenshots/scr-sidebar-dashboard-desktop.png)
+
+
+- Sidebar on mobile devices, profile:
+
+
+![alt text](static/readme-assets/screenshots/scr-sidebar-collapsed-mobile.png)
+
+
 
 - Sidebar on mobile devices, dashboard:
+
+![alt text](static/readme-assets/screenshots/scr-sidebar-mobile.png)
+
+
+
 
 #### Viewing
 All users have access to the main page with all entries in card form:
 
+![alt text](static/readme-assets/screenshots/scr-mainpage-desktop.png)
+
 Users can click the card or the card title to open the full-page view of the card containing the entry description and the comment section:
+
+![alt text](static/readme-assets/screenshots/scr-card-fullpageview-desktop.png)
 
 Users can also click on the username on a card to navigate to the profile page of a user containing their 'About me' and 'Contact' info as well as all their public entries in card form:
 
+![alt text](static/readme-assets/screenshots/scr-profile-desktop.png)
+
+![alt text](static/readme-assets/screenshots/scr-profile-1-mobile.png)
+
 Users can click the 'About' link at the bottom of the sidebar to access the 'About' page outlining the idea behind the website and the rules and providing a way to send feedback to the site admins:
 
-Authenticated users can view all their public and private entries in their personal dashboard:
+![alt text](static/readme-assets/screenshots/scr-about-desktop.png)
 
-Authenticated users can also view their 'Comments' and 'Favorites' pages:
+![alt text](static/readme-assets/screenshots/scr-user-feedback-mobile.png)
+
+Authenticated users can view all their public and private entries in their personal dashboard. Authenticated users can also view their 'Comments' and 'Favorites' pages:
+
+![alt text](static/readme-assets/screenshots/scr-all-comments-desktop.png)
+
+![alt text](static/readme-assets/screenshots/scr-all-comments-mobile.png)
+
+![alt text](static/readme-assets/screenshots/scr-favourites-desktop.png)
 
 #### Editing
 
 Authenticated users can click on the 'Edit' button on their profile page beneath their large avatar or click the 'Update profile' link in the dropdown menu in the upper navigation bar to open the "Edit profile" form and update their data:
 
+![alt text](static/readme-assets/screenshots/scr-edit-profile-1-mobile.png)
+
+![alt text](static/readme-assets/screenshots/scr-edit-profile-2-mobile.png)
+
+![alt text](static/readme-assets/screenshots/scr-edit-profile-3-desktop.png)
+
 Authenticated users can click on an existing entry to get access to the 'Edit'/'Delete' buttons:
+
+![alt text](static/readme-assets/screenshots/scr-edit-delete-entry-desktop.png)
 
 A click on 'Edit' opens the 'Edit entry' form where users can change their entry data or upload another version of their song:
 
+![alt text](static/readme-assets/screenshots/scr-edit-entry-1-desktop.png)
+
+![alt text](static/readme-assets/screenshots/scr-edit-entry-2-desktop.png)
+
+![alt text](static/readme-assets/screenshots/scr-edit-entry-1-mobile.png)
+
 A click on 'Delete' opens a modal that asks for confirmation before deleting the song permanently:
+
+![alt text](static/readme-assets/screenshots/scr-delete-entry-mobile.png)
 
 Authenticated users can use the 'Like' button to like/unlike entries anywhere on the page where entries are displayed:
 
+![alt text](static/readme-assets/screenshots/scr-like-unlike-mobile.png)
+
 Authenticated users can edit and delete their comments on all pages where comments are displayed:
 
+![alt text](static/readme-assets/screenshots/scr-edit-comment-desktop.png)
+
 Authenticated users can send a message to the admins on the 'About' page:
+
+![alt text](static/readme-assets/screenshots/scr-user-feedback-mobile.png)
 
 #### Logging in
 
 Users can use the 'Login'/'Sign up' buttons on the upper navbar to create an account or log in:
 
+![alt text](static/readme-assets/screenshots/scr-sign-up-mobile.png)
+
+![alt text](static/readme-assets/screenshots/scr-login-mobile.png)
+
+![alt text](static/readme-assets/screenshots/scr-login-desktop.png)
+
+
 They can sign out via the link in the dropdown with their avatar and name in the navbar:
+
+![alt text](static/readme-assets/screenshots/scr-sign-out-mobile.png)
 
 #### Error pages
 
@@ -187,7 +253,9 @@ The website has four custom  error pages:
 - 404 for pages that don't exist
 - 500 for server errors
 
-All error pages provide a short description of the error and a link to get back to the main page. 
+![alt text](static/readme-assets/screenshots/scr-404.PNG)
+
+All error pages provide a short description of the error and a link to get back to the main page.
 
 ### Future Features:
 
@@ -437,15 +505,9 @@ When I tried initializing the instance with ```instance = self.instance``` for f
 I use the Cloudinary cloud service for user file storage and handle the file upload directly via the ```CloudinaryField``` model field. However, since deleting an object associated with a Cloudinary file does not automatically remove the file in the cloud storage, I have implemented the mechanism of file destruction via ```cloudinary.uploader.destroy(file.public_id, invalidate=True)``` where it is relevant.
 
 #### Summernote integration
-Since I decided to allow users to use custom formatting in their 'About me' and 'Entry description' sections, I had to implement a richtext editor and adjust it for scope and safety reasons. I integrated Summernote by using ```SummernoteWidget``` as a widget in the ```Meta``` section of the form classes and made sure to adjust its settings via ```SUMMERNOTE_CONFIG``` in settings.py, 
+Since I decided to allow users to use custom formatting in their 'About me' and 'Entry description' sections, I had to implement a richtext editor and adjust it for scope and safety reasons. I integrated Summernote by using ```SummernoteWidget``` as a widget in the ```Meta``` section of the form classes and made sure to adjust its settings via ```SUMMERNOTE_CONFIG``` in settings.py, disabling attachments and drag&drop, removing the option of embedding code, and leaving a few basic styling options and fonts.
+Summernote uses the ```django-bleach``` module to sanitize HTML input, so I deemed it sufficiently safe to render the user description and bio texts with the template filter ```{{ description|safe }}``` and display the content.
 
-- handle html safely
-- disable code/file embed in settings
-
-
-
-### Site functionality
-- JS for sidebar
 
 ## Testing
 
@@ -582,55 +644,77 @@ Since I decided to allow users to use custom formatting in their 'About me' and 
 ### Fixed bugs
 During development, I encountered several bugs that I was largely able to fix on the spot. Some of the more prominent ones were:
 
-- admin slug, created new ModelForm with clean() method and linked it as form to admin
-- force-show user/tag section instead of using proper bootstrap call
-- couldn't save form without ```enctype="multipart/form-data"```
-- relied on changed_data and tried to get file attribute; file field was changed but 'file' was empty
+- When trying to validate the custom slug in the ```save_model()``` method of the admin class ```EntryAdmin```, all errors went to the 'Server error' page instead of simply showing a validation error in the form. After some research, I created a new ModelForm ```EntryFormExtension``` with the overridden ```clean()``` method and linked it to the ```EntryAdmin``` class via ```get_form()```. Now I could validate the slug inside the ```clean()``` method and show validation errors in the form. However, I could not save the validated slug right there in ```EntryFormExtension``` because the instance didn't seem to give me access to the Entry object. Therefore, after a successful validation, the ```EntryAdmin``` class recreates and finally saves the slug in its own ```save_model()``` method. This seems to be a clunky and error-prone process and should be revised in the future.
 
-Issues:
+- When trying to keep a collapsed section open inside the sidebar in a specific view, I added and removed the ```show``` class from the section's class list before realizing that I was circumventing the collapsible functionality and the ```aria-expanded``` attribute. I made sure to use the proper Bootstrap method ```$(element).collapse("hide")``` instead.
 
-Link focus when tabbing
+- When trying to upload a file via the POST method of a form, I found that no file had been passed on to the request. After some research, I understood that a form receiving a file upload needs the attribute ```enctype="multipart/form-data"``` and that its instance must receive ```request.FILES``` in its constructor: ```form = EntryForm(request.POST, request.FILES)```
+
+- In the ```save()``` method of ```EntryForm```, I have code checking whether the user is trying to upload a new file while keeping the old file. I checked for changes with ```if "audio_file" in self.changed_data``` and then made the mistake of assuming that this expression being true meant that I could get all attributes of my old file via ```old_file = self.initial["audio_file"].public_id```. Fortunately, I noticed the issue when I tried to create a new entry, selected a file in the uploader, and then left the description field blank to cause an error. After the validation error, I again added the file for upload, filled out all fields and submitted the form, only to get a server error. Apparently, a change in the audio file field had been registered in ```self.changed_data``` the first time I tried to add a file before causing the ValidationError, but since no file was uploaded, ```self.initial["audio_file"]``` was empty, which caused an AttributeError.
+I changed the code to 
+```
+old_file = self.initial.get("audio_file")
+if "audio_file" in self.changed_data and old_file:
+```
+
+
+### Issues and caveats
+
+**Sidebar**
+
+I decided to have a collapsible sidebar with all relevant site operations always accessible to the user. To that end, I first used a template sidebar that relied on Bootstrap classes for responsiveness. However, after adding features and functionality to my pages, I realized that I would need to control the sidebar via JavaScript. Instead of rethinking it completely and building it from scratch as a JS-controlled element, I tried to work with and around the bootstrap classes, constantly fixing bugs while creating new ones, which cost me a lot of time and effort. I realize that I should have thought it through from the start. At the moment, it mostly works as intended (see [Unfixed bugs](#unfixed-bugs 'Unfixed bugs') for rare style issue), but I feel like the JS code is bulky and probably much slower than it could be.
+
+**Filtering**
 
 Filtering by user only makes sense with a rather small user base. Should the site have thousands of users, retrieving them all to scroll through makes no sense from a UX perspective.
 The same goes for tags: since I allow users to enter their own tags, theoretically there is no limit to how many tags could accumulate in the database in the future. Thus, my filtering feature can only be seen as a temporary measure.
 It should be replaced by a free text search to allow users to find tags, usernames, and titles. To this end, indexing and search vectors must be implemented.
 Also, a handful of meaningful categories should be added as top-level tagging to help users with labelling their work and to allow for quick and useful filtering.
 
-Since my website queries the database on almost every page load and every query costs time and resources, I tried to optimize the queries to the extent of my capabilites. Using the methods ```select_related()``` and ```prefetch_related()```, I was able to reduce the amount of queries to an average of 10 per page, regardless of the amount of entries, users, or comments retrieved.
-I was unable to achieve the same result on the admin page though, where retrieving a list of comments took over 40 queries. Maybe removing items from the list view would help ...
+**User form input**
 
-I allow users to keep uploaded files as a kind of "version history" when adding a new file to their existing entry. To make sure they see all their uploaded files and can delete them selectively while editing the entry, I added audio elements and delete buttons to the entry form view and wired up the buttons via forms.js. I was yet unable to properly override the Django admin form view to achieve the same result in the admin panel. Thus, in order to delete a specific file from the version history, the admin has to manually copy the ID of the Cloudinary file from the text area containing the json dictionary ```old_files```, log in to Cloudinary, delete the file there, and delete the key-value pair for the file from the text area. This is a tedious and error-prone process and must be fixed in the future.
+The ```TextField``` models that receive user input for the entry.description and profile.bio data have no upper limit as to their character length yet. This should be amended.
+Also, no custom tag validation has been implemented yet, so users could enter tags that are too long and too many and thereby break the style of the sidebar and the cards.
+
+**Admin optimization**
+
+As mentioned before, I tried to optimize my website queries using the methods ```select_related()``` and ```prefetch_related()```, which worked well.
+However, due to time restrictions, I was unable to achieve the same result on the admin page, where retrieving a list of 100 likes takes over 200 queries and 17000 ms. This needs to be researched and amended.
+
+**Admin old file handling**
+
+I allow users to keep uploaded files as a kind of "version history" when adding a new file to their existing entry. To make sure they see all their uploaded files and can delete them selectively while editing the entry, I added audio elements and delete buttons to the entry form view and wired up the buttons via ```forms.js```. I was yet unable to properly override the Django admin form view to achieve the same result in the admin panel. Thus, in order to delete a specific file from the version history, the admin has to manually copy the ID of the Cloudinary file from the text area containing the json dictionary ```old_files```, log into Cloudinary, delete the file there, and delete the key-value pair for the file from the text area. This is a tedious and error-prone process and must be fixed in the future.
+
+**Dangerous Admin edits**
+
+Right now, the admin can delete a user profile without deleting the user. If the user then logged into their account, they would be met with a server error due to the inability to retrieve their profile data which the site relies on. 
+Thus, a check for the existence of a profile for active users needs to be implemented. This could, for example, happen immediately after user login, where the app would create a default profile for a user should no profile be found in the database.
+
+A similar issue arises when the admin changes a username. If the user has already created entries, their slugs ({title}-{author}) contain the old username, which now could be used by a new user. To fix this, all entries of the affected user must be updated immediately after a username change. This could probably be implemented via signal or a custom script.
+
+**Comments on private entries**
+
+Users can decide at any time whether their entry should be public or private. If they set a previously public entry to private and that entry contains comments by other users, these comments will still be visible and editable in the 'My comments' section of the user's dashboard, albeit the entry itself won't be accessible via the link in the title. This issue requires some consideration.
+
+**Quality of profile pictures**
+
+I have not implemented any proper image resizing tools, which is probably why the avatar images are of pretty poor quality. They are being uploaded in their original size and then resized with CSS to 30px or 38px. I need to implement some cropping/resizing mechanics to improve on their quality.
 
 Whenever an attempt is made to destroy a Cloudinary file via the method ```...```, the server returns a response containing a dictionary: ```{'result': 'ok'}``` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
 
-no safeguard against admin deleting user profile
-or changing user name
+**Audio player**
 
-Caching:
+The audio player is the custom HTML audio element, which might not work in all browsers and should be replaced with a custom playback option. Right now, it is possible to start several audio files at once, which should, of course, be prevented in the future.
 
+**User upload issues**
 
-Security considerations
+My sister, who was helping me with filling the database with data, encountered server errors and application errors when trying to upload large audio files with otherwise correct form data. When I tried to upload the same files to the same accounts, I had no issues whatsoever and could not reproduce her errors. My assumption is that due to her quite slow upload speed, Heroku reacts with a timeout and terminates the connection. If this turns out to be a common issue for slower internet connections, I should revise the file upload mechanics to account for that.
 
-HTML in summernote
-
-Storage:
-
-Cloudinary
-
-some users can't upload
-proper image resizing
-
-code:
-HttpResponseRedirect, redirect
-
-comments are visible when entries are private
 
 ### Unfixed bugs
 
 1. Sometimes, when resizing the window too often and expanding elements in the main content container, the sidebar doesn't quite stretch to the bottom of the page. This issue seems rare but still needs investigating. The problem might be paddings/margins or wrong min-height values.
 ![alt text](static/readme-assets/bug-sidebar.PNG)
-
-2. If admin changes a user's username, all slugs must be updated
 
 ## Technologies Used
 ### Main Languages Used
