@@ -8,7 +8,8 @@
         {% if not dashboard_view %}
         <div class="card-header">
             <p class="user-line">
-                <a href="{% url 'user_profile' entry.author.username %}" class="user-link">
+                <a href="{% url 'user_profile' entry.author.username %}" class="user-link"
+                aria-label="{{ entry.author }}">
                 {% if "placeholder" in entry.author.profile.pic.url %}
                 <img loading="lazy" src="{% static 'images/default_profile.webp' %}" alt="Placeholder avatar"
                     width="30" height="30" class="rounded-circle avatar-sm">
@@ -45,7 +46,7 @@
 
         <!-- Playable audio file, date, short description preview and tags -->
         <div class="card-body d-flex flex-column">
-            <audio controls preload="none" class="w-100 my-3" aria-label="Audio file titled {{ entry.title }}">
+            <audio controls="controls" preload="metadata" class="w-100 my-3" aria-label="Audio file titled {{ entry.title }}">
                 <source src="{{ entry.audio_file.url }}" type="audio/mpeg">
                 Your browser does not support the audio tag.
             </audio>
