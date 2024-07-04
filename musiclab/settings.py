@@ -92,7 +92,7 @@ CSRF_TRUSTED_ORIGINS = {
 }
 
 # load_dotenv()
-# config = cloudinary.config(secure=True)
+cloudinary.config(secure=True)
 
 TAGGIT_CASE_INSENSITIVE = True
 
