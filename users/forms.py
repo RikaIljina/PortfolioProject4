@@ -89,8 +89,8 @@ class ProfileForm(forms.ModelForm):
         Overrides superclass save method to handle Cloudinary file deletion
 
         Args:
-            commit (bool, optional): If True, the changes are saved to the database.
-                Defaults to True.
+            commit (bool, optional): If True, the changes are saved to the
+            database. Defaults to True.
 
         Returns:
             Profile: The Profile model instance.
@@ -101,9 +101,11 @@ class ProfileForm(forms.ModelForm):
         if "pic" in self.changed_data:
             old_id = self.initial["pic"].public_id
             if old_id != "placeholder":
-                # The response could be used to send an error message to the admin
-                # if the file couldn't be destroyed
-                cl_response = cloudinary.uploader.destroy(old_id, invalidate=True)
+                # The response could be used to send an error message to the
+                # admin if the file couldn't be destroyed
+                cl_response = cloudinary.uploader.destroy(
+                    old_id, invalidate=True
+                )
 
         if commit:
             super().save()
@@ -130,7 +132,7 @@ class ProfileForm(forms.ModelForm):
 
         file = self.cleaned_data.get("pic", False)
         if file and "cloudinary" not in str(type(file)):
-            if not file.content_type in ["image/jpeg", "image/png"]:
+            if file.content_type not in ["image/jpeg", "image/png"]:
                 raise ValidationError(
                     f"This is not an image file, please"
                     f" choose a valid file."

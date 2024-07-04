@@ -293,12 +293,12 @@ def user_favorites(request, username):
     authenticated user. It ensures that only the authenticated user can access
     their own favorites page and displays the entries along with the number of
     likes and comments received.
-    The other views that display entries process a queryset of entries annotated
-    with like and comment amounts, and the HTML templates expect to receive an
-    'entry' object with all its attributes. However, since this view doesn't
-    process a queryset of entries but rather a queryset of Like objects, each
-    Like object is annotated with the amount of likes and comments which its
-    related entry received instead.
+    The other views that display entries process a queryset of entries
+    annotated with like and comment amounts, and the HTML templates expect to
+    receive an 'entry' object with all its attributes. However, since this view
+    doesn't process a queryset of entries but rather a queryset of Like
+    objects, each Like object is annotated with the amount of likes and
+    comments which its related entry received instead.
     The HTML template is then wrapped in {% with entry=like.entry %} tags to
     access entry data and in {% with entry=like %} tags to access the annotated
     values.

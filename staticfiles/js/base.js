@@ -1,39 +1,53 @@
+/* This script manages:
+ * - the sidebar behavior
+ * - the color of the info/error messages shown to the user as feedback
+ * - tooltip activation
+ */
+
 var sidebarCollapsed = false;
 var sidebarAutoCollapse = false;
-localStorage.setItem("sidebarCollapsed", "false");
-const sidebar = document.getElementById("sidebar");
+// Check if the user has already changed the sidebar state and it is therefore
+// saved in the storage. If not, set it to false.
+if (!localStorage.getItem("sidebarCollapsed")) {
+  localStorage.setItem("sidebarCollapsed", "false");
+}
 
 window.addEventListener("DOMContentLoaded", function () {
+  const sidebar = document.getElementById("sidebar");
+  const noSidebar = document.querySelector(".no-sidebar");
+
   setMsgColor();
   activateTooltips();
 
   // Hide sidebar on pages with no sidebar (error pages)
-  const noSidebar = document.querySelector(".no-sidebar");
   if (noSidebar) {
     sidebar.classList.add("d-none");
   } else {
     var filterLinks = document.getElementsByClassName("filter-link");
     var filterCategories = document.getElementsByClassName("filter-cat");
-    const sidebar = document.getElementById("sidebar");
     var sidebarPos = getComputedStyle(sidebar).position;
 
-    // Check whether the user is on a mobile device
+    // Check whether the user is on a mobile device and make sure sidebar collapses automatically.
+    // The sidebar position on mobile devices is 'absolute'
     if (sidebarPos === "absolute") {
       sidebarAutoCollapse = true;
-      collapseSidebar();
+      collapseSidebar(sidebar);
     } else {
       sidebarAutoCollapse = false;
+      // Check the previous state of the sidebar as set by the toggle button
       if (localStorage.getItem("sidebarCollapsed") === "false") {
-        expandSidebar();
+        expandSidebar(sidebar);
       } else {
-        collapseSidebar();
+        collapseSidebar(sidebar);
       }
     }
 
-    // Prevent filter items from collapsing once opened (on large screens)
+    // Prevent filter items from collapsing once opened (on large screens):
     // Keep the list of usernames or tags expanded if the user is not on a
     // mobile device and if they already clicked on a filter and the view
-    // shows a filtered selection of entries
+    // shows a filtered selection of entries.
+    // Do not expand the list if the user has collapsed the sidebar in the
+    // filter view.
     for (let filterCat of filterCategories) {
       if (
         !sidebarAutoCollapse &&
@@ -46,7 +60,7 @@ window.addEventListener("DOMContentLoaded", function () {
         sidebarAutoCollapse &&
         filterCat.classList.contains("force-show")
       ) {
-        collapseSidebar();
+        collapseSidebar(sidebar);
       }
     }
 
@@ -55,8 +69,11 @@ window.addEventListener("DOMContentLoaded", function () {
         // If the user clicks on an expandable item, no matter on what device, and
         // the sidebar is collapsed, the sidebar will be expanded
         if (link.getAttribute("aria-expanded") === "true" && sidebarCollapsed) {
-          expandSidebar();
+          expandSidebar(sidebar);
         }
+        // Adjust the 'about' link container with the position 'absolute' at the
+        // bottom of the sidebar. Give it some time because it is sometimes
+        // too fast and receives the wrong width.
         setTimeout(() => {
           document.querySelector("#about-link-container").style.width =
             getComputedStyle(sidebar).width;
@@ -64,11 +81,16 @@ window.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Adjust the 'about' link container with the position 'absolute' at the
+    // bottom of the sidebar once everything has been loaded. Give it some time
+    // because it is sometimes too fast and receives the wrong width.
     setTimeout(() => {
       document.querySelector("#about-link-container").style.width =
         getComputedStyle(sidebar).width;
     }, 200);
 
+    // Try to adjust the sidebar height on mobile devices to the main content
+    // container height
     if (sidebarPos === "absolute") {
       let newHeight = getComputedStyle(
         document.querySelector(".main-content")
@@ -76,21 +98,23 @@ window.addEventListener("DOMContentLoaded", function () {
       document.querySelector("#sidebar").style.height = newHeight;
     }
 
+    // Toggle button functionality
     document
       .getElementById("sidebar-toggle-btn")
       .addEventListener("click", function () {
         if (sidebarCollapsed) {
-          expandSidebar();
+          expandSidebar(sidebar);
         } else {
-          collapseSidebar();
+          collapseSidebar(sidebar);
         }
 
-        // Use setTimeout to remove focus from the icon after clicking it
+        // Use setTimeout to remove focus from the toggle icon after clicking it
         setTimeout(() => {
           this.blur();
         }, 100);
       });
 
+    // Listen for window resize and adjust the sidebar accordingly
     window.addEventListener("resize", () => {
       var sidebarPos = getComputedStyle(sidebar).position;
       if (sidebarPos === "absolute") {
@@ -111,6 +135,8 @@ window.addEventListener("DOMContentLoaded", function () {
       }, 200);
     });
 
+    // Listen for scrolling and adjust the 'about' link container at the bottom
+    // to give it a shadow if it overlays other sidebar elements
     window.addEventListener("scroll", function () {
       const aboutLink = document.querySelector("#about-link-container");
       const menu = document.querySelector("#menu");
@@ -126,13 +152,16 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-function collapseSidebar() {
+/** This function handles all processes needed to collapse the sidebar.
+ */
+function collapseSidebar(sidebar) {
   // Toogle button icon
   document.querySelector("#toggle-icon-expand").classList.add("d-inline");
   document.querySelector("#toggle-icon-expand").classList.remove("d-none");
   document.querySelector("#toggle-icon-collapse").classList.add("d-none");
   document.querySelector("#toggle-icon-collapse").classList.remove("d-inline");
 
+  // Remember the new sidebar state
   sidebarCollapsed = true;
   localStorage.setItem("sidebarCollapsed", sidebarCollapsed);
 
@@ -150,17 +179,21 @@ function collapseSidebar() {
     title.classList.remove("d-inline");
   }
 
+  // Reset the sidebar width
   sidebar.style.minWidth = "initial";
   document.querySelector("#about-link-container").style.width = "initial";
 }
 
-function expandSidebar() {
+/** This function handles all processes needed to expand the sidebar.
+ */
+function expandSidebar(sidebar) {
   // Toogle button icon
   document.querySelector("#toggle-icon-expand").classList.remove("d-inline");
   document.querySelector("#toggle-icon-expand").classList.add("d-none");
   document.querySelector("#toggle-icon-collapse").classList.remove("d-none");
   document.querySelector("#toggle-icon-collapse").classList.add("d-inline");
 
+  // Remember the new sidebar state
   sidebarCollapsed = false;
   localStorage.setItem("sidebarCollapsed", sidebarCollapsed);
 
@@ -171,17 +204,25 @@ function expandSidebar() {
     title.classList.add("d-inline");
   }
 
+  // Set the sidebar width
   if (sidebarAutoCollapse) {
     sidebar.style.minWidth = "95%";
   } else {
     sidebar.style.minWidth = "17%";
   }
+
+  // Adjust the 'about' link container with the position 'absolute' at the
+  // bottom of the sidebar. Give it some time because it is sometimes
+  // too fast and receives the wrong width.
   setTimeout(() => {
     document.querySelector("#about-link-container").style.width =
       getComputedStyle(sidebar).width;
   }, 200);
 }
 
+/** This function sets a green or red background color for messages at the top of
+ * the main content container depending on the type of the message.
+ */
 function setMsgColor() {
   const msgAlerts = document.querySelectorAll(".alert");
 
@@ -197,8 +238,8 @@ function setMsgColor() {
 /** Finds all elements that use bootstrap tooltips and initializes them.
  * Always shows active tooltips which are used to display errors on login/signup
  * form fields.
- *  @type {NodeList object} activeTooltips - Elements that show tooltips once they receive a text value
- *  @type {NodeList object} hoverTooltips  - Elements that show tooltips on hover
+ *  activeTooltips - Elements that show tooltips once they receive a text value
+ *  hoverTooltips  - Elements that show tooltips on hover
  */
 
 function activateTooltips() {

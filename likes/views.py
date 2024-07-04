@@ -9,7 +9,7 @@ Key functionalities:
 - Delete a like from an entry
 
 View Functions:
-- add_like(request, entry_id, current_path): Handles the addition of a like 
+- add_like(request, entry_id, current_path): Handles the addition of a like
   to an entry.
 - delete_like_by_entry(request, entry_id, current_path): Handles the removal of
   a like from an entry by entry ID.
@@ -57,9 +57,9 @@ def add_like(request, entry_id, current_path=""):
     entry = get_object_or_404(Entry.objects.filter(publish=1), id=entry_id)
 
     if (
-        not request.user.liked.filter(entry__pk=entry_id).exists() 
+        not request.user.liked.filter(entry__pk=entry_id).exists()
         and request.user != entry.author
-        ):
+    ):
         Like.objects.create(user=request.user, entry=entry)
 
     # Needed to preserve sorting and page parameters

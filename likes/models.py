@@ -39,7 +39,8 @@ class Like(models.Model):
         Check if the like is valid before saving
 
         This method ensures that a user cannot like an entry twice and cannot
-        like their own entry. If the like is valid, it is saved to the database.
+        like their own entry. If the like is valid, it is saved to the
+        database.
         """
 
         if self.entry.author == self.user:

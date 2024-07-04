@@ -225,7 +225,8 @@ def delete_entry(request, username, slug):
     Args:
         request (HttpRequest): The HTTP request object containing metadata
             about the request.
-        username (str): The username of the user attempting to delete the entry.
+        username (str): The username of the user attempting to delete the
+            entry.
         slug (str): The slug of the entry being deleted.
 
     Returns:
@@ -258,7 +259,8 @@ def delete_old_file(request, username, slug, file_id):
     Args:
         request (HttpRequest): The HTTP request object containing metadata
             about the request.
-        username (str): The username of the user attempting to delete the entry.
+        username (str): The username of the user attempting to delete the
+            entry.
         slug (str): The slug of the entry being deleted.
         file_id (str): The ID of the file being deleted.
 

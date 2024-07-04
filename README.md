@@ -508,12 +508,17 @@ I use the Cloudinary cloud service for user file storage and handle the file upl
 Since I decided to allow users to use custom formatting in their 'About me' and 'Entry description' sections, I had to implement a richtext editor and adjust it for scope and safety reasons. I integrated Summernote by using ```SummernoteWidget``` as a widget in the ```Meta``` section of the form classes and made sure to adjust its settings via ```SUMMERNOTE_CONFIG``` in settings.py, disabling attachments and drag&drop, removing the option of embedding code, and leaving a few basic styling options and fonts.
 Summernote uses the ```django-bleach``` module to sanitize HTML input, so I deemed it sufficiently safe to render the user description and bio texts with the template filter ```{{ description|safe }}``` and display the content.
 
-
 ## Testing
 
 ### Validator Testing
 
-
+| Files | Validator | Result |
+|---|---|---|
+| All *.py files in the main project folder and the app folders except for migrations | pycodestyle (PEP8) | Pass |
+| base.js | [JSHint](https://jshint.com/) | Pass |
+| comments.js | [JSHint](https://jshint.com/) | Pass |
+| entries.js | [JSHint](https://jshint.com/) | Pass |
+| likes.js | [JSHint](https://jshint.com/) | Pass |
 
 ### Responsiveness testing
 
@@ -723,7 +728,7 @@ My sister, who was helping me with filling the database with data, encountered s
 - Javascript
 - Python
 - Django
-- SQL - Postgres
+- PostgreSQL
 
 ### Frameworks, Libraries & Programs Used
 

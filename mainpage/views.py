@@ -51,7 +51,7 @@ def index(request):
     """
 
     entries = get_published_entries(request, Entry.objects, get_comments=False)
-    
+
     # get_page_context() takes care of checking whether entries is empty
     users, tags, entries, sorted_param, page_obj = get_page_context(
         request, entries

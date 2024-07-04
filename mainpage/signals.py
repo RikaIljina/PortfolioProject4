@@ -4,7 +4,7 @@ signals.py for the 'Mainpage' app
 This module contains signals that fire on certain triggers.
 
 delete_tags(): Triggered by the deletion of the Entry object; deletes all tags
-    with no associated entries. 
+    with no associated entries.
 """
 
 from django.db.models.signals import post_delete, post_save

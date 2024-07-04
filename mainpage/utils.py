@@ -49,9 +49,9 @@ def get_page_context(request, entries=None, mainpage=True):
                - dict: A dictionary of all tags and their respective amounts.
     """
 
-    if entries == None and mainpage:
+    if entries is None and mainpage:
         return get_all_usernames(), get_all_tags(), None, '', None
-    elif entries == None:
+    elif entries is None:
         # Relevant for the dashboard view
         return None, '', None
 

@@ -147,7 +147,7 @@ class EntryForm(forms.ModelForm):
         file = self.cleaned_data.get("audio_file", False)
 
         if file and "cloudinary" not in str(type(file)):
-            if not file.content_type in ["audio/mpeg"]:
+            if file.content_type not in ["audio/mpeg"]:
                 raise ValidationError(
                     f"This is not an mp3 file, please choose" f" a valid file."
                 )

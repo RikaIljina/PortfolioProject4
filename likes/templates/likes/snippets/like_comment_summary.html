@@ -3,10 +3,10 @@
     <p class="ms-2 mb-0">
 
         {% if user.is_authenticated and entry.author != user %}
-            <a class="btn-like like" data-entry_id="{{ entry.id }}"
+            <a class="btn-like like" data-entry-id="{{ entry.id }}"
             {% if entry.already_liked == 1 %}data-liked=True{% endif %}
             {% if is_favorite == 1 %}data-favorite-view=True{% endif %}
-            href="{{ request.path }}">
+            href="#">
                 {% if entry.already_liked == 1 or is_favorite == 1 %}
                 <i class="fa-solid fa-heart like-red hover-scale" title="Unlike"></i>
                 {% else %}
