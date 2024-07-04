@@ -143,7 +143,9 @@ The website uses images sparingly to not distract from the main purpose of the s
 The logo was adapted from an icon found on Flaticon.
 The background images on the 'Login' and 'Sign up' pages are taken from Freepik. They create a pleasant backdrop for the otherwise plain pages, while their musical theme prepares the user for a hopefully amazing musical experience.
 See credits for source attribution.
+
 <img src="static\images\logo-inst-l.webp" width="300" alt="Logo with stylized instruments next to the name MusicLab">
+
 <img src="static\images\hands-holding-music-instruments_53876-148189.webp" width="300" alt="Hands holding music instruments">
 
 ## Features
