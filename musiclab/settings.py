@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 import cloudinary
-from dotenv import load_dotenv
 import dj_database_url
 
 if os.path.isfile("env.py"):
@@ -34,7 +33,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    ".localhost",
+    "localhost",
     "127.0.0.1",
     ".herokuapp.com",
 ]
@@ -91,7 +90,6 @@ CSRF_TRUSTED_ORIGINS = {
     "https://*.herokuapp.com",
 }
 
-# load_dotenv()
 cloudinary.config(secure=True)
 
 TAGGIT_CASE_INSENSITIVE = True
@@ -185,6 +183,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
+# For Debug toolbar
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
