@@ -20,15 +20,15 @@
         <div class="row g-0 px-2 pt-1 pb-0 mt-0 mb-2 justify-content-center content-header">
             <div class="col-12 py-auto">
                 {% if sorted_param == '?sorted=by_date' %}
-                <h1 class="">Most <b>recent</b> entries</h1>
+                <h2 class="">Most <b>recent</b> entries</h2>
                 {% elif sorted_param == '?sorted=by_likes' %}
-                <h1 class="">Most <b>liked</b> entries</h1>
+                <h2 class="">Most <b>liked</b> entries</h2>
                 {% elif sorted_param == '?sorted=by_updated' %}
-                <h1 class="">Last <b>updated</b> first</h1>
+                <h2 class="">Last <b>updated</b> first</h2>
                 {% elif sorted_param == '?sorted=by_published' %}
-                <h1 class=""><b>Unpublished</b> first</h1>
+                <h2 class=""><b>Unpublished</b> first</h2>
                 {% else %}
-                <h1 class="">All entries</h1>
+                <h2 class="">All entries</h2>
                 {% endif %}
             </div>
         </div>

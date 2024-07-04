@@ -16,7 +16,7 @@
                     <img src="{{ profile.pic.url }}" alt="User profile picture" class="img-fluid my-2 rounded-circle avatar-lg">
                     {% endif %}
 
-                    <h3>{{ profile.user.username }}</h3>
+                    <h1>{{ profile.user.username }}</h1>
                     <p>Joined {{ profile.joined|naturalday }}</p>
 
                     <!-- 'Edit profile' button -->
@@ -30,7 +30,7 @@
                 <!-- 'About me' section with profile bio -->
                 <div class="col-lg-5 col-xl-6">
                     <div class="pt-1 px-4">
-                        <h6>About me</h6>
+                        <h2>About me</h2>
                         <hr class="mt-0 mb-2">
                         <div class="row pt-1">
                             <div class="col-12 mb-3 bio">
@@ -47,7 +47,7 @@
                 <!-- User contact info -->
                 <div class="col-lg-4 col-xl-3">
                     <div class="pt-1 px-4">
-                        <h6>Contact Me</h6>
+                        <h2>Contact Me</h2>
                         <hr class="mt-0 mb-2">
                         <div class="pt-1">
                             {% if profile.email %}

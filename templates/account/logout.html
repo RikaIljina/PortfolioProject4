@@ -12,7 +12,7 @@
 <div class="row g-0 justify-content-center m-auto sidebar-margin h-100 bg-2">
     <div class="col-10 col-md-10 mt-2 mt-sm-3">
         <div class="opaque-bg">
-            <h3>{% trans "Sign Out" %}</h3>
+            <h1>{% trans "Sign Out" %}</h1>
             <p>{% trans 'Are you sure you want to sign out?' %}</p>
             <form method="post" action="{% url 'account_logout' %}">
                 {% csrf_token %}

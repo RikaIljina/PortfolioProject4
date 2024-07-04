@@ -19,18 +19,18 @@
                 <span>{{ entry.author }}</span>
                 </a>
             </p>
-            <h3>
+            <h2>
                 <a href="{% url 'entry_details' entry.slug %}" class="title-link" id="{{ entry.slug }}">
                     <span>{{ entry.title }}</span>
                 </a>
-            </h3>
+            </h2>
         </div>
 
         {% else %}
         <div class="card-header pt-3">
             <a href="{% url 'dashboard_entry' user.username entry.slug %}" class="ms-1 d-inline-block"
                 id="{{ entry.slug }}">
-                <h3>
+                <h2>
                     <!-- The dashboard page adds a private/public icon to each entry -->
                     {% if entry.publish == 0 %}
                     <i class="fa-solid fa-lock publicity-icon align-middle" title="Private"></i>
@@ -38,7 +38,7 @@
                     <i class="fa-solid fa-globe publicity-icon" title="Public"></i>
                     {% endif %}
                     {{ entry.title }}
-                </h3>
+                </h2>
             </a>
         </div>
         {% endif %}

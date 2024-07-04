@@ -53,7 +53,7 @@
                                 src="{{ comment.author.profile.pic.url }}" width="30" alt="User profile picture">
                             {% endif %}
                             <a href="{% url 'user_profile' comment.author.username %}" class="ms-2 me-3 mt-1">
-                                <h5>{{ comment.author }}</h5>
+                                <h4>{{ comment.author }}</h4>
                             </a>
                             <p class="flex-fill"></p>
                             <p class="mt-1 ms-2 text-muted text-end">{{ comment.created_on|naturalday }}</p>
