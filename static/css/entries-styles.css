@@ -21,14 +21,6 @@ h3 {
   font-weight: 700;
 }
 
-/* .content-header {
-  background-color: #95d2b3;
-} */
-
-/* .card-container {
-    justify-content: start;
-  } */
-
 .card-outer {
   min-width: 300px;
   max-width: 300px;
@@ -47,7 +39,6 @@ h3 {
   word-break: break-word;
 }
 .card-desc {
-  /* border: 1px solid black; */
   border-radius: 0;
   min-height: 350px;
   font-weight: 400;
@@ -55,7 +46,6 @@ h3 {
 }
 
 .card-comments {
-  /* border: 1px solid black; */
   border-radius: 0;
   font-weight: 400;
   word-break: break-word;
@@ -164,8 +154,8 @@ looks better especially when displaying song lyrics */
 
 .card-body {
   padding: 0.5rem;
-  /* word-break: break-word; */
 }
+
 .card-footer {
   padding: 0.5rem 0.3rem;
 }
@@ -191,7 +181,6 @@ looks better especially when displaying song lyrics */
 }
 
 .tag-container a:focus-visible span {
-  /* outline: rgb(156, 221, 229); */
   box-shadow: 0 2px 2px rgb(107, 103, 103);
 }
 
@@ -216,16 +205,6 @@ looks better especially when displaying song lyrics */
   transition: all 0.3s;
 }
 
-/* .btn-comment:hover,
-.btn-comment:focus-visible,
-.btn-update:hover,
-.btn-update:focus-visible,
-.btn-edit,
-.btn-delete {
-  background-color: rgb(238, 238, 84);
-  transition: all 0.3s;
-} */
-
 .btn-edit,
 .btn-delete {
   font-size: 0.8rem;
@@ -237,10 +216,6 @@ looks better especially when displaying song lyrics */
   border: 1px solid #000000;
   border-radius: 0;
 }
-
-/* .btn-edit {
-  border: 1px solid #75ed6f;
-} */
 
 .btn-delete,
 .btn-delete-entry {

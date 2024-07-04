@@ -61,7 +61,7 @@
 
                         <!-- Comment content -->
                         <div id="comment{{ comment.id }}" class="comment-text-sm my-2">
-                            <span>{{ comment.content|linebreaks }}</span>
+                            {{ comment.content|linebreaks }}
                         </div>
 
                         <!-- Comment edit form; hidden by default, revealed after user clicks the 'Edit comment' button -->

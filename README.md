@@ -519,6 +519,15 @@ Summernote uses the ```django-bleach``` module to sanitize HTML input, so I deem
 | comments.js | [JSHint](https://jshint.com/) | Pass |
 | entries.js | [JSHint](https://jshint.com/) | Pass |
 | likes.js | [JSHint](https://jshint.com/) | Pass |
+| base-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
+| entries-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
+| form-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
+| mainpage-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
+| user-profile-styles.css | [W3C CSS Validation](https://jigsaw.w3.org/css-validator/) | Pass |
+
+
+| All public HTML pages | [JSHint](https://jshint.com/) | Pass |
+
 
 ### Responsiveness testing
 

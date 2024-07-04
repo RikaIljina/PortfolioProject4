@@ -30,10 +30,6 @@ h3 {
   color: rgb(0, 0, 0);
 }
 
-/* .card-header a {
-  text-decoration: underline;
-} */
-
 .card-header,
 .card-footer {
   background-color: #dfeddc;
@@ -41,8 +37,8 @@ h3 {
 
 .card-body {
   padding: 0.5rem;
-  /* word-break: break-word; */
 }
+
 .card-footer {
   padding: 0.5rem 0.3rem;
 }
@@ -57,20 +53,11 @@ h3 {
 .user-line {
   transition: all 0.3s;
   display: inline-block;
-  /* antialiasing, https://slickmedia.io/blog/stop-blurring-jagged-edges-css-transform-transition
-  outline: 1px solid transparent;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform;
-  perspective: 1000;
-  -webkit-perspective: 1000; */
 }
 
 .title-link:hover,
 .user-line:hover {
   opacity: 0.7;
-  /* transform: scale(1.02); */
   transition: all 0.3s;
 }
 .title-link:focus-visible,
@@ -80,11 +67,6 @@ h3 {
   box-shadow: 0 0 0 white;
   outline: none;
 }
-
-/* .title-link,
-.user-link {
-  text-decoration: underline;
-} */
 
 .tag {
   padding: 1px;
@@ -111,7 +93,6 @@ h3 {
 
 input,
 .form-control {
-  /* width: 100% !important; */
   border: 1px solid black;
   border-radius: 0;
   background-color: #f5f8f1;
@@ -121,10 +102,6 @@ input,
   h3 {
     font-size: 1.2rem;
   }
-
-  /* .card-container {
-    justify-content: center;
-  } */
 
   .card-outer {
     max-width: 400px;
