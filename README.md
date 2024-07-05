@@ -739,7 +739,7 @@ Users can decide at any time whether their entry should be public or private. If
 
 I have not implemented any proper image resizing tools, which is probably why the avatar images are of pretty poor quality. They are being uploaded in their original size and then resized with CSS to 30px or 38px. I need to implement some cropping/resizing mechanics to improve on their quality.
 
-Whenever an attempt is made to destroy a Cloudinary file via the method `cloudinary.uploader.destroy(old_id, invalidate=True)`, the server returns a response containing a dictionary: `{'result': 'ok'}` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
+Whenever an attempt is made to destroy a Cloudinary file via the method `cloudinary.uploader.destroy(old_id, invalidate=True)`, the server returns a response containing a dictionary: `{'result': 'ok'}` or `{'result': 'not found'}`. At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
 
 **Audio player**
 
