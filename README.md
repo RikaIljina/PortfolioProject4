@@ -739,7 +739,7 @@ Users can decide at any time whether their entry should be public or private. If
 
 I have not implemented any proper image resizing tools, which is probably why the avatar images are of pretty poor quality. They are being uploaded in their original size and then resized with CSS to 30px or 38px. I need to implement some cropping/resizing mechanics to improve on their quality.
 
-Whenever an attempt is made to destroy a Cloudinary file via the method `...`, the server returns a response containing a dictionary: `{'result': 'ok'}` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
+Whenever an attempt is made to destroy a Cloudinary file via the method `cloudinary.uploader.destroy(old_id, invalidate=True)`, the server returns a response containing a dictionary: `{'result': 'ok'}` or ... At the moment, my app just assumes that the file has been deleted properly and continues without giving feedback. In the future, these responses should be saved in a log, informing the admin whether the Cloudinary storage contains unassigned files that need to be deleted manually.
 
 **Audio player**
 
@@ -815,18 +815,25 @@ Depending on your system or IDE, other steps might be necessary. See [the Python
 Then, in your workspace:
 
 1. Install Django:
+
    `pip install django`
 2. Install gunicorn as WSGI HTTP server:
+
    `pip install gunicorn`
-3. Install Cloudinary SDK and integration package
+3. Install Cloudinary SDK and integration package:
+
    `pip install cloudinary dj3-cloudinary-storage`
-4. Install PostgreSQL adapter and URL parsing tool
+4. Install PostgreSQL adapter and URL parsing tool:
+
    `pip install psycopg2 dj_database_url`
 5. Create a file with the project requirements:
+
    `pip freeze --local > requirements.txt`
 6. Start the Django project:
+
    `django-admin startproject <your-project-name> .`
 7. Create a Django app:
+
    `python3 manage.py startapp <app-name>`
 8. Create an `env.py` file in your root folder and add it to the ```.gitignore``` file to make sure your API keys and other sensitive data don't get uploaded to GitHub and exposed to the public.
 9. Create an account on [cloudinary.com](https://www.cloudinary.com/), go to your Dashboard -> API keys -> Generate an API key, and copy your API environment variable.
